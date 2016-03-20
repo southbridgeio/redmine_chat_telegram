@@ -1,3 +1,0 @@
-= redmine_chat_telegram
-
-Description goes here

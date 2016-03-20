@@ -1,0 +1,37 @@
+# Redmine plugin which creates telegram group chats
+
+Description goes here
+
+## Installation
+
+### Requirements
+
+* You need to install the [Telegram CLI](https://github.com/vysheng/tg) first.
+* Telegram user account
+* Telegram bot account
+
+### Config for Telegram CLI
+
+Use `config/telegram.yml.example` as example.
+
+Copy it to `config/telegram.yml` it plugin root and set your values for CLI and public key paths.
+
+### Authorize telegram user
+
+You need to run `telegram-cli` manually on your Redmine server.
+
+On first run you will authorize your user account.
+
+Plugin will can create group chats after that.
+
+### Create Telegram Bot
+
+It is necessary to register a bot and get its token. There is a special bot in Telegram for this purpose. It is called [@BotFather](https://telegram.me/botfather).
+
+Start it by typing `/start` to get a list of all available commands.
+Issue the  `/newbot` command and it will ask you to come up with the name for our new bot.
+The name must end with "bot" word.
+On success @BotFather will give you token for your new bot and a link so you could quickly add the bot to contact list.
+You'll have to invent a new name if the registration fails.
+
+You should enter bot's token and name on the Plugin Settings page.
