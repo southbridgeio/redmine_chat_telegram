@@ -1,0 +1,2 @@
+telegram_cli_path: '/usr/bin/telegram-cli'
+telegram_cli_public_key_path: '/etc/telegram-cli/server.pub'

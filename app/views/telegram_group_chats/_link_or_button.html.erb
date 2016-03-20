@@ -1,0 +1,7 @@
+<div id="telegram-link">
+<% if @issue.telegram_chat_url.present? %>
+  <%= link_to 'Войти в чат Telegram', @issue.telegram_chat_url, target: '_blank' %>
+<% else %>
+  <%= button_to 'Создать чат Telegram', telegram_group_chats_path(issue_id: @issue.id) %>
+<% end %>
+</div>

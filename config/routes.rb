@@ -1,2 +1,1 @@
-# Plugin's routes
-# See: http://guides.rubyonrails.org/routing.html
+resources :telegram_group_chats, only: :create

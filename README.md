@@ -1,6 +1,6 @@
-# Redmine plugin which creates telegram group chats
+# redmine_chat_telegram
 
-Description goes here
+Redmine plugin which creates telegram group chats
 
 ## Installation
 
