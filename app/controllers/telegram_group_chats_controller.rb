@@ -2,7 +2,7 @@ class TelegramGroupChatsController < ApplicationController
   unloadable
 
   def create
-    cli_base = '/Users/artur/projects/tg/bin/telegram-cli -W -k /Users/artur/projects/tg/tg-server.pub -e '
+    cli_base = '/usr/bin/telegram-cli -W -k /etc/telegram-cli/server.pub -e '
 
     @issue = Issue.visible.find(params[:issue_id])
 
