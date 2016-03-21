@@ -34,4 +34,12 @@ The name must end with "bot" word.
 On success @BotFather will give you token for your new bot and a link so you could quickly add the bot to contact list.
 You'll have to invent a new name if the registration fails.
 
+Also set Privacy mode to disabled by command `/setprivacy`. This allows bot to listen all group chat messages for writing its to Redmine chat archive.
+
 You should enter bot's token and name on the Plugin Settings page.
+
+
+### Add bot to user contacts
+
+Send `/start` command to your bot from user account.
+This allows user to add Bot to group chats.

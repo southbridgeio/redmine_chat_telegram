@@ -16,7 +16,7 @@ class TelegramGroupChatsController < ApplicationController
     cmd = "#{cli_base} \"export_chat_link #{subject.gsub(' ', '_').gsub('#', '@')}\""
     result = %x( #{cmd} )
 
-    telegram_chat_url = result.match(/https:\/\/telegram.me\/joinchat\/\w+/).to_s
+    telegram_chat_url = result.match(/https:\/\/telegram.me\/joinchat\/[\w-]+/).to_s
 
     @issue.update_attribute :telegram_chat_url, telegram_chat_url
     redirect_to @issue
