@@ -2,7 +2,9 @@ class TelegramGroupChatsController < ApplicationController
   unloadable
 
   def create
-    cli_base = '/usr/bin/telegram-cli -W -k /etc/telegram-cli/server.pub -e '
+    cli_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_path']
+    public_key_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_public_key_path']
+    cli_base = "#{cli_path} -W -k #{public_key_path} -e "
 
     @issue = Issue.visible.find(params[:issue_id])
 
