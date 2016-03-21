@@ -8,9 +8,9 @@ namespace :chat_telegram do
 
     if ENV['PID_DIR']
       pid_dir = ENV['PID_DIR']
-      PidFile.new(piddir: pid_dir, pidfile: 'telegram-bot.pid')
+      PidFile.new(piddir: pid_dir, pidfile: 'telegram-chat-bot.pid')
     else
-      PidFile.new(pidfile: 'telegram-bot.pid')
+      PidFile.new(pidfile: 'telegram-chat-bot.pid')
     end
 
     at_exit { LOG.error 'aborted by some reasons' }
