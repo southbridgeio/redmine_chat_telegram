@@ -18,7 +18,13 @@ class TelegramGroupChatsController < ApplicationController
 
     telegram_chat_url = result.match(/https:\/\/telegram.me\/joinchat\/[\w-]+/).to_s
 
-    @issue.update_attribute :telegram_chat_url, telegram_chat_url
+    begin
+      @issue.update_attribute :telegram_chat_url, telegram_chat_url
+    rescue ActiveRecord::StaleObjectError
+      @issue.reload
+      retry
+    end
+
     redirect_to @issue
   end
 end

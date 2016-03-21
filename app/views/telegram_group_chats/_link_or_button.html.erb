@@ -1,7 +1,10 @@
 <div id="telegram-link">
-<% if @issue.telegram_chat_url.present? %>
-  <%= link_to 'Войти в чат Telegram', @issue.telegram_chat_url, target: '_blank' %>
-<% else %>
-  <%= button_to 'Создать чат Telegram', telegram_group_chats_path(issue_id: @issue.id) %>
-<% end %>
+  <% if @issue.telegram_chat_url.present? %>
+      <%= link_to @issue.telegram_chat_url, target: '_blank' do %>
+          <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-icon.png' %>
+          Войти в чат Telegram
+      <% end %>
+  <% else %>
+      <%= button_to 'Создать чат Telegram', telegram_group_chats_path(issue_id: @issue.id) %>
+  <% end %>
 </div>
