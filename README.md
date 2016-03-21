@@ -38,8 +38,15 @@ Also set Privacy mode to disabled by command `/setprivacy`. This allows bot to l
 
 You should enter bot's token and name on the Plugin Settings page.
 
-
 ### Add bot to user contacts
 
 Send `/start` command to your bot from user account.
 This allows user to add Bot to group chats.
+
+### Bot launch
+
+Bot rake task:
+
+```shell
+bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
+```
