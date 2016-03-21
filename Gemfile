@@ -1,2 +1,1 @@
-gem 'telegrammer'
 gem 'pidfile'
