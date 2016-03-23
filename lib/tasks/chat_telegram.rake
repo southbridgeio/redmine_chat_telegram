@@ -28,7 +28,7 @@ namespace :chat_telegram do
       abort 'Aborted with HUP signal'
     end
 
-    LOG.info "Start daemon..."
+    LOG.info 'Start daemon...'
 
     token = Setting.plugin_redmine_chat_telegram['bot_token']
 
