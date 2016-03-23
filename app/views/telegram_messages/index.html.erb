@@ -1,0 +1,9 @@
+<%= form_tag publish_issue_telegram_messages_path do %>
+  <% @telegram_messages.each do |message| %>
+    <%= check_box_tag 'telegram_message_ids[]', message.id %>
+    <time><%= format_time message.sent_at %></time>
+    <strong><%= message.author_name %>:</strong>
+    <%= simple_format message.message %>
+  <% end %>
+  <%= submit_tag 'Сохранить в задаче' %>
+<% end %>

@@ -5,12 +5,13 @@ FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.
 
 require 'redmine'
 require_dependency 'redmine_chat_telegram/hook_listener'
+require_dependency 'redmine_chat_telegram/issue_patch'
 
 Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '0.0.6'
+  version '0.1.0'
   author 'Centos-admin.ru'
   author_url 'http://centos-admin.ru'
 
