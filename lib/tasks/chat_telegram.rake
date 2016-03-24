@@ -57,23 +57,37 @@ namespace :chat_telegram do
 
     bot.get_updates(fail_silently: false) do |message|
       begin
-        if message.text.present? and message.chat.type == 'group'
+        chat_title = message.chat.title
+        issue_id   = chat_title.match(/#(\d+)/)[1]
+        issue_url  = if Setting['protocol'] == 'https'
+                       URI::HTTPS.build({ host: Setting['host_name'], path: "/issues/#{issue_id}" }).to_s
+                     else
+                       URI::HTTP.build({ host: Setting['host_name'], path: "/issues/#{issue_id}" }).to_s
+                     end
 
-          chat_title   = message.chat.title
-          issue_id     = chat_title.match(/#(\d+)/)[1]
-          telegram_id  = message.message_id
-          sent_at      = message.date
-          message_text = message.text
+        if message.group_chat_created
+          bot.send_message(chat_id: message.chat.id, text: "Hello, everybody! This is a chat for issue: #{issue_url}")
+        elsif message.text.present? and message.chat.type == 'group'
 
-          from_id         = message.from.id
-          from_first_name = message.from.first_name
-          from_last_name  = message.from.last_name
-          from_username   = message.from.username
+          if message.text == '/link'
+            bot.send_message(chat_id: message.chat.id, text: "Link to issue: #{issue_url}")
+          else
 
-          TelegramMessage.create issue_id:       issue_id,
-                                 telegram_id:    telegram_id, sent_at: sent_at, message: message_text,
-                                 from_id:        from_id, from_first_name: from_first_name,
-                                 from_last_name: from_last_name, from_username: from_username
+
+            telegram_id  = message.message_id
+            sent_at      = message.date
+            message_text = message.text
+
+            from_id         = message.from.id
+            from_first_name = message.from.first_name
+            from_last_name  = message.from.last_name
+            from_username   = message.from.username
+
+            TelegramMessage.create issue_id:       issue_id,
+                                   telegram_id:    telegram_id, sent_at: sent_at, message: message_text,
+                                   from_id:        from_id, from_first_name: from_first_name,
+                                   from_last_name: from_last_name, from_username: from_username
+          end
         end
 
       rescue Exception => e
