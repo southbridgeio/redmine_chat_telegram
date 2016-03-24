@@ -1,3 +1,18 @@
+def set_telegram_id(message, telegram_chat_id)
+  chat_title = message.chat.title
+  issue_id   = chat_title.match(/#(\d+)/)[1]
+  issue      = Issue.find(issue_id)
+
+  begin
+    issue.telegram_id = telegram_chat_id
+    issue.save
+  rescue ActiveRecord::StaleObjectError
+    issue.reload
+    retry
+  end
+  issue
+end
+
 namespace :chat_telegram do
   # bundle exec rake chat_telegram:bot PID_DIR='/tmp'
   desc "Runs telegram bot process (options: PID_DIR='/pid/dir')"
@@ -57,23 +72,23 @@ namespace :chat_telegram do
 
     bot.get_updates(fail_silently: false) do |message|
       begin
-        chat_title = message.chat.title
-        issue_id   = chat_title.match(/#(\d+)/)[1]
-        issue_url  = if Setting['protocol'] == 'https'
-                       URI::HTTPS.build({ host: Setting['host_name'], path: "/issues/#{issue_id}" }).to_s
-                     else
-                       URI::HTTP.build({ host: Setting['host_name'], path: "/issues/#{issue_id}" }).to_s
-                     end
+        telegram_chat_id = message.chat.id
 
         if message.group_chat_created
-          bot.send_message(chat_id: message.chat.id, text: "Hello, everybody! This is a chat for issue: #{issue_url}")
+          issue = set_telegram_id(message, telegram_chat_id)
+
+          issue_url = RedmineChatTelegram.issue_url(issue.id)
+          bot.send_message(chat_id: telegram_chat_id, text: "Hello, everybody! This is a chat for issue: #{issue_url}")
+
         elsif message.text.present? and message.chat.type == 'group'
 
+          issue     = Issue.find_by(telegram_id: telegram_chat_id)
+          issue     = set_telegram_id(message, telegram_chat_id) unless issue.present?
+          issue_url = RedmineChatTelegram.issue_url(issue.id)
+
           if message.text == '/link'
-            bot.send_message(chat_id: message.chat.id, text: "Link to issue: #{issue_url}")
+            bot.send_message(chat_id: telegram_chat_id, text: "Link to issue: #{issue_url}")
           else
-
-
             telegram_id  = message.message_id
             sent_at      = message.date
             message_text = message.text
@@ -81,7 +96,7 @@ namespace :chat_telegram do
             if message_text.include?('!log')
               message_text.gsub!('!log', '')
               journal_text = message_text.split("\n").map{|row| "> #{row}"}.join("\n")
-              issue = Issue.find(issue_id)
+
               issue.init_journal(User.current, "*Telegram chat log*: \n#{journal_text}")
               issue.save
             end
@@ -91,7 +106,7 @@ namespace :chat_telegram do
             from_last_name  = message.from.last_name
             from_username   = message.from.username
 
-            TelegramMessage.create issue_id:       issue_id,
+            TelegramMessage.create issue_id:       issue.id,
                                    telegram_id:    telegram_id, sent_at: sent_at, message: message_text,
                                    from_id:        from_id, from_first_name: from_first_name,
                                    from_last_name: from_last_name, from_username: from_username
