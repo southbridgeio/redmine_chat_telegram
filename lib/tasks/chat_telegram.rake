@@ -78,6 +78,14 @@ namespace :chat_telegram do
             sent_at      = message.date
             message_text = message.text
 
+            if message_text.include?('!log')
+              message_text.gsub!('!log', '')
+              journal_text = message_text.split("\n").map{|row| "> #{row}"}.join("\n")
+              issue = Issue.find(issue_id)
+              issue.init_journal(User.current, "*Telegram chat log*: \n#{journal_text}")
+              issue.save
+            end
+
             from_id         = message.from.id
             from_first_name = message.from.first_name
             from_last_name  = message.from.last_name
