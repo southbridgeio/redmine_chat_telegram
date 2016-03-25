@@ -1,0 +1,31 @@
+<%= error_messages_for 'redmine_chat_telegram_settings' %>
+
+<% errors = [] %>
+<% errors << l('redmine_chat_telegram.enable_module') unless @project.module_enabled?(:chat_telegram) %>
+
+<% if errors.empty? %>
+  <%= form_tag(
+          { controller: :redmine_chat_telegram_settings, action: :update, project_id: @project, tab: 'chat_telegram_settings' },
+          method: :put, class: 'tabular', multipart: true, id: 'chat_telegram_settings') do %>
+
+    <fieldset class="box tabular">
+      <legend><%= t 'redmine_chat_telegram.settings.creator_telegram_group_ids' %></legend>
+      <% @project.groups.each do |group| %>
+        <label class="floating">
+          <%= check_box_tag 'chat_telegram_settings[creator_telegram_group_ids][]', group.id, @project.creator_telegram_group_ids.try(:include?, group.id.to_s), :id => nil %>
+          <%= group %>
+        </label>
+      <% end %>
+      <%= hidden_field_tag 'chat_telegram_settings[creator_telegram_group_ids][]', '' %>
+    </fieldset>
+
+
+    <div style="clear:both;"></div>
+
+    <%= submit_tag l(:button_save) %>
+
+  <% end %>
+
+<% else %>
+  <p class="nodata"><%= errors.join('<br/>').html_safe %></p>
+<% end %>
