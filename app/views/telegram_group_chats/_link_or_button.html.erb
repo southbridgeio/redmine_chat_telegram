@@ -3,7 +3,8 @@
     <% if @issue.telegram_chat_url.present? %>
       <%= render 'telegram_group_chats/links' %>
     <% else %>
-      <% if (User.current.group_ids.map(&:to_s) & @project.creator_telegram_group_ids).present? %>
+      <% if @project.creator_telegram_group_ids.present? and User.current.group_ids.present? and
+          (User.current.group_ids.map(&:to_s) & @project.creator_telegram_group_ids).present? %>
         <%= link_to telegram_group_chats_path(issue_id: @issue.id), method: :post, remote: true do %>
           <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-icon.png' %>
           Создать чат Telegram
