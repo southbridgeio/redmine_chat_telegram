@@ -3,5 +3,9 @@
   Войти в чат Telegram
 <% end %>
 <% if @issue.telegram_messages.present? %>
-| <%= link_to 'Архив', issue_telegram_messages_path(@issue.id) %>
+| <%= link_to 'Архив',
+    issue_telegram_messages_path(@issue.id),
+    target: "popup",
+    onclick: "window.open('#{ issue_telegram_messages_path(@issue.id) }','popup','width=600,height=400'); return false;"
+  %>
 <% end %>
