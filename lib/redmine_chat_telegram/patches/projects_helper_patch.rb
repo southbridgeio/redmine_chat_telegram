@@ -37,10 +37,10 @@ module RedmineChatTelegram
         def project_settings_tabs_with_redmine_chat_telegram_settings
           tabs = project_settings_tabs_without_redmine_chat_telegram_settings
 
-          tabs.push({name: 'chat_telegram_settings',
+          tabs.push({name: 'redmine_chat_telegram_settings',
                      action: :manage_redmine_chat_telegram_settings,
                      partial: 'projects/settings/redmine_chat_telegram',
-                     label: 'redmine_chat_telegram.tab_title'})
+                     label: 'redmine_chat_telegram.tab_title'}) if User.current.allowed_to?(:manage_redmine_chat_telegram_settings, @project)
 
           tabs
         end
