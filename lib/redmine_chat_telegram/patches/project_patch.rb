@@ -5,8 +5,11 @@ module RedmineChatTelegram
         base.class_eval do
           unloadable
 
-          store :chat_telegram_settings, accessors: %w(creator_telegram_group_ids)
+          store :chat_telegram_settings, accessors: %w(telegram_group_creator_role)
 
+          def everybody_can_create_telegram_group?
+            telegram_group_creator_role == 'all' or !telegram_group_creator_role.present?
+          end
         end
       end
 
