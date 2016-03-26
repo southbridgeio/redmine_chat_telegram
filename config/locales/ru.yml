@@ -1,6 +1,12 @@
 # English strings go here for Rails i18n
 ru:
+  permission_create_telegram_chat: Создание чата Telegram
+  permission_manage_redmine_chat_telegram_settings: Редактировать настройки плагина в проекте
   redmine_chat_telegram:
     tab_title: Chat Telegram
     settings:
       creator_telegram_group_ids: "Пользователи из этих групп могут создавать групповые чаты Telegram"
+      telegram_group_creator_role:
+        title: Кто может создавать группы Telegram?
+        all: Все
+        selected: Те, чьей роли разрешено создавать группы
