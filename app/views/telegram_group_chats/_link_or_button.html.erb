@@ -6,10 +6,16 @@
       <% if User.current.logged? and
           (@project.everybody_can_create_telegram_group? or User.current.allowed_to?(:create_telegram_chat, @project)) %>
         <%= link_to telegram_group_chats_path(issue_id: @issue.id), method: :post, remote: true do %>
-          <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-icon.png' %>
+          <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-inactive-icon.png' %>
           Создать чат Telegram
         <% end %>
       <% end %>
     <% end %>
   </div>
+<% end %>
+
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'style', :plugin => 'redmine_chat_telegram' %>
+    <%= stylesheet_link_tag 'jquery.datetimepicker', :plugin => 'redmine_chat_telegram' %>
+    <%= javascript_include_tag 'jquery.datetimepicker.full.min', :plugin => 'redmine_chat_telegram' %>
 <% end %>
