@@ -1,2 +1,44 @@
-$('#ajax-modal').html('<%= escape_javascript(render partial: 'modal_window') %>');
-showModal('ajax-modal', '700px');
+$('#ajax-modal').html('<%= escape_javascript(render partial: 'modal_window') %>')
+
+$('#ajax-modal').dialog({
+  dialogClass: 'telegram-archive-modal',
+  height: $(window).height(),
+  width: '700px',
+  modal: true,
+  position: {
+    my: "top",
+    at: "top",
+    of: window
+  },
+  resizable: false,
+  title: 'Архив',
+  close: function(){
+    $('#datetimepicker').datetimepicker('destroy')
+  }
+})
+
+$('#datetimepicker').datetimepicker({
+  validateOnBlur: false,
+  onSelectTime: function(time){
+    var scrollTo = {}
+    var container = $('.archive-form')
+    var selectedUnixTime = new Date(time).getTime() / 1000|0
+
+    // find message to scroll
+    $('.telegram-message').each(function(){
+      var messageTime = $(this).data('sent-at')
+      scrollTo = $(this)
+      if (messageTime > selectedUnixTime) {
+        return false
+      }
+    })
+
+    container.animate({scrollTop: scrollTo.offset().top - container.offset().top +
+                      container.scrollTop()})
+  }
+})
+
+var formHeight = $('#ajax-modal').css('height').match(/\d+/)[0] - 75
+$('.archive-form').css({
+  height: formHeight
+})
