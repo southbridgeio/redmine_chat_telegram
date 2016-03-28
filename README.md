@@ -36,7 +36,7 @@ You'll have to invent a new name if the registration fails.
 
 Also set Privacy mode to disabled by command `/setprivacy`. This allows bot to listen all group chat messages for writing its to Redmine chat archive.
 
-You should enter bot's token and name on the Plugin Settings page.
+You should enter bot's token and name (not @username) on the Plugin Settings page.
 
 ### Add bot to user contacts
 

@@ -1,9 +1,12 @@
-<%= link_to @issue.telegram_chat_url, target: '_blank' do %>
-  <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-icon.png' %>
-  Войти в чат Telegram
+<% if User.current.allowed_to?(:view_telegram_chat_link, @issue.project) %>
+  <%= link_to @issue.telegram_chat_url, target: '_blank' do %>
+    <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-icon.png' %>
+    Войти в чат Telegram
+  <% end %>
 <% end %>
-<% if @issue.telegram_messages.present? %>
-| <%= link_to issue_telegram_messages_path(@issue.id), remote: true do %>
+
+<% if User.current.allowed_to?(:view_telegram_chat_archive, @issue.project) and @issue.telegram_messages.present? %>
+  | <%= link_to issue_telegram_messages_path(@issue.id), remote: true do %>
     <%= image_tag '/plugin_assets/redmine_chat_telegram/images/archive-icon.png' %>
     Архив
   <% end %>
