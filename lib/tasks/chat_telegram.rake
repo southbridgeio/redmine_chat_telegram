@@ -13,6 +13,10 @@ def set_telegram_id(message, telegram_chat_id)
   issue
 end
 
+def chat_user_full_name(telegram_user)
+  [telegram_user.first_name, telegram_user.last_name].compact.join
+end
+
 namespace :chat_telegram do
   # bundle exec rake chat_telegram:bot PID_DIR='/tmp'
   desc "Runs telegram bot process (options: PID_DIR='/pid/dir')"
@@ -73,43 +77,78 @@ namespace :chat_telegram do
     bot.get_updates(fail_silently: false) do |message|
       begin
         telegram_chat_id = message.chat.id
+        telegram_id      = message.message_id
+        sent_at          = message.date
+
+        from_id         = message.from.id
+        from_first_name = message.from.first_name
+        from_last_name  = message.from.last_name
+        from_username   = message.from.username
 
         if message.group_chat_created
           issue = set_telegram_id(message, telegram_chat_id)
 
           issue_url = RedmineChatTelegram.issue_url(issue.id)
           bot.send_message(chat_id: telegram_chat_id, text: "Hello, everybody! This is a chat for issue: #{issue_url}")
+          message_text     = 'Chat created'
+          telegram_message = TelegramMessage.create issue_id:       issue.id,
+                                                    telegram_id:    telegram_id,
+                                                    sent_at:        sent_at, message: message_text,
+                                                    from_id:        from_id, from_first_name: from_first_name,
+                                                    from_last_name: from_last_name, from_username: from_username
+        else
+          issue = Issue.find_by(telegram_id: telegram_chat_id)
+          issue = set_telegram_id(message, telegram_chat_id) unless issue.present?
 
-        elsif message.text.present? and message.chat.type == 'group'
+          if message.new_chat_participant.present?
+            new_chat_participant = message.new_chat_participant
+            message_text         = if message.from.id == new_chat_participant.id
+                                     'joined to the group'
+                                   else
+                                     "invited #{chat_user_full_name(new_chat_participant)}"
+                                   end
+            telegram_message     = TelegramMessage.create issue_id:       issue.id,
+                                                          telegram_id:    telegram_id,
+                                                          sent_at:        sent_at, message: message_text,
+                                                          from_id:        from_id, from_first_name: from_first_name,
+                                                          from_last_name: from_last_name, from_username: from_username
+          elsif message.left_chat_participant.present?
+            left_chat_participant = message.left_chat_participant
+            message_text          = if message.from.id == left_chat_participant.id
+                                      'left the group'
+                                    else
+                                      "kicked #{chat_user_full_name(left_chat_participant)}"
+                                    end
+            telegram_message      = TelegramMessage.create issue_id:       issue.id,
+                                                           telegram_id:    telegram_id,
+                                                           sent_at:        sent_at, message: message_text,
+                                                           from_id:        from_id, from_first_name: from_first_name,
+                                                           from_last_name: from_last_name, from_username: from_username
 
-          issue     = Issue.find_by(telegram_id: telegram_chat_id)
-          issue     = set_telegram_id(message, telegram_chat_id) unless issue.present?
-          issue_url = RedmineChatTelegram.issue_url(issue.id)
+          elsif message.text.present? and message.chat.type == 'group'
+            issue_url = RedmineChatTelegram.issue_url(issue.id)
 
-          if message.text.include?('/task')
-            bot.send_message(chat_id: telegram_chat_id, text: "#{issue_url}\n#{issue.subject}")
-          else
-            telegram_id  = message.message_id
-            sent_at      = message.date
             message_text = message.text
 
-            from_id         = message.from.id
-            from_first_name = message.from.first_name
-            from_last_name  = message.from.last_name
-            from_username   = message.from.username
+            if message_text.include?('/task') or message_text.include?('/link') or message_text.include?('/url')
+              bot.send_message(chat_id: telegram_chat_id, text: "#{issue.subject}\n#{issue_url}")
+
+              next unless message_text.gsub('/task', '').gsub('/link', '').gsub('/url', '').strip.present?
+
+            end
 
             telegram_message = TelegramMessage.new issue_id:       issue.id,
                                                    telegram_id:    telegram_id,
-                                                   sent_at: sent_at, message: message_text,
+                                                   sent_at:        sent_at, message: message_text,
                                                    from_id:        from_id, from_first_name: from_first_name,
                                                    from_last_name: from_last_name, from_username: from_username
 
             if message_text.include?('/log')
               telegram_message.message = message_text.gsub('/log', '')
 
-              journal_text             = telegram_message.as_text
+              journal_text = telegram_message.as_text(with_time: false)
 
-              issue.init_journal(User.current, "*Из Telegram:*: \n#{journal_text}")
+              issue.init_journal(User.current, "_Из Telegram:_ \n\n#{journal_text}")
               issue.save
             end
 

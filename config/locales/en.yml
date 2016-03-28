@@ -1,7 +1,9 @@
 # English strings go here for Rails i18n
 en:
   permission_create_telegram_chat: Create Telegram Chat
-  permission_manage_redmine_chat_telegram_settings: Manage plugin settings in project
+  permission_view_telegram_chat_link: View Telegram Chat Link
+  permission_view_telegram_chat_archive: View Chat Archive
+
   redmine_chat_telegram:
     tab_title: Chat Telegram
     settings:
