@@ -5,6 +5,11 @@ class TelegramMessagesController < ApplicationController
   def index
     @issue = Issue.visible.find(params[:id])
     @telegram_messages = @issue.telegram_messages
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def publish

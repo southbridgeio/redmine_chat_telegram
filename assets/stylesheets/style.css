@@ -1,0 +1,21 @@
+.telegram-archive-modal{
+  background: #fff;
+  position: fixed;
+}
+.telegram-message-text{
+  margin-top: 5px;
+  padding-left: 68px;
+}
+
+.archive-form{
+  display: block;
+  overflow: auto;
+}
+
+.archive-date-picker{
+  height: 40px;
+}
+
+.message-date{
+  text-align: center;
+}
