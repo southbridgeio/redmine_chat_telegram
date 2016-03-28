@@ -7,8 +7,12 @@ class TelegramMessage < ActiveRecord::Base
     all.map(&:as_text).join("\n\n")
   end
 
-  def as_text
-    format_time(sent_at) + ' ' + author_name + ': ' + message
+  def as_text(with_time: true)
+    if with_time
+      format_time(sent_at) + ' ' + author_name + ': ' + message
+    else
+      author_name + ': ' + message
+    end
   end
 
   def author_name

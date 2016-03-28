@@ -86,36 +86,42 @@ namespace :chat_telegram do
           issue     = set_telegram_id(message, telegram_chat_id) unless issue.present?
           issue_url = RedmineChatTelegram.issue_url(issue.id)
 
-          if message.text.include?('/task')
-            bot.send_message(chat_id: telegram_chat_id, text: "#{issue_url}\n#{issue.subject}")
-          else
-            telegram_id  = message.message_id
-            sent_at      = message.date
-            message_text = message.text
+          message_text = message.text
 
-            from_id         = message.from.id
-            from_first_name = message.from.first_name
-            from_last_name  = message.from.last_name
-            from_username   = message.from.username
+          if message_text.include?('/task') or message_text.include?('/link') or message_text.include?('/url')
+            bot.send_message(chat_id: telegram_chat_id, text: "#{issue.subject}\n#{issue_url}")
 
-            telegram_message = TelegramMessage.new issue_id:       issue.id,
-                                                   telegram_id:    telegram_id,
-                                                   sent_at: sent_at, message: message_text,
-                                                   from_id:        from_id, from_first_name: from_first_name,
-                                                   from_last_name: from_last_name, from_username: from_username
-
-            if message_text.include?('/log')
-              telegram_message.message = message_text.gsub('/log', '')
-
-              journal_text             = telegram_message.as_text
-
-              issue.init_journal(User.current, "*Из Telegram:*: \n#{journal_text}")
-              issue.save
-            end
-
-            telegram_message.save!
+            next unless message_text.gsub('/task', '').gsub('/link', '').gsub('/url', '').strip.present?
 
           end
+
+          telegram_id  = message.message_id
+          sent_at      = message.date
+
+
+          from_id         = message.from.id
+          from_first_name = message.from.first_name
+          from_last_name  = message.from.last_name
+          from_username   = message.from.username
+
+          telegram_message = TelegramMessage.new issue_id:       issue.id,
+                                                 telegram_id:    telegram_id,
+                                                 sent_at:        sent_at, message: message_text,
+                                                 from_id:        from_id, from_first_name: from_first_name,
+                                                 from_last_name: from_last_name, from_username: from_username
+
+          if message_text.include?('/log')
+            telegram_message.message = message_text.gsub('/log', '')
+
+            journal_text = telegram_message.as_text(with_time: false)
+
+            issue.init_journal(User.current, "_Из Telegram:_ \n\n#{journal_text}")
+            issue.save
+          end
+
+          telegram_message.save!
+
+
         end
 
       rescue Exception => e

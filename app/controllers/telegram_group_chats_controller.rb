@@ -26,7 +26,7 @@ class TelegramGroupChatsController < ApplicationController
       retry
     end
 
-    @issue.init_journal(User.current, "По ссылке #{telegram_chat_url} создан чат по этой задаче.")
+    @issue.init_journal(User.current, "По ссылке #{telegram_chat_url} создан чат.")
     @issue.save
 
     respond_to do |format|
