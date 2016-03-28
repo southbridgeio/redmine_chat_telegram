@@ -4,7 +4,7 @@
 }
 .telegram-message-text{
   margin-top: 5px;
-  padding-left: 150px;
+  padding-left: 68px;
 }
 
 .archive-form{
@@ -14,4 +14,8 @@
 
 .archive-date-picker{
   height: 40px;
+}
+
+.message-date{
+  text-align: center;
 }
