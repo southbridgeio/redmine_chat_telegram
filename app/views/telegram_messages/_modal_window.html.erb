@@ -1,10 +1,10 @@
 <div class="archive-date-picker">
   <span>Перейти к дате:</span>
-  <input id="datetimepicker" type="text" placeholder="Выберите дату">
+  <input id="datetimepicker" type="text" placeholder="выберите дату">
   <hr>
 </div>
 <%= render partial: 'archive_form'%>
 <hr>
-<%= submit_tag 'Сохранить в задаче',
+<%= submit_tag 'Скопировать в задачу',
   onclick: "$('.archive-form').submit()",
   class: 'archive-submit-button'%>

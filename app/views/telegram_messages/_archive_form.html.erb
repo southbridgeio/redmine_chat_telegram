@@ -1,7 +1,9 @@
 <% if User.current.allowed_to?(:view_telegram_chat_archive, @issue.project) and @issue.telegram_messages.present? %>
   <%= form_tag publish_issue_telegram_messages_path, class: 'archive-form' do %>
     <% messages_by_date.each do |date, messages| %>
-      <div class="message-date"><%= date %></div>
+      <fieldset class="message-date">
+        <legend><%= date %></legend>
+      </fieldset>
       <% messages.each do |message| %>
         <div class="telegram-message" data-sent-at=<%= message.sent_at.to_i %>>
           <%= check_box_tag 'telegram_message_ids[]', message.id %>
