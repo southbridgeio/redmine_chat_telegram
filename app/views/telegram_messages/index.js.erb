@@ -12,6 +12,9 @@ $('#ajax-modal').dialog({
   },
   resizable: false,
   title: 'Архив',
+  open: function(){
+    $("#datetimepicker").blur()
+  },
   close: function(){
     $('#datetimepicker').datetimepicker('destroy')
   }
