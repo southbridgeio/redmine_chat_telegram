@@ -1,6 +1,7 @@
 # English strings go here for Rails i18n
 en:
   permission_create_telegram_chat: Create Telegram Chat
+  permission_close_telegram_chat: Close Telegram Chat
   permission_view_telegram_chat_link: View Telegram Chat Link
   permission_view_telegram_chat_archive: View Chat Archive
 

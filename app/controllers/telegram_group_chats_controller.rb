@@ -2,6 +2,8 @@ class TelegramGroupChatsController < ApplicationController
   unloadable
 
   def create
+    current_user = User.current
+
     cli_path        = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_path']
     public_key_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_public_key_path']
     cli_base        = "#{cli_path} -W -k #{public_key_path} -e "
@@ -26,12 +28,24 @@ class TelegramGroupChatsController < ApplicationController
       retry
     end
 
-    @issue.init_journal(User.current, "По ссылке #{telegram_chat_url} создан чат.")
+    @issue.init_journal(current_user, "По ссылке #{telegram_chat_url} создан чат.")
     @issue.save
+
+    @project = @issue.project
 
     respond_to do |format|
       format.html { redirect_to @issue }
       format.js
+    end
+  end
+
+  def destroy
+    @issue                   = Issue.visible.find(params[:id])
+    @issue.telegram_chat_url = nil
+    @project                 = @issue.project
+
+    if @issue.save
+      TelegramGroupCloseWorker.perform_async(@issue.id, User.current.id)
     end
   end
 end

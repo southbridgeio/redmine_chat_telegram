@@ -6,10 +6,11 @@ Redmine plugin which creates telegram group chats
 
 ### Requirements
 
-* You need to install the [Telegram CLI](https://github.com/vysheng/tg) first.
+* You need to install the [Telegram CLI](https://github.com/vysheng/tg) first
 * Telegram user account
 * Telegram bot account
 * [Telegrammer gem](https://github.com/mayoral/telegrammer) (place it in your `Gemfile.local`)
+* [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
 
 ### Config for Telegram CLI
 

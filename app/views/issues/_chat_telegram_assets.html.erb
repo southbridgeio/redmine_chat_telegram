@@ -1,8 +1,3 @@
-<%= render partial: 'archive_form' %>
-<%= submit_tag 'Сохранить в задаче',
-               onclick: "$('.archive-form').submit()",
-               class: 'archive-submit-button'%>
-
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'style', :plugin => 'redmine_chat_telegram' %>
   <%= stylesheet_link_tag 'jquery.datetimepicker', :plugin => 'redmine_chat_telegram' %>
