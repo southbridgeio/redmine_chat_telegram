@@ -1,6 +1,7 @@
 # English strings go here for Rails i18n
 ru:
   permission_create_telegram_chat: Создание чата Telegram
+  permission_close_telegram_chat: Закрытие чата Telegram
   permission_view_telegram_chat_link: Просмотр ссылки на чат Telegram
   permission_view_telegram_chat_archive: Просмотр архива чата
   redmine_chat_telegram:

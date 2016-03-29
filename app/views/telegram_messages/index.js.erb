@@ -19,10 +19,14 @@ $('#ajax-modal').dialog({
 
 $('#datetimepicker').datetimepicker({
   validateOnBlur: false,
+  format: "d.m.Y H:i",
+  minDate: "<%= format_date @telegram_messages.first.sent_at %>",
+  maxDate: "<%= format_date @telegram_messages.last.sent_at %>",
+  formatDate: "d.m.Y",
   onSelectTime: function(time){
     var scrollTo = {}
     var container = $('.archive-form')
-    var selectedUnixTime = new Date(time).getTime() / 1000|0
+    var selectedUnixTime = time / 1000|0
 
     // find message to scroll
     $('.telegram-message').each(function(){
