@@ -22,3 +22,7 @@
   text-align: center;
   margin: 10px 0;
 }
+
+.message-date legend{
+  padding: 0 10px;
+}
