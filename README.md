@@ -1,8 +1,10 @@
 # redmine_chat_telegram
 
+Plugin developed by [Centos-admin.ru](https://centos-admin.ru)
+
 Redmine plugin used to create Telegram group chats.
 
-The `redmine_chat_telegram` can be used to create a group chat associated with a ticket and record its logs to the Redmine archive.
+The `redmine_chat_telegram` can be used to create a group chat associated with a ticket and record its logs to the Redmine archive. Associated group chats can be easily created via the `Create Telegram chat` link on the ticket page. You're able to copy the link and pass it to anyone you'll want to join this Telegram chat.
 
 ## Installation
 
@@ -22,7 +24,7 @@ Put the correct values for the `telegram_cli_path` and `telegram_cli_public_key_
 
 ### First time run
 
-Manually start `telegram-cli` on your Redmine server and login to Telegram with it. You'll be able to create group chats after this.
+Start `telegram-cli` on your Redmine server and login to Telegram with it. You'll be able to create group chats after that.
 
 ### Create Telegram Bot
 
@@ -48,3 +50,7 @@ Execute the following rake task to launch the bot:
 ```shell
 bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 ```
+
+### Usage
+
+Open the ticket. You'll see the new link `Create Telegram chat` on the right side of the ticket. Click it and the Telegram group chat associated with this ticket will be created. The link will change to `Enter Telegram chat`. Click on in to join the chat in your Telegram client. You'll be able to copy and pass the link to anyone you want to invite them to the Group Chat. 
