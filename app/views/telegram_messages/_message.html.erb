@@ -1,0 +1,10 @@
+<div class="telegram-message" data-sent-at=<%= message.sent_at.to_i %>>
+  <%= check_box_tag 'telegram_message_ids[]', message.id %>
+  <time><%= format_time message.sent_at, false %></time>
+  <div class="telegram-message-body">
+    <span class="telegram-message-author"><%= message.author_name %></span>
+    <div class="telegram-message-text">
+      <%= message.message %>
+    </div>
+  </div>
+</div>

@@ -2,10 +2,6 @@
   background: #fff;
   position: fixed;
 }
-.telegram-message-text{
-  margin-top: 5px;
-  padding-left: 68px;
-}
 
 .archive-form{
   display: block;
@@ -14,6 +10,41 @@
 
 .archive-date-picker{
   height: 40px;
+}
+
+
+.telegram-message{
+  margin: 10px;
+}
+
+.telegram-message time{
+  float: right;
+  color: #adadad;
+  font-size: .85em;
+}
+
+.telegram-message input[type=checkbox]{
+  float: left;
+  width: 40px;
+  height: 40px;
+}
+
+.telegram-message-body{
+  display: block;
+  overflow: hidden;
+}
+
+.telegram-message-author{
+  margin: 1px 0 4px;
+  display: inline-block;
+  color: #b7635d;
+  font-weight: 700;
+}
+
+.telegram-message-text{
+  word-wrap: break-word;
+  line-height: 150%;
+  white-space: pre-wrap;
 }
 
 .message-date{
