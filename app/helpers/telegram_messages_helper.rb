@@ -4,4 +4,12 @@ module TelegramMessagesHelper
     @telegram_messages.group_by{|x| x.sent_at.strftime("%d.%m.%Y")}
   end
 
+  def color_number_for_user(user_id)
+    user = @chat_users.detect do |user|
+      user[:id] == user_id
+    end
+
+    user[:color_number]
+  end
+
 end

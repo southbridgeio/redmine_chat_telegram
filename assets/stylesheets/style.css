@@ -37,7 +37,6 @@
 .telegram-message-author{
   margin: 1px 0 4px;
   display: inline-block;
-  color: #b7635d;
   font-weight: 700;
 }
 
@@ -64,7 +63,6 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background: #80d066;
 }
 
 .telegram-system-message{
@@ -76,4 +74,68 @@
   text-align: center;
   margin: 5px 0;
   font-size: 0.85em;
+}
+
+.user-color-1{
+  color: #8365ab;
+}
+
+.user-color-2{
+  color: #539e4f;
+}
+
+.user-color-3{
+  color: #ae9661;
+}
+
+.user-color-4{
+  color: #4979a3;
+}
+
+.user-color-5{
+  color: #b7635d;
+}
+
+.user-color-6{
+  color: #b3577a;
+}
+
+.user-color-7{
+  color: #5397b4;
+}
+
+.user-color-8{
+  color: #c07844;
+}
+
+.user-bgcolor-1{
+  background: #cc90e2;
+}
+
+.user-bgcolor-2{
+  background: #80d066;
+}
+
+.user-bgcolor-3{
+  background: #ecd074;
+}
+
+.user-bgcolor-4{
+  background: #6fb1e4;
+}
+
+.user-bgcolor-5{
+  background: #e57979;
+}
+
+.user-bgcolor-6{
+  background: #f98bae;
+}
+
+.user-bgcolor-7{
+  background: #73cdd0;
+}
+
+.user-bgcolor-8{
+  background: #fba76f;
 }
