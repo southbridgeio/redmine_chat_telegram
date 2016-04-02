@@ -20,5 +20,8 @@ class TelegramMessage < ActiveRecord::Base
     full_name.present? ? full_name : from_username
   end
 
+  def author_initials
+    [from_first_name.first, from_last_name.first].join
+  end
 
 end

@@ -14,7 +14,7 @@
 
 
 .telegram-message{
-  margin: 10px;
+  padding: 15px 0px;
 }
 
 .telegram-message time{
@@ -42,9 +42,29 @@
 }
 
 .telegram-message-text{
-  word-wrap: break-word;
   line-height: 150%;
-  white-space: pre-wrap;
+}
+
+.telegram-author-photo{
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 15px 0 0;
+  float: left;
+}
+
+.telegram-author-photo span{
+  line-height: 42px;
+  display: block;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background: #80d066;
 }
 
 .message-date{
