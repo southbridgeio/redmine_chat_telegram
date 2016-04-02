@@ -1,15 +1,22 @@
-<div class="telegram-message" data-sent-at=<%= message.sent_at.to_i %>>
-  <%= check_box_tag 'telegram_message_ids[]', message.id %>
-  <time><%= format_time message.sent_at, false %></time>
-  <div class="telegram-author-photo">
-    <span>
-      <%= message.author_initials %>
-    </span>
-  </div>
-  <div class="telegram-message-body">
+<% if message.is_system? %>
+  <div class="telegram-system-message">
     <span class="telegram-message-author"><%= message.author_name %></span>
-    <div class="telegram-message-text">
-      <%= message.message %>
+    <span><%= message.message %></div>
+  </div>
+<% else %>
+  <div class="telegram-message" data-sent-at=<%= message.sent_at.to_i %>>
+    <%= check_box_tag 'telegram_message_ids[]', message.id %>
+    <time><%= format_time message.sent_at, false %></time>
+    <div class="telegram-author-photo">
+      <span>
+        <%= message.author_initials %>
+      </span>
+    </div>
+    <div class="telegram-message-body">
+      <span class="telegram-message-author"><%= message.author_name %></span>
+      <div class="telegram-message-text">
+        <%= message.message %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>

@@ -67,6 +67,17 @@
   background: #80d066;
 }
 
+.telegram-system-message{
+  display: block;
+  min-width: 10px;
+  padding: 4px 7px;
+  line-height: 1.4;
+  color: #999;
+  text-align: center;
+  margin: 5px 0;
+  font-size: 0.85em;
+}
+
 .message-date{
   border:0px;
   border-top:1px solid #e4e4e4;
