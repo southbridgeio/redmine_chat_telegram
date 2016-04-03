@@ -49,3 +49,21 @@ var formHeight = $('#ajax-modal').css('height').match(/\d+/)[0] - 75
 $('.archive-form').css({
   height: formHeight
 })
+
+$(".telegram-message").click(function(){
+  if ($(this).hasClass("telegram-selected-message")) {
+    $(this).removeClass("telegram-selected-message")
+    $(this).find(".telegram-message-checkbox").prop("checked", false);
+  } else {
+    $(this).addClass("telegram-selected-message")
+    $(this).find(".telegram-message-checkbox").prop("checked", true);
+  }
+})
+
+$(".telegram-message").hover(function(){
+  $(this).find(".telegram-message-checkbox").css("visibility", "visible");
+}, function(){
+  if (!$(this).hasClass("telegram-selected-message")) {
+    $(this).find(".telegram-message-checkbox").css("visibility", "hidden");
+  }
+})

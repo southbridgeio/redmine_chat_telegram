@@ -17,16 +17,24 @@
   padding: 15px 0px;
 }
 
+.telegram-message:hover{
+  background: #f2f6fa;
+}
+
+.telegram-selected-message{
+  background: #f2f6fa;
+}
+
 .telegram-message time{
   float: right;
   color: #adadad;
   font-size: .85em;
 }
 
-.telegram-message input[type=checkbox]{
-  float: left;
-  width: 40px;
-  height: 40px;
+.telegram-message-checkbox{
+  float: right;
+  margin-left: 10px;
+  visibility: hidden;
 }
 
 .telegram-message-body{
