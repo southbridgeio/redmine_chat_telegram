@@ -67,3 +67,35 @@ $(".telegram-message").hover(function(){
     $(this).find(".telegram-message-checkbox").css("visibility", "hidden");
   }
 })
+
+
+// Search
+var messages = $("#telegram-search-input").data("messages")
+
+var searchOptions = {
+  caseSensitive: false,
+  tokenize: true,
+  threshold: 0.0,
+  location: 0,
+  distance: 10000,
+  maxPatternLength: 32,
+  keys: ["message"]
+};
+
+var fuse = new Fuse(messages, searchOptions);
+
+$("#telegram-search-input").keyup(function(event){
+  query = event.target.value
+  console.log(query)
+  if (query){
+    $(".archive-form").children().hide()
+    matchedMessages = fuse.search(query)
+    matchedMessages.forEach(function(message){
+      if (!message['is_system']){
+        $("#telegram_message_" + message.id).show()
+      }
+    })
+  } else {
+    $(".archive-form").children().show()
+  }
+})
