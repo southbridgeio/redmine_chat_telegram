@@ -86,16 +86,27 @@ var fuse = new Fuse(messages, searchOptions);
 
 $("#telegram-search-input").keyup(function(event){
   query = event.target.value
-  console.log(query)
   if (query){
     $(".archive-form").children().hide()
+
     matchedMessages = fuse.search(query)
     matchedMessages.forEach(function(message){
+      var regexp = "^" + query + "| " + query
+      highlightedMessageText = message.message.replace(new RegExp(regexp, "ig"), '<strong>$&</strong>')
       if (!message['is_system']){
-        $("#telegram_message_" + message.id).show()
+        $("#telegram_message_" + message.id)
+        .show()
+        .find(".telegram-message-text").html(highlightedMessageText)
       }
     })
   } else {
     $(".archive-form").children().show()
+    messages.forEach(function(message){
+      if (!message['is_system']){
+        $("#telegram_message_" + message.id)
+        .show()
+        .find(".telegram-message-text").html(message.message)
+      }
+    })
   }
 })
