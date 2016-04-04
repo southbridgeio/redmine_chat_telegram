@@ -98,7 +98,8 @@ namespace :chat_telegram do
                                                     telegram_id:    telegram_id,
                                                     sent_at:        sent_at, message: message_text,
                                                     from_id:        from_id, from_first_name: from_first_name,
-                                                    from_last_name: from_last_name, from_username: from_username
+                                                    from_last_name: from_last_name, from_username: from_username,
+                                                    is_system: true
         else
           issue = Issue.find_by(telegram_id: telegram_chat_id)
           issue = set_telegram_id(message, telegram_chat_id) unless issue.present?
@@ -114,7 +115,8 @@ namespace :chat_telegram do
                                                           telegram_id:    telegram_id,
                                                           sent_at:        sent_at, message: message_text,
                                                           from_id:        from_id, from_first_name: from_first_name,
-                                                          from_last_name: from_last_name, from_username: from_username
+                                                          from_last_name: from_last_name, from_username: from_username,
+                                                          is_system: true
           elsif message.left_chat_participant.present?
             left_chat_participant = message.left_chat_participant
             message_text          = if message.from.id == left_chat_participant.id
@@ -126,7 +128,8 @@ namespace :chat_telegram do
                                                            telegram_id:    telegram_id,
                                                            sent_at:        sent_at, message: message_text,
                                                            from_id:        from_id, from_first_name: from_first_name,
-                                                           from_last_name: from_last_name, from_username: from_username
+                                                           from_last_name: from_last_name, from_username: from_username,
+                                                           is_system: true
 
           elsif message.text.present? and message.chat.type == 'group'
             issue_url = RedmineChatTelegram.issue_url(issue.id)
