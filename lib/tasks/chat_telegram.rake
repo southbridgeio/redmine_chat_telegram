@@ -1,18 +1,3 @@
-def set_telegram_id(message, telegram_chat_id)
-  chat_title = message.chat.title
-  issue_id   = chat_title.match(/#(\d+)/)[1]
-  issue      = Issue.find(issue_id)
-
-  begin
-    issue.telegram_id = telegram_chat_id
-    issue.save
-  rescue ActiveRecord::StaleObjectError
-    issue.reload
-    retry
-  end
-  issue
-end
-
 def chat_user_full_name(telegram_user)
   [telegram_user.first_name, telegram_user.last_name].compact.join
 end
@@ -85,8 +70,15 @@ namespace :chat_telegram do
         from_last_name  = message.from.last_name
         from_username   = message.from.username
 
+        begin
+          issue = Issue.find_by!(telegram_id: telegram_chat_id)
+        rescue Exception => e
+          LOG.error "#{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
+          next
+        end
+
+
         if message.group_chat_created
-          issue = set_telegram_id(message, telegram_chat_id)
 
           issue_url = RedmineChatTelegram.issue_url(issue.id)
           bot.send_message(chat_id:                  telegram_chat_id,
@@ -101,8 +93,6 @@ namespace :chat_telegram do
                                                     from_last_name: from_last_name, from_username: from_username,
                                                     is_system: true
         else
-          issue = Issue.find_by(telegram_id: telegram_chat_id)
-          issue = set_telegram_id(message, telegram_chat_id) unless issue.present?
 
           if message.new_chat_participant.present?
             new_chat_participant = message.new_chat_participant
