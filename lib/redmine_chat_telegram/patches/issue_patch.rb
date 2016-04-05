@@ -8,8 +8,10 @@ module RedmineChatTelegram
           has_many :telegram_messages
           has_one :telegram_group, class_name: 'RedmineChatTelegram::TelegramGroup'
 
+          before_save :set_need_to_close, :reset_need_to_close
+
           def set_need_to_close
-            if telegram_group.present?
+            if closing? and telegram_group.present?
               telegram_group.update need_to_close_at:     2.weeks.from_now,
                                     last_notification_at: (1.week.from_now - 12.hours)
 
@@ -17,7 +19,7 @@ module RedmineChatTelegram
           end
 
           def reset_need_to_close
-            if telegram_group.present?
+            if reopening? and telegram_group.present?
               telegram_group.update need_to_close_at:     nil,
                                     last_notification_at: nil
             end
