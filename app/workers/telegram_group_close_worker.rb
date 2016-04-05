@@ -21,6 +21,15 @@ class TelegramGroupCloseWorker
     cmd = "#{cli_base} \"export_chat_link #{chat_name}\""
     TELEGRAM_GROUP_CLOSE_LOG.debug %x( #{cmd} )
 
+
+    # send notification to chat
+    close_message_text = 'чат закрыт из задачи'
+    cmd       = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
+    msg = %x( #{cmd} )
+
+
+    # remove chat users
+
     cmd       = "#{cli_base} \"chat_info #{chat_name}\""
     chat_info = %x( #{cmd} )
 
@@ -31,6 +40,7 @@ class TelegramGroupCloseWorker
       TELEGRAM_GROUP_CLOSE_LOG.debug %x( #{cmd} )
     end
 
+    # post message to archive
 
     message_text = 'Chat closed'
     TelegramMessage.create issue_id:        issue.id,
