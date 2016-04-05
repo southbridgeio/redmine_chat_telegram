@@ -25,8 +25,14 @@ class TelegramMessage < ActiveRecord::Base
   def author_initials
     if from_first_name && from_last_name
       [from_first_name.first, from_last_name.first].join
-    else
+    elsif from_username
       from_username[0..1]
+    elsif from_first_name
+      from_first_name[0..1]
+    elsif from_last_name
+      from_last_name[0..1]
+    else
+      "--"
     end
   end
 
