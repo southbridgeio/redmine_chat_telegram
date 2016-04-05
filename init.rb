@@ -12,11 +12,16 @@ ActionDispatch::Callbacks.to_prepare do
   end
 end
 
+Sidekiq::Cron::Job.create(name: 'Telegram Group Auto Close - every 1 hour',
+                          cron: '7 * * * *',
+                          class: 'TelegramGroupAutoCloseWorker')
+
+
 Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '0.9.3'
+  version '0.10.0'
   author 'Centos-admin.ru'
   author_url 'http://centos-admin.ru'
 
