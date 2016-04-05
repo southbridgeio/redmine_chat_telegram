@@ -23,7 +23,11 @@ class TelegramMessage < ActiveRecord::Base
   end
 
   def author_initials
-    [from_first_name.first, from_last_name.first].join
+    if from_first_name && from_last_name
+      [from_first_name.first, from_last_name.first].join
+    else
+      from_username[0..1]
+    end
   end
 
   def user_id
