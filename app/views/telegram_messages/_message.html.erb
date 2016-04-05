@@ -6,7 +6,7 @@
     <span><%= message.message %></div>
   </div>
 <% else %>
-  <div class="telegram-message" data-sent-at=<%= message.sent_at.to_i %>>
+  <div class="telegram-message" id="telegram_message_<%= message.id %>" data-sent-at=<%= message.sent_at.to_i %>>
     <%= check_box_tag 'telegram_message_ids[]', message.id, false, class: "telegram-message-checkbox" %>
     <time><%= format_time message.sent_at, false %></time>
     <div class="telegram-author-photo <%= "user-bgcolor-#{color_number_for_user(message.user_id)}" %>">

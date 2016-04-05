@@ -1,6 +1,13 @@
-<div class="archive-date-picker">
-  <span>Перейти к дате:</span>
-  <input id="datetimepicker" type="text" placeholder="выберите дату">
+<div class="archive-top">
+  <div class="archive-datetimepicker">
+    <span>Перейти к дате:</span>
+    <input id="datetimepicker" type="text" placeholder="выберите дату">
+  </div>
+  <div class="archive-search">
+    <span>Поиск:</span>
+    <input size="38" id="telegram-search-input" type="text" data-messages="<%= @telegram_messages.to_json %>" placeholder="введите строку для поиска">
+  </div>
+  <div style="clear: both;"></div>
   <hr>
 </div>
 <%= render partial: 'archive_form'%>
