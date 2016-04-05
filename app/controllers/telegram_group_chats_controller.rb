@@ -1,7 +1,8 @@
 class TelegramGroupChatsController < ApplicationController
   unloadable
 
-  helper JournalsHelper
+  helper :journals
+  helper :issues
 
   def create
     current_user = User.current
