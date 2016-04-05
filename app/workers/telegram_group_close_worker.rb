@@ -2,8 +2,10 @@ class TelegramGroupCloseWorker
   include Sidekiq::Worker
   TELEGRAM_GROUP_CLOSE_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-group-close.log'))
 
-  def perform(issue_id, user_id)
-    user = User.find user_id
+  def perform(issue_id, user_id = nil)
+
+    user = user_id.present? ? User.find user_id : User.anonymous
+
     TELEGRAM_GROUP_CLOSE_LOG.debug user.inspect
 
     issue = Issue.find issue_id
@@ -22,21 +24,26 @@ class TelegramGroupCloseWorker
     TELEGRAM_GROUP_CLOSE_LOG.debug %x( #{cmd} )
 
 
-    # send notification to chat
-    close_message_text = 'чат закрыт из задачи'
-    cmd       = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
-    msg = %x( #{cmd} )
+    unless user.anonymous?
 
+    # send notification to chat
+      close_message_text = 'чат закрыт из задачи'
+      cmd                = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
+      msg                = %x( #{cmd} )
+    end
+
+    issue.init_journal(user, 'Чат Telegram закрыт')
+    issue.save
 
     # remove chat users
 
-    cmd       = "#{cli_base} \"chat_info #{chat_name}\""
-    chat_info = %x( #{cmd} )
+    cmd                = "#{cli_base} \"chat_info #{chat_name}\""
+    chat_info          = %x( #{cmd} )
 
     users_array = chat_info.scan(/user#\d+/)
     users       = users_array.group_by { |u| u }.sort_by { |u| u.last.size }.map(&:first) # remove self in last order
-    users.each do |user_id|
-      cmd = "#{cli_base} \"chat_del_user #{chat_name} #{user_id}\""
+    users.each do |telegram_user_id|
+      cmd = "#{cli_base} \"chat_del_user #{chat_name} #{telegram_user_id}\""
       TELEGRAM_GROUP_CLOSE_LOG.debug %x( #{cmd} )
     end
 

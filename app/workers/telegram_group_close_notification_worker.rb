@@ -2,7 +2,8 @@ class TelegramGroupCloseNotificationWorker
   include Sidekiq::Worker
   include ActionView::Helpers::DateHelper
 
-  TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-group-close-notification.log'))
+  TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG = Logger.new(Rails.root.join('log/chat_telegram',
+                                                                     'telegram-group-close-notification.log'))
 
   def perform(issue_id)
 
