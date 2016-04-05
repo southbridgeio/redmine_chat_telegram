@@ -3,6 +3,8 @@ class TelegramMessage < ActiveRecord::Base
 
   include Redmine::I18n
 
+  COLORS_NUMBER = 8
+
   def self.as_text
     all.map(&:as_text).join("\n\n")
   end
@@ -20,5 +22,16 @@ class TelegramMessage < ActiveRecord::Base
     full_name.present? ? full_name : from_username
   end
 
+  def author_initials
+    if from_first_name && from_last_name
+      [from_first_name.first, from_last_name.first].join
+    else
+      from_username[0..1]
+    end
+  end
+
+  def user_id
+    from_id
+  end
 
 end

@@ -1,54 +1,56 @@
 # redmine_chat_telegram
 
-Redmine plugin which creates telegram group chats
+Plugin developed by [Centos-admin.ru](https://centos-admin.ru)
+
+Redmine plugin used to create Telegram group chats.
+
+The `redmine_chat_telegram` can be used to create a group chat associated with a ticket and record its logs to the Redmine archive. Associated group chats can be easily created via the `Create Telegram chat` link on the ticket page. You're able to copy the link and pass it to anyone you'll want to join this Telegram chat.
 
 ## Installation
 
 ### Requirements
 
-* You need to install the [Telegram CLI](https://github.com/vysheng/tg) first
-* Telegram user account
-* Telegram bot account
-* [Telegrammer gem](https://github.com/mayoral/telegrammer) (place it in your `Gemfile.local`)
-* [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
+* [Telegram CLI](https://github.com/vysheng/tg) should be installed
+* You should have Telegram user account
+* You should have Telegram bot account
+* Install [Telegrammer gem](https://github.com/mayoral/telegrammer), place it in your `Gemfile.local`)
+* Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
 
-### Config for Telegram CLI
+### Telegram CLI configuration
 
-Use `config/telegram.yml.example` as example.
+Take the `config/telegram.yml.example` file and use it as a template.
+Copy it to `config/` folder and rename it to `telegram.yml`.
+Put the correct values for the `telegram_cli_path` and `telegram_cli_public_key_path` variables.
 
-Copy it to `config/telegram.yml` it plugin root and set your values for CLI and public key paths.
+### First time run
 
-### Authorize telegram user
-
-You need to run `telegram-cli` manually on your Redmine server.
-
-On first run you will authorize your user account.
-
-Plugin will can create group chats _after_ that.
+Start `telegram-cli` on your Redmine server and login to Telegram with it. You'll be able to create group chats after that.
 
 ### Create Telegram Bot
 
-It is necessary to register a bot and get its token. There is a special bot in Telegram for this purpose. It is called [@BotFather](https://telegram.me/botfather).
+It is necessary to register a bot and get its token. There is a [@BotFather] bot used in Telegram for this purpose. Type `/start` to get a complete list of available commands.
 
-Start it by typing `/start` to get a list of all available commands.
-Issue the  `/newbot` command and it will ask you to come up with the name for our new bot.
-The name must end with "bot" word.
+Type `/newbot` command to register a new bot. @BotFather will ask you a name for the new bot. The bot's name must end with the "bot" word.
 On success @BotFather will give you token for your new bot and a link so you could quickly add the bot to contact list.
-You'll have to invent a new name if the registration fails.
+You'll have to come up with a new name if registration fails.
 
-Also set Privacy mode to disabled by command `/setprivacy`. This allows bot to listen all group chat messages for writing its to Redmine chat archive.
+Set the Privacy mode to disabled with `/setprivacy`. This will let the bot listen all group chats and write its logs to Redmine chat archive.
 
-You should enter bot's token and name (not @username) on the Plugin Settings page.
+Enter bot's token on the Plugin Settings page to add the bot to your chat.
 
 ### Add bot to user contacts
 
-Send `/start` command to your bot from user account.
+Type `/start` command to your bot from your user account.
 This allows user to add Bot to group chats.
 
 ### Bot launch
 
-Bot rake task:
+Execute the following rake task to launch the bot:
 
 ```shell
 bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 ```
+
+### Usage
+
+Open the ticket. You'll see the new link `Create Telegram chat` on the right side of the ticket. Click it and the Telegram group chat associated with this ticket will be created. The link will change to `Enter Telegram chat`. Click on in to join the chat in your Telegram client. You'll be able to copy and pass the link to anyone you want to invite them to the Group Chat. 

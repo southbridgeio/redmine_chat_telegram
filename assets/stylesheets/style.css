@@ -2,23 +2,159 @@
   background: #fff;
   position: fixed;
 }
-.telegram-message-text{
-  margin-top: 5px;
-  padding-left: 68px;
-}
 
 .archive-form{
   display: block;
   overflow: auto;
 }
 
-.archive-date-picker{
+.archive-top{
   height: 40px;
 }
 
-.message-date{
-  border:0px;
-  border-top:1px solid #e4e4e4;
+.archive-datetimepicker{
+  float:left;
+}
+
+.archive-search{
+  float:right;
+}
+
+.archive-submit-button{
+  float:right;
+}
+
+.telegram-message{
+  padding: 15px 0px;
+}
+
+.telegram-message:hover{
+  background: #f2f6fa;
+}
+
+.telegram-selected-message{
+  background: #f2f6fa;
+}
+
+.telegram-message time{
+  float: right;
+  color: #adadad;
+  font-size: .85em;
+}
+
+.telegram-message-checkbox{
+  float: right;
+  margin-left: 10px;
+  visibility: hidden;
+}
+
+.telegram-message-body{
+  display: block;
+  overflow: hidden;
+}
+
+.telegram-message-author{
+  margin: 1px 0 4px;
+  display: inline-block;
+  font-weight: 700;
+}
+
+.telegram-message-text{
+  line-height: 150%;
+}
+
+.telegram-author-photo{
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 15px 0 0;
+  float: left;
+}
+
+.telegram-author-photo span{
+  line-height: 42px;
+  display: block;
+  color: #fff;
   text-align: center;
-  margin: 10px 0;
+  text-transform: uppercase;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.telegram-system-message{
+  display: block;
+  min-width: 10px;
+  padding: 4px 7px;
+  line-height: 1.4;
+  color: #999;
+  text-align: center;
+  margin: 5px 0;
+  font-size: 0.85em;
+}
+
+.user-color-1{
+  color: #8365ab;
+}
+
+.user-color-2{
+  color: #539e4f;
+}
+
+.user-color-3{
+  color: #ae9661;
+}
+
+.user-color-4{
+  color: #4979a3;
+}
+
+.user-color-5{
+  color: #b7635d;
+}
+
+.user-color-6{
+  color: #b3577a;
+}
+
+.user-color-7{
+  color: #5397b4;
+}
+
+.user-color-8{
+  color: #c07844;
+}
+
+.user-bgcolor-1{
+  background: #cc90e2;
+}
+
+.user-bgcolor-2{
+  background: #80d066;
+}
+
+.user-bgcolor-3{
+  background: #ecd074;
+}
+
+.user-bgcolor-4{
+  background: #6fb1e4;
+}
+
+.user-bgcolor-5{
+  background: #e57979;
+}
+
+.user-bgcolor-6{
+  background: #f98bae;
+}
+
+.user-bgcolor-7{
+  background: #73cdd0;
+}
+
+.user-bgcolor-8{
+  background: #fba76f;
 }

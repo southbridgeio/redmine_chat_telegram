@@ -89,13 +89,17 @@ namespace :chat_telegram do
           issue = set_telegram_id(message, telegram_chat_id)
 
           issue_url = RedmineChatTelegram.issue_url(issue.id)
-          bot.send_message(chat_id: telegram_chat_id, text: "Hello, everybody! This is a chat for issue: #{issue_url}")
+          bot.send_message(chat_id:                  telegram_chat_id,
+                           text:                     "Hello, everybody! This is a chat for issue: #{issue_url}",
+                           disable_web_page_preview: true)
+
           message_text     = 'Chat created'
           telegram_message = TelegramMessage.create issue_id:       issue.id,
                                                     telegram_id:    telegram_id,
                                                     sent_at:        sent_at, message: message_text,
                                                     from_id:        from_id, from_first_name: from_first_name,
-                                                    from_last_name: from_last_name, from_username: from_username
+                                                    from_last_name: from_last_name, from_username: from_username,
+                                                    is_system: true
         else
           issue = Issue.find_by(telegram_id: telegram_chat_id)
           issue = set_telegram_id(message, telegram_chat_id) unless issue.present?
@@ -111,7 +115,8 @@ namespace :chat_telegram do
                                                           telegram_id:    telegram_id,
                                                           sent_at:        sent_at, message: message_text,
                                                           from_id:        from_id, from_first_name: from_first_name,
-                                                          from_last_name: from_last_name, from_username: from_username
+                                                          from_last_name: from_last_name, from_username: from_username,
+                                                          is_system: true
           elsif message.left_chat_participant.present?
             left_chat_participant = message.left_chat_participant
             message_text          = if message.from.id == left_chat_participant.id
@@ -123,7 +128,8 @@ namespace :chat_telegram do
                                                            telegram_id:    telegram_id,
                                                            sent_at:        sent_at, message: message_text,
                                                            from_id:        from_id, from_first_name: from_first_name,
-                                                           from_last_name: from_last_name, from_username: from_username
+                                                           from_last_name: from_last_name, from_username: from_username,
+                                                           is_system: true
 
           elsif message.text.present? and message.chat.type == 'group'
             issue_url = RedmineChatTelegram.issue_url(issue.id)
@@ -131,7 +137,9 @@ namespace :chat_telegram do
             message_text = message.text
 
             if message_text.include?('/task') or message_text.include?('/link') or message_text.include?('/url')
-              bot.send_message(chat_id: telegram_chat_id, text: "#{issue.subject}\n#{issue_url}")
+              bot.send_message(chat_id:                  telegram_chat_id,
+                               text:                     "#{issue.subject}\n#{issue_url}",
+                               disable_web_page_preview: true)
 
               next unless message_text.gsub('/task', '').gsub('/link', '').gsub('/url', '').strip.present?
 

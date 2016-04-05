@@ -49,3 +49,64 @@ var formHeight = $('#ajax-modal').css('height').match(/\d+/)[0] - 75
 $('.archive-form').css({
   height: formHeight
 })
+
+$(".telegram-message").click(function(){
+  if ($(this).hasClass("telegram-selected-message")) {
+    $(this).removeClass("telegram-selected-message")
+    $(this).find(".telegram-message-checkbox").prop("checked", false);
+  } else {
+    $(this).addClass("telegram-selected-message")
+    $(this).find(".telegram-message-checkbox").prop("checked", true);
+  }
+})
+
+$(".telegram-message").hover(function(){
+  $(this).find(".telegram-message-checkbox").css("visibility", "visible");
+}, function(){
+  if (!$(this).hasClass("telegram-selected-message")) {
+    $(this).find(".telegram-message-checkbox").css("visibility", "hidden");
+  }
+})
+
+
+// Search
+var messages = $("#telegram-search-input").data("messages")
+
+var searchOptions = {
+  caseSensitive: false,
+  tokenize: true,
+  threshold: 0.0,
+  location: 0,
+  distance: 10000,
+  maxPatternLength: 32,
+  keys: ["message"]
+};
+
+var fuse = new Fuse(messages, searchOptions);
+
+$("#telegram-search-input").keyup(function(event){
+  query = event.target.value
+  if (query){
+    $(".archive-form").children().hide()
+
+    matchedMessages = fuse.search(query)
+    matchedMessages.forEach(function(message){
+      var regexp = "^" + query + "| " + query
+      highlightedMessageText = message.message.replace(new RegExp(regexp, "ig"), '<strong>$&</strong>')
+      if (!message['is_system']){
+        $("#telegram_message_" + message.id)
+        .show()
+        .find(".telegram-message-text").html(highlightedMessageText)
+      }
+    })
+  } else {
+    $(".archive-form").children().show()
+    messages.forEach(function(message){
+      if (!message['is_system']){
+        $("#telegram_message_" + message.id)
+        .show()
+        .find(".telegram-message-text").html(message.message)
+      }
+    })
+  }
+})

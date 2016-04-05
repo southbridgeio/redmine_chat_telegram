@@ -16,7 +16,7 @@ Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '0.8.1'
+  version '0.9.3'
   author 'Centos-admin.ru'
   author_url 'http://centos-admin.ru'
 
@@ -25,7 +25,7 @@ Redmine::Plugin.register :redmine_chat_telegram do
 
   project_module :chat_telegram do
     permission :create_telegram_chat, :telegram_group_chats => :create
-    permission :close_telegram_chat, :telegram_group_chats => :create
+    permission :close_telegram_chat, :telegram_group_chats => :destroy
     permission :view_telegram_chat_link, :telegram_group_chats => :create
     permission :view_telegram_chat_archive, :telegram_group_chats => :create
   end
