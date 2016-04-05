@@ -8,10 +8,21 @@
   overflow: auto;
 }
 
-.archive-date-picker{
+.archive-top{
   height: 40px;
 }
 
+.archive-datetimepicker{
+  float:left;
+}
+
+.archive-search{
+  float:right;
+}
+
+.archive-submit-button{
+  float:right;
+}
 
 .telegram-message{
   padding: 15px 0px;
