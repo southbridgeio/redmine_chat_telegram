@@ -20,6 +20,11 @@ $('#ajax-modal').dialog({
   }
 })
 
+function scrollTo(container, scrollElement){
+  container.animate({scrollTop: scrollElement.offset().top - container.offset().top +
+                    container.scrollTop()})
+}
+
 $('#datetimepicker').datetimepicker({
   validateOnBlur: false,
   format: "d.m.Y H:i",
@@ -27,21 +32,20 @@ $('#datetimepicker').datetimepicker({
   maxDate: "<%= format_date @telegram_messages.last.sent_at %>",
   formatDate: "d.m.Y",
   onSelectTime: function(time){
-    var scrollTo = {}
+    var scrollElement = {}
     var container = $('.archive-form')
     var selectedUnixTime = time / 1000|0
 
     // find message to scroll
     $('.telegram-message').each(function(){
       var messageTime = $(this).data('sent-at')
-      scrollTo = $(this)
+      scrollElement = $(this)
       if (messageTime > selectedUnixTime) {
         return false
       }
     })
 
-    container.animate({scrollTop: scrollTo.offset().top - container.offset().top +
-                      container.scrollTop()})
+    scrollTo(container, scrollElement)
   }
 })
 
@@ -72,6 +76,22 @@ $(".telegram-message").hover(function(){
 // Search
 var messages = $("#telegram-search-input").data("messages")
 
+function clearSearch(){
+  $("#telegram-search-input").prop("value", "")
+
+  $(".archive-form").children().show()
+  messages.forEach(function(message){
+    if (!message['is_system']){
+      $("#telegram_message_" + message.id).show()
+      .find(".telegram-message-text").html(message.message)
+
+      $("#telegram_message_" + message.id)
+      .find(".telegram-goto-link").hide()
+    }
+  })
+}
+
+
 var searchOptions = {
   caseSensitive: false,
   tokenize: true,
@@ -94,19 +114,22 @@ $("#telegram-search-input").keyup(function(event){
       var regexp = "^" + query + "| " + query
       highlightedMessageText = message.message.replace(new RegExp(regexp, "ig"), '<strong>$&</strong>')
       if (!message['is_system']){
-        $("#telegram_message_" + message.id)
-        .show()
+        $("#telegram_message_" + message.id).show()
         .find(".telegram-message-text").html(highlightedMessageText)
+
+        $("#telegram_message_" + message.id)
+        .find(".telegram-goto-link").show()
       }
     })
   } else {
-    $(".archive-form").children().show()
-    messages.forEach(function(message){
-      if (!message['is_system']){
-        $("#telegram_message_" + message.id)
-        .show()
-        .find(".telegram-message-text").html(message.message)
-      }
-    })
+    clearSearch()
   }
+})
+
+$(".telegram-goto-link").click(function(){
+  clearSearch()
+
+  messageId = $(this).data('message-id')
+  var messageElement = $("#telegram_message_" + messageId)
+  scrollTo($(".archive-form"), messageElement)
 })
