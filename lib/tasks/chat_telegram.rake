@@ -40,6 +40,8 @@ def chat_telegram_bot_init
   bot      = Telegrammer::Bot.new(token)
   bot_name = bot.me.username
 
+  Setting.plugin_redmine_chat_telegram['bot_name'] = "user##{bot.me.id}"
+
   until bot_name.present?
 
     LOG.error 'Telegram Bot Token is invalid or Telegram API is in downtime. I will try again after minute'
@@ -77,7 +79,7 @@ namespace :chat_telegram do
         from_username   = message.from.username
 
         begin
-          issue = Issue.find_by!(telegram_id: telegram_chat_id)
+          issue = Issue.joins(:telegram_group).find_by!(redmine_chat_telegram_telegram_groups: {telegram_id: telegram_chat_id})
         rescue Exception => e
           LOG.error "#{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
           next
