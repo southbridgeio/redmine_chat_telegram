@@ -4,13 +4,17 @@ en:
   permission_close_telegram_chat: Close Telegram Chat
   permission_view_telegram_chat_link: View Telegram Chat Link
   permission_view_telegram_chat_archive: View Chat Archive
-
   redmine_chat_telegram:
     tab_title: Chat Telegram
     settings:
-      creator_telegram_group_ids: "This groups users can create Telegram Group Chat"
-      telegram_group_creator_role:
-        title: Who can create Telegram groups?
-        all: All
-        selected: Holders of the relevant rights (by role)
-
+      daily_report: Post a comment with chat summary once a day
+    messages:
+      hello: "Hello, everybody! This is a chat for issue: %{issue_url}"
+      closed_from_issue: chat was closed from issue
+      closed_automaticaly: chat was closed automatically
+      close_notification: "The issue of this chat is closed. Chat will automatically disbanded after %{time_in_words}."
+    archive:
+      chat_was_created: "Chat was created"
+    journal:
+      chat_was_created: "Chat was created. Join it here: %{telegram_chat_url}"
+      chat_was_closed: Telegram Group was closed

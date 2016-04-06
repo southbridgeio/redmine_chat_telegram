@@ -6,6 +6,7 @@ class TelegramGroupCloseNotificationWorker
                                                                      'telegram-group-close-notification.log'))
 
   def perform(issue_id)
+    I18n.locale = Setting['default_language']
 
     issue = Issue.find issue_id
     TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG.debug issue.inspect
@@ -23,7 +24,7 @@ class TelegramGroupCloseNotificationWorker
 
     # send notification to chat
     time_in_words = distance_of_time_in_words(Time.now, telegram_group.need_to_close_at)
-    close_message_text = "Задача по этому чату закрыта. Чат будет автоматически расформирован через #{time_in_words}."
+    close_message_text = I18n.t('redmine_chat_telegram.messages.close_notification', time_in_words: time_in_words)
     cmd       = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
     msg = %x( #{cmd} )
 

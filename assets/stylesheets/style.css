@@ -95,6 +95,13 @@
   font-size: 0.85em;
 }
 
+.telegram-goto-link{
+  color: #adadad !important;
+  font-size: .85em;
+  cursor: pointer;
+  display:none;
+}
+
 .user-color-1{
   color: #8365ab;
 }

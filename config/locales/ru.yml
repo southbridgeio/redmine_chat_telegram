@@ -7,8 +7,14 @@ ru:
   redmine_chat_telegram:
     tab_title: Chat Telegram
     settings:
-      creator_telegram_group_ids: "Пользователи из этих групп могут создавать групповые чаты Telegram"
-      telegram_group_creator_role:
-        title: Кто может создавать группы Telegram?
-        all: Все
-        selected: Те, чьей роли разрешено создавать группы
+      daily_report: Публиковать комментарий со сводкой по чату раз в сутки
+    messages:
+      hello: "Всем привет! Это чат для задачи: %{issue_url}"
+      closed_from_issue: чат закрыт из задачи
+      closed_automaticaly: чат закрыт автоматически
+      close_notification: "Задача по этому чату закрыта. Чат будет автоматически расформирован через %{time_in_words}."
+    archive:
+      chat_was_created: Чат создан
+    journal:
+      chat_was_created: "По ссылке %{telegram_chat_url} создан чат."
+      chat_was_closed: Чат Telegram закрыт
