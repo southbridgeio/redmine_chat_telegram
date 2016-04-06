@@ -16,6 +16,9 @@ Sidekiq::Cron::Job.create(name:  'Telegram Group Auto Close - every 1 hour',
                           cron:  '7 * * * *',
                           class: 'TelegramGroupAutoCloseWorker')
 
+Sidekiq::Cron::Job.create(name:  'Telegram Group Daily Report - every day',
+                          cron:  '7 0 * * *',
+                          class: 'TelegramGroupDailyReportWorker')
 
 Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
