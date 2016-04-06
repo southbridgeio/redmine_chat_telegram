@@ -15,6 +15,10 @@ ru:
       closed_automaticaly: чат закрыт автоматически
       close_notification: "Задача по этому чату закрыта. Чат будет автоматически расформирован через %{time_in_words}."
     archive:
+      joined: присоединился к чату
+      invited: "пригласил %{system_data}"
+      left_chat: покинул чат
+      kicked: исключен
       chat_was_created: Чат создан
       goto_message_link: Перейти к сообщению
       goto_date: Перейти к дате
@@ -25,6 +29,7 @@ ru:
     journal:
       chat_was_created: "По ссылке %{telegram_chat_url} создан чат."
       chat_was_closed: Чат Telegram закрыт
+      from_telegram: Из Telegram
     link:
       enter_chat: Войти в чат Telegram
       close_chat: Закрыть чат

@@ -15,6 +15,10 @@ en:
       closed_automaticaly: chat was closed automatically
       close_notification: "The issue of this chat is closed. Chat will automatically disbanded after %{time_in_words}."
     archive:
+      joined: joined the chat
+      invired: "invited %{system_data}"
+      left_chat: left the chat
+      kicked: kicked
       chat_was_created: "Chat was created"
       goto_message_link: Go to message
       goto_date: Go to date
@@ -25,6 +29,7 @@ en:
     journal:
       chat_was_created: "Chat was created. Join it here: %{telegram_chat_url}"
       chat_was_closed: Telegram Group was closed
+      from_telegram: from Telegram
     link:
       enter_chat: Enter telegram chat
       close_chat: Close chat

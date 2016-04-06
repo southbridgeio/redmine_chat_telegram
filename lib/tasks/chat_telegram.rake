@@ -111,32 +111,39 @@ namespace :chat_telegram do
           if message.new_chat_participant.present?
             new_chat_participant = message.new_chat_participant
 
-            # TODO: Localize it
-            message_text         = if message.from.id == new_chat_participant.id
-                                     'joined to the group'
-                                   else
-                                     "invited #{chat_user_full_name(new_chat_participant)}"
-                                   end
-            telegram_message     = TelegramMessage.create issue_id:       issue.id,
-                                                          telegram_id:    telegram_id,
-                                                          sent_at:        sent_at, message: message_text,
-                                                          from_id:        from_id, from_first_name: from_first_name,
-                                                          from_last_name: from_last_name, from_username: from_username,
-                                                          is_system: true, bot_message: true
+            telegram_message     = TelegramMessage.new issue_id:       issue.id,
+                                                       telegram_id:    telegram_id,
+                                                       sent_at:        sent_at,
+                                                       from_id:        from_id, from_first_name: from_first_name,
+                                                       from_last_name: from_last_name, from_username: from_username,
+                                                       is_system: true, bot_message: true
+
+            if message.from.id == new_chat_participant.id
+              telegram_message.message = 'joined'
+            else
+              telegram_message.message = "invited"
+              telegram_message.system_data = chat_user_full_name(new_chat_participant)
+            end
+            telegram_message.save
+
           elsif message.left_chat_participant.present?
             left_chat_participant = message.left_chat_participant
-            # TODO: Localize it
-            message_text          = if message.from.id == left_chat_participant.id
-                                      'left the group'
-                                    else
-                                      "kicked #{chat_user_full_name(left_chat_participant)}"
-                                    end
-            telegram_message      = TelegramMessage.create issue_id:       issue.id,
-                                                           telegram_id:    telegram_id,
-                                                           sent_at:        sent_at, message: message_text,
-                                                           from_id:        from_id, from_first_name: from_first_name,
-                                                           from_last_name: from_last_name, from_username: from_username,
-                                                           is_system: true, bot_message: true
+
+            telegram_message      = TelegramMessage.new issue_id:       issue.id,
+                                                        telegram_id:    telegram_id,
+                                                        sent_at:        sent_at,
+                                                        from_id:        from_id, from_first_name: from_first_name,
+                                                        from_last_name: from_last_name, from_username: from_username,
+                                                        is_system: true, bot_message: true
+
+            if message.from.id == left_chat_participant.id
+              telegram_message.message = 'left_group'
+            else
+              telegram_message.message_text = 'kicked'
+              telegram_message.system_data = chat_user_full_name(left_chat_participant)
+            end
+            telegram_message.save
+
 
           elsif message.text.present? and message.chat.type == 'group'
             issue_url = RedmineChatTelegram.issue_url(issue.id)
@@ -169,8 +176,7 @@ namespace :chat_telegram do
               telegram_message.message = message_text.gsub('/log', '')
 
               journal_text = telegram_message.as_text(with_time: false)
-              # TODO: Localize it
-              issue.init_journal(User.current, "_Из Telegram:_ \n\n#{journal_text}")
+              issue.init_journal(User.current, "_#{ I18n.t('redmine_chat_telegram.journal.from_telegram') }:_ \n\n#{journal_text}")
               issue.save
             end
 

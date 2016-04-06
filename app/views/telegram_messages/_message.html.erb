@@ -4,10 +4,10 @@
       <%= message.author_name %>
     </span>
     <span>
-      <% if message.message == 'chat_was_created' %>
-        <%= t 'redmine_chat_telegram.archive.chat_was_created' %>
+      <% if message.system_data.present?  %>
+        <%= t "redmine_chat_telegram.archive.#{message.message}", system_data: message.system_data %>
       <% else %>
-        <%= message.message %>
+        <%= t "redmine_chat_telegram.archive.#{message.message}" %>
       <% end %>
     </span>
   </div>
