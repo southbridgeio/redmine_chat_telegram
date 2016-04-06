@@ -34,9 +34,6 @@ class TelegramGroupCloseWorker
       msg                = %x( #{cmd} )
     end
 
-    issue.init_journal(user, 'Чат Telegram закрыт')
-    issue.save
-
     # remove chat users
 
     cmd                = "#{cli_base} \"chat_info #{chat_name}\""

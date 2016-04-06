@@ -46,9 +46,11 @@ class TelegramGroupChatsController < ApplicationController
   end
 
   def destroy
-    @issue                   = Issue.visible.find(params[:id])
-    @issue.telegram_chat_url = nil
-    @project                 = @issue.project
+    @issue   = Issue.visible.find(params[:id])
+    @project = @issue.project
+
+    @issue.telegram_group.destroy
+    @issue.init_journal(user, 'Чат Telegram закрыт')
 
     if @issue.save
       TelegramGroupCloseWorker.perform_async(@issue.id, User.current.id)
@@ -59,12 +61,12 @@ class TelegramGroupChatsController < ApplicationController
 
   def load_journals
     @journals = @issue.journals.includes(:user, :details).
-                    references(:user, :details).
-                    reorder(:created_on, :id).to_a
-    @journals.each_with_index {|j,i| j.indice = i+1}
+        references(:user, :details).
+        reorder(:created_on, :id).to_a
+    @journals.each_with_index { |j, i| j.indice = i+1 }
     @journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, @issue.project)
     Journal.preload_journals_details_custom_fields(@journals)
-    @journals.select! {|journal| journal.notes? || journal.visible_details.any?}
+    @journals.select! { |journal| journal.notes? || journal.visible_details.any? }
     @journals.reverse! if User.current.wants_comments_in_reverse_order?
   end
 end
