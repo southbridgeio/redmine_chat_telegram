@@ -3,6 +3,7 @@ class TelegramGroupCloseWorker
   TELEGRAM_GROUP_CLOSE_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-group-close.log'))
 
   def perform(issue_id, user_id = nil)
+    I18n.locale = Setting['default_language']
 
     user = user_id.present? ? User.find(user_id) : User.anonymous
 
@@ -26,13 +27,13 @@ class TelegramGroupCloseWorker
     TELEGRAM_GROUP_CLOSE_LOG.debug %x( #{cmd} )
 
 
-    unless user.anonymous?
-
     # send notification to chat
-      close_message_text = 'чат закрыт из задачи'
-      cmd                = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
-      msg                = %x( #{cmd} )
-    end
+    close_message_text = user.anonymous? ?
+        I18n.t('redmine_chat_telegram.messages.closed_automaticaly') :
+        I18n.t('redmine_chat_telegram.messages.closed_from_issue')
+
+    cmd                = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
+    msg                = %x( #{cmd} )
 
     # remove chat users
 
@@ -45,14 +46,6 @@ class TelegramGroupCloseWorker
       cmd = "#{cli_base} \"chat_del_user #{chat_name} #{telegram_user_id}\""
       TELEGRAM_GROUP_CLOSE_LOG.debug %x( #{cmd} )
     end
-
-    # post message to archive
-
-    message_text = 'Chat closed'
-    TelegramMessage.create issue_id:        issue.id,
-                           sent_at:         Time.now, message: message_text,
-                           from_first_name: user.firstname,
-                           from_last_name:  user.lastname
 
     telegram_group.destroy
   rescue ActiveRecord::RecordNotFound => e

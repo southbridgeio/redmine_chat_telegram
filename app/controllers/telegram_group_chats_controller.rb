@@ -32,7 +32,9 @@ class TelegramGroupChatsController < ApplicationController
                                    shared_url:  telegram_chat_url
     end
 
-    @issue.init_journal(current_user, "По ссылке #{telegram_chat_url} создан чат.")
+    @issue.init_journal(current_user,
+                        I18n.t('redmine_chat_telegram.journal.chat_was_created',
+                               telegram_chat_url: telegram_chat_url))
     @issue.save
 
     @project = @issue.project
@@ -50,7 +52,7 @@ class TelegramGroupChatsController < ApplicationController
     @project = @issue.project
 
     @issue.telegram_group.destroy
-    @issue.init_journal(user, 'Чат Telegram закрыт')
+    @issue.init_journal(user, I18n.t('redmine_chat_telegram.journal.chat_was_closed'))
 
     if @issue.save
       TelegramGroupCloseWorker.perform_async(@issue.id, User.current.id)
