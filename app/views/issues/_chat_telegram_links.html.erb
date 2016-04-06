@@ -10,7 +10,7 @@
 
       <% if User.current.allowed_to?(:close_telegram_chat, @issue.project) %>
         | <%= link_to 'Закрыть чат', telegram_group_chat_path(@issue.id),
-                      method: :delete, remote: true, data: { confirm: l(:text_are_you_sure) } %>
+                      method: :delete, data: { confirm: l(:text_are_you_sure) } %>
       <% end %>
 
     <% else %>

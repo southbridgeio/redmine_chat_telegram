@@ -3,7 +3,13 @@
     <span class="telegram-message-author <%= "user-color-#{color_number_for_user(message.user_id)}" %>">
       <%= message.author_name %>
     </span>
-    <span><%= message.message %></div>
+    <span>
+      <% if message.message == 'chat_was_created' %>
+        <%= t 'redmine_chat_telegram.archive.chat_was_created' %>
+      <% else %>
+        <%= message.message %>
+      <% end %>
+    </span>
   </div>
 <% else %>
   <div class="telegram-message" id="telegram_message_<%= message.id %>" data-sent-at=<%= message.sent_at.to_i %>>

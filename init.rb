@@ -12,10 +12,13 @@ ActionDispatch::Callbacks.to_prepare do
   end
 end
 
-Sidekiq::Cron::Job.create(name: 'Telegram Group Auto Close - every 1 hour',
-                          cron: '7 * * * *',
+Sidekiq::Cron::Job.create(name:  'Telegram Group Auto Close - every 1 hour',
+                          cron:  '7 * * * *',
                           class: 'TelegramGroupAutoCloseWorker')
 
+Sidekiq::Cron::Job.create(name:  'Telegram Group Daily Report - every day',
+                          cron:  '7 0 * * *',
+                          class: 'TelegramGroupDailyReportWorker')
 
 Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
@@ -25,7 +28,10 @@ Redmine::Plugin.register :redmine_chat_telegram do
   author 'Centos-admin.ru'
   author_url 'http://centos-admin.ru'
 
-  settings(default: { 'bot_name' => 'BotName', 'bot_token' => 'bot_token' },
+  settings(default: { 'bot_name'     => 'BotName',
+                      'bot_token'    => 'bot_token',
+                      'daily_report' => true
+                    },
            partial: 'settings/chat_telegram')
 
   project_module :chat_telegram do
