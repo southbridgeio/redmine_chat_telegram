@@ -7,8 +7,4 @@ ru:
   redmine_chat_telegram:
     tab_title: Chat Telegram
     settings:
-      creator_telegram_group_ids: "Пользователи из этих групп могут создавать групповые чаты Telegram"
-      telegram_group_creator_role:
-        title: Кто может создавать группы Telegram?
-        all: Все
-        selected: Те, чьей роли разрешено создавать группы
+      daily_report: Публиковать комментарий со сводкой по чату раз в сутки

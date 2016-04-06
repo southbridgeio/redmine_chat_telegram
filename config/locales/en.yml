@@ -8,9 +8,5 @@ en:
   redmine_chat_telegram:
     tab_title: Chat Telegram
     settings:
-      creator_telegram_group_ids: "This groups users can create Telegram Group Chat"
-      telegram_group_creator_role:
-        title: Who can create Telegram groups?
-        all: All
-        selected: Holders of the relevant rights (by role)
+      daily_report: Post a comment with chat summary once a day
 
