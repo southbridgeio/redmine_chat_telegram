@@ -27,10 +27,10 @@ function scrollTo(container, scrollElement){
 
 $('#datetimepicker').datetimepicker({
   validateOnBlur: false,
-  format: "d.m.Y H:i",
+  format: "<%= current_date_format %> H:i",
   minDate: "<%= format_date @telegram_messages.first.sent_at %>",
   maxDate: "<%= format_date @telegram_messages.last.sent_at %>",
-  formatDate: "d.m.Y",
+  formatDate: "<%= current_date_format %>",
   onSelectTime: function(time){
     var scrollElement = {}
     var container = $('.archive-form')
