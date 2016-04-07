@@ -12,6 +12,8 @@ ActionDispatch::Callbacks.to_prepare do
   end
 end
 
+Sidekiq::Logging.logger = Logger.new(Rails.root.join('log', 'sidekiq.log'))
+
 Sidekiq::Cron::Job.create(name:  'Telegram Group Auto Close - every 1 hour',
                           cron:  '7 * * * *',
                           class: 'TelegramGroupAutoCloseWorker')
@@ -24,7 +26,7 @@ Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '1.0.0.beta2'
+  version '1.0.0.beta3'
   author 'Centos-admin.ru'
   author_url 'http://centos-admin.ru'
 
