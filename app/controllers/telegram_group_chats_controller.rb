@@ -55,6 +55,8 @@ class TelegramGroupChatsController < ApplicationController
     if @issue.save
       TelegramGroupCloseWorker.perform_async(@issue.id, User.current.id)
     end
+
+    redirect_to issue_path(@issue)
   end
 
   private
