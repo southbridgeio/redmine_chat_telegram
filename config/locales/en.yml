@@ -20,7 +20,6 @@ en:
       left_chat: left the chat
       kicked: kicked
       chat_was_created: "Chat was created"
-      goto_message_link: Go to message
       goto_date: Go to date
       select_date: select date
       search: Search
