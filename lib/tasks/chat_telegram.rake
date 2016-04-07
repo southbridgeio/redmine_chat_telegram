@@ -40,7 +40,13 @@ def chat_telegram_bot_init
   bot      = Telegrammer::Bot.new(token)
   bot_name = bot.me.username
 
-  Setting.plugin_redmine_chat_telegram['bot_name'] = "user##{bot.me.id}"
+  plugin_settings = Setting.find_by(name: 'plugin_redmine_chat_telegram')
+
+  plugin_settings_hash = plugin_settings.value
+  plugin_settings_hash['bot_name'] = "user##{bot.me.id}"
+  plugin_settings.value = plugin_settings_hash
+
+  plugin_settings.save
 
   until bot_name.present?
 
@@ -69,7 +75,7 @@ namespace :chat_telegram do
 
     bot.get_updates(fail_silently: false) do |message|
       begin
-        telegram_chat_id = message.chat.id
+        telegram_chat_id = message.chat.id.abs
         telegram_id      = message.message_id
         sent_at          = message.date
 

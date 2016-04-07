@@ -14,9 +14,7 @@ class TelegramGroupCloseWorker
 
     telegram_group = issue.telegram_group
 
-    cli_path        = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_path']
-    public_key_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_public_key_path']
-    cli_base        = "#{cli_path} -WCI -k  #{public_key_path} -e "
+    cli_base = RedmineChatTelegram.cli_base
 
     chat_name = "chat##{telegram_group.telegram_id.abs}"
 
@@ -32,13 +30,13 @@ class TelegramGroupCloseWorker
         I18n.t('redmine_chat_telegram.messages.closed_automaticaly') :
         I18n.t('redmine_chat_telegram.messages.closed_from_issue')
 
-    cmd                = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
-    msg                = %x( #{cmd} )
+    cmd       = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
+    msg       = %x( #{cmd} )
 
     # remove chat users
 
-    cmd                = "#{cli_base} \"chat_info #{chat_name}\""
-    chat_info          = %x( #{cmd} )
+    cmd       = "#{cli_base} \"chat_info #{chat_name}\""
+    chat_info = %x( #{cmd} )
 
     users_array = chat_info.scan(/user#\d+/)
     users       = users_array.group_by { |u| u }.sort_by { |u| u.last.size }.map(&:first) # remove self in last order

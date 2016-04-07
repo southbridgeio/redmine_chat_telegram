@@ -13,9 +13,7 @@ class TelegramGroupCloseNotificationWorker
 
     telegram_group = issue.telegram_group
 
-    cli_path        = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_path']
-    public_key_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_public_key_path']
-    cli_base        = "#{cli_path} -WCI -k  #{public_key_path} -e "
+    cli_base = RedmineChatTelegram.cli_base
 
     chat_name = "chat##{telegram_group.telegram_id.abs}"
 
