@@ -30,6 +30,7 @@ ru:
       chat_was_created: "По ссылке %{telegram_chat_url} создан чат."
       chat_was_closed: Чат Telegram закрыт
       from_telegram: Из Telegram
+      daily_report: "За %{date} в чате переписывались %{users}, всего %{messages_count} реплик. Всего в чате было %{users_count} человек."
     link:
       enter_chat: Войти в чат Telegram
       close_chat: Закрыть чат
