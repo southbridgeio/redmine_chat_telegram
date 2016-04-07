@@ -24,9 +24,6 @@
       <span class="telegram-message-author <%= "user-color-#{color_number_for_user(message.user_id)}" %>">
         <%= message.author_name %>
       </span>
-      <a href="#" data-message-id="<%= message.id %>" class="telegram-goto-link">
-        <%= t 'redmine_chat_telegram.archive.goto_message_link' %>
-      </a>
       <div class="telegram-message-text">
         <%= message.message %>
       </div>

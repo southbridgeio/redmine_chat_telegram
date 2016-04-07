@@ -62,6 +62,12 @@ $(".telegram-message").click(function(){
     $(this).addClass("telegram-selected-message")
     $(this).find(".telegram-message-checkbox").prop("checked", true);
   }
+
+  // Go to message from search
+  if ($("#telegram-search-input").prop("value") != ""){
+    clearSearch()
+    scrollTo($(".archive-form"), $(this))
+  }
 })
 
 $(".telegram-message").hover(function(){
@@ -84,9 +90,6 @@ function clearSearch(){
     if (!message['is_system']){
       $("#telegram_message_" + message.id).show()
       .find(".telegram-message-text").html(message.message)
-
-      $("#telegram_message_" + message.id)
-      .find(".telegram-goto-link").hide()
     }
   })
 }
@@ -116,20 +119,9 @@ $("#telegram-search-input").keyup(function(event){
       if (!message['is_system']){
         $("#telegram_message_" + message.id).show()
         .find(".telegram-message-text").html(highlightedMessageText)
-
-        $("#telegram_message_" + message.id)
-        .find(".telegram-goto-link").show()
       }
     })
   } else {
     clearSearch()
   }
-})
-
-$(".telegram-goto-link").click(function(){
-  clearSearch()
-
-  messageId = $(this).data('message-id')
-  var messageElement = $("#telegram_message_" + messageId)
-  scrollTo($(".archive-form"), messageElement)
 })
