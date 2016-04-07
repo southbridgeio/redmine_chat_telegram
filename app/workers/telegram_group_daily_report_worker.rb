@@ -16,12 +16,11 @@ class TelegramGroupDailyReportWorker
             where('sent_at >= ? and sent_at <= ?', time_from, time_to).
             where(is_system: false, bot_message: false)
 
-        # TODO: Localize it
         date_string = format_date(yesterday)
         user_names = telegram_messages.map(&:author_name).uniq
         joined_user_names = user_names.join(', ')
-        journal_text = "За #{date_string} в чате переписывались #{joined_user_names}, всего #{telegram_messages.size} реплик. Всего в чате было #{user_names.count} человек."
-        issue.init_journal(User.current, "_Из чата Telegram:_ \n\n#{journal_text}")
+        journal_text = I18n.t('redmine_chat_telegram.journal.daily_report', date: date_string, users: joined_user_names, messages_count: telegram_messages.size, users_count: user_names.count)
+        issue.init_journal(User.current, "_#{ I18n.t 'redmine_chat_telegram.journal.from_telegram' }:_ \n\n#{journal_text}")
         issue.save
       end
     end
