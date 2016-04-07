@@ -75,10 +75,11 @@ namespace :chat_telegram do
 
     bot.get_updates(fail_silently: false) do |message|
       begin
-        telegram_chat_id = message.chat.id.abs
+        telegram_chat_id = message.chat.id
 
         begin
-          issue = Issue.joins(:telegram_group).find_by!(redmine_chat_telegram_telegram_groups: { telegram_id: telegram_chat_id })
+          issue = Issue.joins(:telegram_group).find_by!(redmine_chat_telegram_telegram_groups:
+                                                            { telegram_id: telegram_chat_id.abs })
         rescue Exception => e
           LOG.error "#{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
           next
