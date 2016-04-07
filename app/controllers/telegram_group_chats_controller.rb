@@ -7,9 +7,7 @@ class TelegramGroupChatsController < ApplicationController
   def create
     current_user = User.current
 
-    cli_path        = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_path']
-    public_key_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_public_key_path']
-    cli_base        = "#{cli_path} -WCI -k #{public_key_path} -e "
+    cli_base = RedmineChatTelegram.cli_base
 
     @issue = Issue.visible.find(params[:issue_id])
 
@@ -52,7 +50,7 @@ class TelegramGroupChatsController < ApplicationController
     @project = @issue.project
 
     @issue.telegram_group.destroy
-    @issue.init_journal(user, I18n.t('redmine_chat_telegram.journal.chat_was_closed'))
+    @issue.init_journal(User.current, I18n.t('redmine_chat_telegram.journal.chat_was_closed'))
 
     if @issue.save
       TelegramGroupCloseWorker.perform_async(@issue.id, User.current.id)
