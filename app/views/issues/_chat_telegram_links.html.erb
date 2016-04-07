@@ -14,7 +14,7 @@
       <% end %>
 
     <% else %>
-      <% if User.current.allowed_to?(:create_telegram_chat, @project) %>
+      <% if User.current.allowed_to?(:create_telegram_chat, @project) and !@issue.closed? %>
         <%= link_to telegram_group_chats_path(issue_id: @issue.id), method: :post, remote: true do %>
           <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-inactive-icon.png' %>
           Создать чат Telegram
