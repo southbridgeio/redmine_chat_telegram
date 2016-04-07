@@ -28,7 +28,7 @@ Redmine::Plugin.register :redmine_chat_telegram do
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
   version '1.0.4'
   author 'Centos-admin.ru'
-  author_url 'http://centos-admin.ru'
+  author_url 'https://centos-admin.ru'
 
   settings(default: {
                       'bot_token'    => 'bot_token',
