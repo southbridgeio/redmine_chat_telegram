@@ -6,6 +6,7 @@ en:
   permission_view_telegram_chat_archive: View Chat Archive
   redmine_chat_telegram:
     tab_title: Chat Telegram
+    archive_title: Archive
     settings:
       daily_report: Post a comment with chat summary once a day
     messages:
@@ -14,7 +15,24 @@ en:
       closed_automaticaly: chat was closed automatically
       close_notification: "The issue of this chat is closed. Chat will automatically disbanded after %{time_in_words}."
     archive:
+      joined: joined the chat
+      invited: "invited %{system_data}"
+      left_chat: left the chat
+      kicked: kicked
       chat_was_created: "Chat was created"
+      goto_message_link: Go to message
+      goto_date: Go to date
+      select_date: select date
+      search: Search
+      input_search_query: input search query
+      copy_to_issue: Copy to issue
     journal:
       chat_was_created: "Chat was created. Join it here: %{telegram_chat_url}"
       chat_was_closed: Telegram Group was closed
+      from_telegram: from Telegram
+      daily_report: "For %{date} there were %{users_count} chatters: %{users}. %{messages_count} messages."
+    link:
+      enter_chat: Enter telegram chat
+      close_chat: Close chat
+      create_chat: Create telegram chat
+      archive: Archive

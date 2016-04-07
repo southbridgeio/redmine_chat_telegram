@@ -12,4 +12,13 @@ module TelegramMessagesHelper
     user[:color_number]
   end
 
+  def current_date_format
+    if Setting.date_format.empty?
+      format = I18n.t("date.formats.default")
+    else
+      format = Setting.date_format
+    end
+    format.gsub("%", "")
+  end
+
 end

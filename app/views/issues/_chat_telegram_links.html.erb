@@ -4,12 +4,12 @@
       <% if User.current.allowed_to?(:view_telegram_chat_link, @issue.project) %>
         <%= link_to @issue.telegram_group.shared_url, target: '_blank' do %>
           <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-icon.png' %>
-          Войти в чат Telegram
+          <%= t 'redmine_chat_telegram.link.enter_chat' %>
         <% end %>
       <% end %>
 
       <% if User.current.allowed_to?(:close_telegram_chat, @issue.project) %>
-        | <%= link_to 'Закрыть чат', telegram_group_chat_path(@issue.id),
+        | <%= link_to t('redmine_chat_telegram.link.close_chat'), telegram_group_chat_path(@issue.id),
                       method: :delete, data: { confirm: l(:text_are_you_sure) } %>
       <% end %>
 
@@ -17,13 +17,13 @@
       <% if User.current.allowed_to?(:create_telegram_chat, @project) and !@issue.closed? %>
         <%= link_to telegram_group_chats_path(issue_id: @issue.id), method: :post, remote: true do %>
           <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-inactive-icon.png' %>
-          Создать чат Telegram
+          <%= t 'redmine_chat_telegram.link.create_chat' %>
         <% end %>
       <% end %>
     <% end %>
 
     <% if User.current.allowed_to?(:view_telegram_chat_archive, @issue.project) and @issue.telegram_messages.present? %>
-      | <%= link_to 'Архив', issue_telegram_messages_path(@issue.id), remote: true %>
+      | <%= link_to t('redmine_chat_telegram.link.archive'), issue_telegram_messages_path(@issue.id), remote: true %>
     <% end %>
 
   </div>
