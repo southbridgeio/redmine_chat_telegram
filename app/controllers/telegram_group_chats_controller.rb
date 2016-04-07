@@ -49,11 +49,13 @@ class TelegramGroupChatsController < ApplicationController
     @issue   = Issue.visible.find(params[:id])
     @project = @issue.project
 
+    telegram_id = @issue.telegram_group.telegram_id
+
     @issue.telegram_group.destroy
     @issue.init_journal(User.current, I18n.t('redmine_chat_telegram.journal.chat_was_closed'))
 
     if @issue.save
-      TelegramGroupCloseWorker.perform_async(@issue.id, User.current.id)
+      TelegramGroupCloseWorker.perform_async(telegram_id, User.current.id)
     end
 
     redirect_to issue_path(@issue)

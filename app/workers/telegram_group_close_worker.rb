@@ -2,21 +2,16 @@ class TelegramGroupCloseWorker
   include Sidekiq::Worker
   TELEGRAM_GROUP_CLOSE_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-group-close.log'))
 
-  def perform(issue_id, user_id = nil)
+  def perform(telegram_id, user_id = nil)
     I18n.locale = Setting['default_language']
 
     user = user_id.present? ? User.find(user_id) : User.anonymous
 
     TELEGRAM_GROUP_CLOSE_LOG.debug user.inspect
 
-    issue = Issue.find issue_id
-    TELEGRAM_GROUP_CLOSE_LOG.debug issue.inspect
-
-    telegram_group = issue.telegram_group
-
     cli_base = RedmineChatTelegram.cli_base
 
-    chat_name = "chat##{telegram_group.telegram_id.abs}"
+    chat_name = "chat##{telegram_id.abs}"
 
     TELEGRAM_GROUP_CLOSE_LOG.debug chat_name
 
@@ -45,7 +40,6 @@ class TelegramGroupCloseWorker
       TELEGRAM_GROUP_CLOSE_LOG.debug %x( #{cmd} )
     end
 
-    telegram_group.destroy
   rescue ActiveRecord::RecordNotFound => e
     # ignore
   end

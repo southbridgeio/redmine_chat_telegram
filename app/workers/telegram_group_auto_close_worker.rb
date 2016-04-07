@@ -14,7 +14,10 @@ class TelegramGroupAutoCloseWorker
         where('redmine_chat_telegram_telegram_groups.need_to_close_at <= ?', Time.now)
 
     need_to_close_issues.each do |issue|
-      TelegramGroupCloseWorker.perform_async(issue.id)
+      telegram_id = issue.telegram_group.telegram_id
+
+      issue.telegram_group.destroy
+      TelegramGroupCloseWorker.perform_async(telegram_id)
     end
 
   rescue ActiveRecord::RecordNotFound => e
