@@ -44,7 +44,7 @@
 
 .telegram-message-checkbox{
   float: right;
-  margin-left: 10px;
+  margin-right: 20px;
   visibility: hidden;
 }
 
@@ -93,13 +93,6 @@
   text-align: center;
   margin: 5px 0;
   font-size: 0.85em;
-}
-
-.telegram-goto-link{
-  color: #adadad !important;
-  font-size: .85em;
-  cursor: pointer;
-  display:none;
 }
 
 .user-color-1{
