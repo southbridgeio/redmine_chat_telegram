@@ -1,9 +1,6 @@
 class TelegramGroupChatsController < ApplicationController
   unloadable
 
-  helper :journals
-  helper :issues
-
   def create
     current_user = User.current
 
@@ -46,12 +43,9 @@ class TelegramGroupChatsController < ApplicationController
 
     @project = @issue.project
 
-    load_journals
-
-    respond_to do |format|
-      format.html { redirect_to @issue }
-      format.js
-    end
+    @last_journal = @issue.journals.visible.order("created_on").last
+    new_journal_path = "#{issue_path(@issue)}/#change-#{@last_journal.id}"
+    render js: "window.location = '#{ new_journal_path }'"
   end
 
   def destroy
@@ -70,19 +64,8 @@ class TelegramGroupChatsController < ApplicationController
       TelegramGroupCloseWorker.perform_async(telegram_id, current_user.id)
     end
 
-    redirect_to @issue
+    @last_journal = @issue.journals.visible.order("created_on").last
+    redirect_to "#{issue_path(@issue)}#change-#{@last_journal.id}"
   end
 
-  private
-
-  def load_journals
-    @journals = @issue.journals.includes(:user, :details).
-        references(:user, :details).
-        reorder(:created_on, :id).to_a
-    @journals.each_with_index { |j, i| j.indice = i+1 }
-    @journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, @issue.project)
-    Journal.preload_journals_details_custom_fields(@journals)
-    @journals.select! { |journal| journal.notes? || journal.visible_details.any? }
-    @journals.reverse! if User.current.wants_comments_in_reverse_order?
-  end
 end
