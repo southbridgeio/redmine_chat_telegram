@@ -16,4 +16,12 @@ module RedmineChatTelegram
     public_key_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_public_key_path']
     "#{cli_path} -WCI -k  #{public_key_path} -e "
   end
+
+  def self.run_command_with_logging(cmd, logger)
+    logger.debug cmd
+
+    result = %x( #{cmd} )
+    logger.debug result
+    result
+  end
 end
