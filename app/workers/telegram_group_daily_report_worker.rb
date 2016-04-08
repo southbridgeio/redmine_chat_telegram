@@ -19,17 +19,17 @@ class TelegramGroupDailyReportWorker
     date_string       = format_date(yesterday)
     user_names        = telegram_messages.map(&:author_name).uniq
     joined_user_names = user_names.join(', ')
-    journal_text      = I18n.t('redmine_chat_telegram.journal.daily_report',
-                               date:           date_string,
-                               users:          joined_user_names,
-                               messages_count: telegram_messages.size,
-                               users_count:    user_names.count)
+    journal_text      =
+        "_#{ I18n.t 'redmine_chat_telegram.journal.from_telegram' }:_ \n\n" +
+            I18n.t('redmine_chat_telegram.journal.daily_report',
+                   date:           date_string,
+                   users:          joined_user_names,
+                   messages_count: telegram_messages.size,
+                   users_count:    user_names.count)
 
 
     begin
-      issue.init_journal(User.current,
-                         "_#{ I18n.t 'redmine_chat_telegram.journal.from_telegram' }:_ \n\n#{journal_text}")
-
+      issue.init_journal(User.current, journal_text)
       issue.save
     rescue ActiveRecord::StaleObjectError
       issue.reload

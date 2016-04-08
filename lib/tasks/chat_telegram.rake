@@ -36,6 +36,12 @@ def chat_telegram_bot_init
     exit
   end
 
+  LOG.info "Get Robot info"
+
+  cmd      = "#{RedmineChatTelegram.cli_base} get_self"
+  result   = %x( #{cmd} )
+  robot_id = result.match(/\(#(\d+)\):/)[1]
+
   LOG.info 'Telegram Bot: Connecting to telegram...'
   bot      = Telegrammer::Bot.new(token)
   bot_name = bot.me.username
@@ -44,6 +50,8 @@ def chat_telegram_bot_init
 
   plugin_settings_hash             = plugin_settings.value
   plugin_settings_hash['bot_name'] = "user##{bot.me.id}"
+  plugin_settings_hash['bot_id']   = bot.me.id
+  plugin_settings_hash['robot_id'] = robot_id
   plugin_settings.value            = plugin_settings_hash
 
   plugin_settings.save
@@ -96,9 +104,9 @@ namespace :chat_telegram do
         telegram_message = TelegramMessage.new issue_id:       issue.id,
                                                telegram_id:    telegram_id,
                                                sent_at:        sent_at,
-                                               from_id:        from_id,        from_first_name: from_first_name,
+                                               from_id:        from_id, from_first_name: from_first_name,
                                                from_last_name: from_last_name, from_username: from_username,
-                                               is_system:      true,           bot_message: true
+                                               is_system:      true, bot_message: true
         if message.group_chat_created
 
           issue_url = RedmineChatTelegram.issue_url(issue.id)
@@ -150,10 +158,8 @@ namespace :chat_telegram do
 
             end
 
-            bot_message_regexp = Regexp.new(
-                I18n.t('redmine_chat_telegram.messages').values.map { |m| m.gsub(/%{.+}/, '.+') }.join('|'))
-
-            bot_message = (message_text == issue_url_text) or (message_text =~ bot_message_regexp).present?
+            bot_message = (from_id == Setting.plugin_redmine_chat_telegram['bot_id'].to_i) or
+                (from_id == Setting.plugin_redmine_chat_telegram['robot_id'].to_i)
 
             telegram_message.message     = message_text
             telegram_message.bot_message = bot_message
@@ -173,8 +179,10 @@ namespace :chat_telegram do
           end
         end
 
+      rescue ActiveRecord::RecordNotFound
+        # ignore
       rescue Exception => e
-        LOG.error "#{e.class}: #{e.message}"
+        LOG.error "#{e.class}: #{e.message} \n#{e.backtrace.join("\n")}"
         print e.backtrace.join("\n")
       end
     end
