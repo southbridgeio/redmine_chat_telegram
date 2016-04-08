@@ -55,18 +55,20 @@ $('.archive-form').css({
 })
 
 $(".telegram-message").click(function(){
-  if ($(this).hasClass("telegram-selected-message")) {
-    $(this).removeClass("telegram-selected-message")
-    $(this).find(".telegram-message-checkbox").prop("checked", false);
-  } else {
-    $(this).addClass("telegram-selected-message")
-    $(this).find(".telegram-message-checkbox").prop("checked", true);
-  }
-
   // Go to message from search
   if ($("#telegram-search-input").prop("value") != ""){
     clearSearch()
     scrollTo($(".archive-form"), $(this))
+  }
+})
+
+$(".telegram-message-checkbox").click(function(){
+  messageId = $(this).prop("value")
+  message = $("#telegram_message_" + messageId)
+  if ($(this).prop("checked")){
+    message.addClass("telegram-selected-message")
+  } else {
+    message.removeClass("telegram-selected-message")
   }
 })
 
