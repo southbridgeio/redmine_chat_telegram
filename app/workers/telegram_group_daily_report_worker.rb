@@ -29,7 +29,7 @@ class TelegramGroupDailyReportWorker
 
 
     begin
-      issue.init_journal(User.current, journal_text)
+      issue.init_journal(User.anonymous, journal_text)
       issue.save
     rescue ActiveRecord::StaleObjectError
       issue.reload

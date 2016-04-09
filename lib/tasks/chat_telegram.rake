@@ -169,7 +169,7 @@ namespace :chat_telegram do
               telegram_message.message = message_text.gsub('/log', '')
 
               journal_text = telegram_message.as_text(with_time: false)
-              issue.init_journal(User.current,
+              issue.init_journal(User.anonymous,
                                  "_#{ I18n.t('redmine_chat_telegram.journal.from_telegram') }:_ \n\n#{journal_text}")
               issue.save
             end

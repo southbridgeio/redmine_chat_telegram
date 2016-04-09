@@ -11,7 +11,7 @@ class TelegramGroupDailyReportCronWorker
       time_to   = yesterday.end_of_day
 
       Issue.joins(:telegram_messages).where('telegram_messages.sent_at >= ? and telegram_messages.sent_at <= ?',
-                                            time_from, time_to).find_each do |issue|
+                                            time_from, time_to).uniq.find_each do |issue|
         TelegramGroupDailyReportWorker.perform_async(issue.id, yesterday.to_s)
       end
     end
