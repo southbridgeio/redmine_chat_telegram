@@ -14,7 +14,9 @@ class TelegramGroupDailyReportWorker
     issue             = Issue.find(issue_id)
     telegram_messages = issue.telegram_messages.
         where('sent_at >= ? and sent_at <= ?', time_from, time_to).
-        where(is_system: false, bot_message: false)
+        where(is_system: false, bot_message: false).
+        where.not(from_id: [Setting.plugin_redmine_chat_telegram['bot_id'],
+                            Setting.plugin_redmine_chat_telegram['robot_id']])
 
     if telegram_messages.present?
       date_string       = format_date(yesterday)
