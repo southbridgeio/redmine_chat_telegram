@@ -9,12 +9,14 @@ class TelegramIssueNotificationsWorker
 
     journal = Journal.find(journal_id)
 
-    cli_base = RedmineChatTelegram.cli_base
+    cli_base  = RedmineChatTelegram.cli_base
     chat_name = "chat##{telegram_id.abs}"
 
-    if journal.details.any?
-      message = details_to_strings(journal.visible_details, no_html: true).join("\\n")
-    end
+    message = if journal.details.any?
+                details_to_strings(journal.visible_details, no_html: true).join("\\n")
+              else
+                ''
+              end
 
     message << "\\n" << journal.notes unless journal.notes.blank?
 

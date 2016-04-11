@@ -5,10 +5,11 @@ module RedmineChatTelegram
         base.class_eval do
           unloadable
 
-          has_many :telegram_messages
+          has_many :telegram_messages, dependent: :destroy
           has_one :telegram_group, class_name: 'RedmineChatTelegram::TelegramGroup'
 
           before_save :set_need_to_close, :reset_need_to_close
+          before_destroy :close_chat
 
           def set_need_to_close
             if closing? and telegram_group.present?
@@ -25,6 +26,16 @@ module RedmineChatTelegram
             end
           end
         end
+
+        private
+
+        def close_chat
+          if telegram_group.present?
+            TelegramGroupCloseWorker.perform_async(telegram_group.telegram_id)
+            telegram_group.destroy
+          end
+        end
+
       end
 
     end
