@@ -22,7 +22,7 @@ class TelegramGroupCloseNotificationWorker
     close_message_text = I18n.t('redmine_chat_telegram.messages.close_notification', time_in_words: time_in_words)
 
     cmd = "msg #{chat_name} #{close_message_text}"
-    RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG)
+    RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG)
 
     telegram_group.update last_notification_at: Time.now
 

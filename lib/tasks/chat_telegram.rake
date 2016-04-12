@@ -39,7 +39,7 @@ def chat_telegram_bot_init
   LOG.info "Get Robot info"
 
   cmd      = 'get_self'
-  json = RedmineChatTelegram.run_cli_command(cmd)
+  json = RedmineChatTelegram.socket_cli_command(cmd)
   robot_id = json['id']
 
   LOG.info 'Telegram Bot: Connecting to telegram...'

@@ -16,15 +16,17 @@
 * Установите [Telegrammer gem](https://github.com/mayoral/telegrammer) и поместите его в `Gemfile.local`
 * Плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) должен быть установлен
 
-### Конфигурация в Telegram CLI
-
-Используйте файл `config/telegram.yml.example` в качестве шаблона.
-Скопируйте его в папку `config/` и переименуйте в `telegram.yml`.
-Установите корректные значения для переменных `telegram_cli_path` и `telegram_cli_public_key_path`.
-
 ### Первый запуск
 
 Запустите `telegram-cli` на Вашем сервере Redmine и залогиньтесь через него в Telegram. После этого Вы сможете создавать групповые чаты.
+
+### Запуск Telegram CLI как службы
+
+Службу Telegram CLI нужно запустить со следующими параметрами
+
+```
+/usr/bin/telegram-cli -WCD --json -d -k  /etc/telegram-cli/server.pub -P 2391
+```
 
 ### Создание бота в Telegram
 

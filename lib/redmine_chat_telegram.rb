@@ -27,4 +27,25 @@ module RedmineChatTelegram
 
     JSON.parse(result.scan(/{.+}/).first)
   end
+
+  def self.socket_cli_command(cmd, logger = nil)
+    logger.debug cmd if logger
+    socket = TCPSocket.open('127.0.0.1', 2391)
+    socket.puts cmd
+    socket.flush
+
+    answer = socket.readline
+    length = answer.match(/ANSWER (\d+)/)[1].to_i
+
+    result = socket.read(length)
+    logger.debug result if logger
+
+    socket.close
+
+    JSON.parse result
+  rescue
+    puts $!
+  ensure
+    socket.close if socket
+  end
 end
