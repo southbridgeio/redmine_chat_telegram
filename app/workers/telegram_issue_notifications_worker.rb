@@ -23,7 +23,7 @@ class TelegramIssueNotificationsWorker
     message.prepend(journal.user.name)
 
     cmd = "msg #{chat_name} '#{message}'"
-    RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_ISSUE_NOTIFICATIONS_LOG)
+    RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_ISSUE_NOTIFICATIONS_LOG)
   rescue ActiveRecord::RecordNotFound => e
     # ignore
   end
