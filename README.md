@@ -16,17 +16,15 @@ The `redmine_chat_telegram` can be used to create a group chat associated with a
 * Install [Telegrammer gem](https://github.com/mayoral/telegrammer), place it in your `Gemfile.local`)
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
 
+### Telegram CLI configuration
+
+Take the `config/telegram.yml.example` file and use it as a template.
+Copy it to `config/` folder and rename it to `telegram.yml`.
+Put the correct values for the `telegram_cli_path` and `telegram_cli_public_key_path` variables.
+
 ### First time run
 
 Start `telegram-cli` on your Redmine server and login to Telegram with it. You'll be able to create group chats after that.
-
-### Run Telegram CLI as daemon
-
-Run Telegram CLI with this params:
-
-```
-/usr/bin/telegram-cli -WCD --json -d -k  /etc/telegram-cli/server.pub -P 2391
-```
 
 ### Create Telegram Bot
 
