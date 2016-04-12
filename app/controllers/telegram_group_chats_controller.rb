@@ -11,15 +11,15 @@ class TelegramGroupChatsController < ApplicationController
     bot_name = Setting.plugin_redmine_chat_telegram['bot_name']
 
     cmd    = "create_group_chat \"#{subject}\" #{bot_name}"
-    json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
+    json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
 
     if json['result'] == 'SUCCESS'
       cmd = "chat_info #{subject_for_cli}"
-      json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
+      json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
       telegram_id = json['id']
 
       cmd = "export_chat_link #{subject_for_cli}"
-      json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
+      json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
 
       telegram_chat_url = json['result']
 
