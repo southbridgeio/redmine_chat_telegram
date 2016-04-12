@@ -1,5 +1,9 @@
 
 #### [Current]
+ * [3dce957](../../commit/3dce957) - __(Artur Trofimov)__ Replace Telegram CLI command exec with run Telegram CLI as daemon
+
+#### 1.0.6
+ * [58a8c13](../../commit/58a8c13) - __(Artur Trofimov)__ version update, add changelog
  * [ea64ed0](../../commit/ea64ed0) - __(Artur Trofimov)__ Refactoring for CLI command, fix bug with wrong shared link, get CLI output as JSON
 
 #### 1.0.5
