@@ -38,9 +38,9 @@ def chat_telegram_bot_init
 
   LOG.info "Get Robot info"
 
-  cmd      = "#{RedmineChatTelegram.cli_base} get_self"
-  result   = %x( #{cmd} )
-  robot_id = result.match(/\(#(\d+)\):/)[1]
+  cmd      = 'get_self'
+  json = RedmineChatTelegram.run_cli_command(cmd)
+  robot_id = json['id']
 
   LOG.info 'Telegram Bot: Connecting to telegram...'
   bot      = Telegrammer::Bot.new(token)

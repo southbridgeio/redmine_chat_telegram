@@ -14,14 +14,17 @@ module RedmineChatTelegram
   def self.cli_base
     cli_path        = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_path']
     public_key_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_public_key_path']
-    "#{cli_path} -WCI -k  #{public_key_path} -e "
+    "#{cli_path} -WCD --json -k  #{public_key_path} -e "
   end
 
-  def self.run_command_with_logging(cmd, logger)
-    logger.debug cmd
+  def self.run_cli_command(cmd, logger = nil)
+    logger.debug cmd if logger
 
-    result = %x( #{cmd} )
-    logger.debug result
-    result
+    cmd_as_param = cmd.gsub("\"", "\\\"")
+
+    result = %x( #{cli_base} "#{cmd_as_param}" )
+    logger.debug result if logger
+
+    JSON.parse(result.scan(/{.+}/).first)
   end
 end

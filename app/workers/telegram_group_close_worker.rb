@@ -9,15 +9,13 @@ class TelegramGroupCloseWorker
 
     TELEGRAM_GROUP_CLOSE_LOG.debug user.inspect
 
-    cli_base = RedmineChatTelegram.cli_base
-
     chat_name = "chat##{telegram_id.abs}"
 
     TELEGRAM_GROUP_CLOSE_LOG.debug chat_name
 
     # Reset chat link. Old link will not work after it.
-    cmd = "#{cli_base} \"export_chat_link #{chat_name}\""
-    RedmineChatTelegram.run_command_with_logging(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+    cmd = "export_chat_link #{chat_name}"
+    RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
 
 
     # send notification to chat
@@ -25,20 +23,27 @@ class TelegramGroupCloseWorker
         I18n.t('redmine_chat_telegram.messages.closed_automaticaly') :
         I18n.t('redmine_chat_telegram.messages.closed_from_issue')
 
-    cmd       = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
-    RedmineChatTelegram.run_command_with_logging(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+    cmd       = "msg #{chat_name} #{close_message_text}"
+    RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
 
     # remove chat users
 
-    cmd       = "#{cli_base} \"chat_info #{chat_name}\""
-    chat_info = %x( #{cmd} )
+    cmd       = "chat_info #{chat_name}"
+    json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
 
-    users_array = chat_info.scan(/user#\d+/)
-    users       = users_array.group_by { |u| u }.sort_by { |u| u.last.size }.map(&:first) # remove self in last order
-    users.each do |telegram_user_id|
-      cmd = "#{cli_base} \"chat_del_user #{chat_name} #{telegram_user_id}\""
-      RedmineChatTelegram.run_command_with_logging(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+    admin = json["admin"]
+    members = json["members"]
+    members_without_admin = members.select{|member| member['id'] != admin['id']}
+
+    members_without_admin.each do |member|
+      telegram_user_id = "user##{member['id']}"
+      cmd = "chat_del_user #{chat_name} #{telegram_user_id}"
+      RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
     end
+
+    telegram_user_id = "user##{admin['id']}"
+    cmd = "chat_del_user #{chat_name} #{telegram_user_id}"
+    RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
 
   rescue ActiveRecord::RecordNotFound => e
     # ignore
