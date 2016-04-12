@@ -25,6 +25,8 @@ class TelegramGroupDailyReportWorker
       journal_text      =
           "_#{ I18n.t 'redmine_chat_telegram.journal.from_telegram' }:_ \n\n" +
               I18n.t('redmine_chat_telegram.journal.daily_report',
+                     message_word: I18n.t('redmine_chat_telegram.pluralization.message', count: telegram_messages.size),
+                     user_word: I18n.t('redmine_chat_telegram.pluralization.person', count: user_names.size),
                      date:           date_string,
                      users:          joined_user_names,
                      messages_count: telegram_messages.size,
