@@ -13,19 +13,16 @@ class TelegramGroupCloseNotificationWorker
 
     telegram_group = issue.telegram_group
 
-    cli_base = RedmineChatTelegram.cli_base
-
     chat_name = "chat##{telegram_group.telegram_id.abs}"
 
     TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG.debug chat_name
-
 
     # send notification to chat
     time_in_words      = distance_of_time_in_words(Time.now, telegram_group.need_to_close_at)
     close_message_text = I18n.t('redmine_chat_telegram.messages.close_notification', time_in_words: time_in_words)
 
-    cmd = "#{cli_base} \"msg #{chat_name} #{close_message_text}\""
-    RedmineChatTelegram.run_command_with_logging(cmd, TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG)
+    cmd = "msg #{chat_name} #{close_message_text}"
+    RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG)
 
     telegram_group.update last_notification_at: Time.now
 
