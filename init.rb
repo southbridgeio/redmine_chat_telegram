@@ -1,9 +1,4 @@
 require 'yaml'
-
-Rails.configuration.to_prepare do
-  require 'rails/plurals.rb'
-end
-
 REDMINE_CHAT_TELEGRAM_CONFIG = YAML.load_file(File.expand_path('../config/telegram.yml', __FILE__))
 
 FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.root.join('log/chat_telegram'))
