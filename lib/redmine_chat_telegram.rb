@@ -25,7 +25,8 @@ module RedmineChatTelegram
     result = %x( #{cli_base} "#{cmd_as_param}" )
     logger.debug result if logger
 
-    JSON.parse(result.scan(/{.+}/).first)
+    json_string = result.scan(/{.+}/).first
+    JSON.parse(json_string) if json_string.present?
   end
 
   def self.socket_cli_command(cmd, logger = nil)
