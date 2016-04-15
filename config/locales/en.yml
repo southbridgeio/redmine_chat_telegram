@@ -29,17 +29,9 @@ en:
       chat_was_created: "Chat was created. Join it here: %{telegram_chat_url}"
       chat_was_closed: Telegram Group was closed
       from_telegram: from Telegram
-      daily_report: "For %{date} there were %{users_count} %{user_word}: %{users}. %{messages_count} %{message_word}."
+      daily_report: "For %{date} there were %{users_count} chatters: %{users}. %{messages_count} messages."
     link:
       enter_chat: Enter telegram chat
       close_chat: Close chat
       create_chat: Create telegram chat
       archive: Archive
-    pluralization:
-      message:
-        one: message
-        other: messages
-      person:
-        one: chatter
-        other: chatters
-

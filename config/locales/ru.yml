@@ -29,21 +29,10 @@ ru:
       chat_was_created: "По ссылке %{telegram_chat_url} создан чат."
       chat_was_closed: Чат Telegram закрыт
       from_telegram: Из Telegram
-      daily_report: "За %{date} в чате переписывались %{users}. Всего %{messages_count} %{message_word}. Всего в чате было %{users_count} %{user_word}."
+      daily_report: "За %{date} в чате переписывались %{users}. Всего %{messages_count} реплик. Всего в чате было %{users_count} человек."
     link:
       enter_chat: Войти в чат Telegram
       close_chat: Закрыть чат
       create_chat: Создать чат Telegram
       archive: Архив
-    pluralization:
-      message:
-        one: реплика
-        few: реплики
-        many: реплик
-        other: реплики
-      person:
-        one: человек
-        few: человека
-        many: человек
-        other: человек
 
