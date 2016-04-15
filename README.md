@@ -26,14 +26,6 @@ Put the correct values for the `telegram_cli_path` and `telegram_cli_public_key_
 
 Start `telegram-cli` on your Redmine server and login to Telegram with it. You'll be able to create group chats after that.
 
-### Run Telegram CLI as daemon
-
-Run Telegram CLI with this params:
-
-```
-/usr/bin/telegram-cli -WCD --json -d -k  /etc/telegram-cli/server.pub -P 2391
-```
-
 ### Create Telegram Bot
 
 It is necessary to register a bot and get its token. There is a [@BotFather] bot used in Telegram for this purpose. Type `/start` to get a complete list of available commands.

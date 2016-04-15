@@ -38,7 +38,7 @@ module RedmineChatTelegram
     length = answer.match(/ANSWER (\d+)/)[1].to_i
 
     result = socket.read(length)
-    logger.debug result.force_encoding('UTF-8') if logger
+    logger.debug result if logger
 
     socket.close
 
