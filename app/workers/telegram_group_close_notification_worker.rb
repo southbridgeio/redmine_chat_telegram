@@ -9,7 +9,7 @@ class TelegramGroupCloseNotificationWorker
     I18n.locale = Setting['default_language']
 
     issue = Issue.find issue_id
-    TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG.debug issue.inspect
+    # TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG.debug issue.inspect
 
     telegram_group = issue.telegram_group
 
