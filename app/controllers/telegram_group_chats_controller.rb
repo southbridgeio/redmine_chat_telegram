@@ -43,9 +43,8 @@ class TelegramGroupChatsController < ApplicationController
 
     @project = @issue.project
 
-    @last_journal    = @issue.journals.visible.order("created_on").last
-    new_journal_path = "#{issue_path(@issue)}/#change-#{@last_journal.id}"
-    render js: "window.location = '#{ new_journal_path }'"
+    @last_journal = @issue.journals.visible.order('created_on').last
+    redirect_to "#{issue_path(@issue)}#change-#{@last_journal.id}"
   end
 
   def destroy
@@ -64,7 +63,7 @@ class TelegramGroupChatsController < ApplicationController
       TelegramGroupCloseWorker.perform_async(telegram_id, current_user.id)
     end
 
-    @last_journal = @issue.journals.visible.order("created_on").last
+    @last_journal = @issue.journals.visible.order('created_on').last
     redirect_to "#{issue_path(@issue)}#change-#{@last_journal.id}"
   end
 
