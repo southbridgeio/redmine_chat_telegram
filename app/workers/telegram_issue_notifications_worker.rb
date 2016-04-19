@@ -9,21 +9,17 @@ class TelegramIssueNotificationsWorker
 
     journal = Journal.find(journal_id)
 
-    chat_name = "chat##{telegram_id.abs}"
-
     message = if journal.details.any?
-                details_to_strings(journal.visible_details, no_html: true).join("\\n")
+                details_to_strings(journal.visible_details, no_html: true).join("\n")
               else
                 ''
               end
 
-    message << "\\n" << journal.notes unless journal.notes.blank?
+    message << "\n" << journal.notes unless journal.notes.blank?
 
-    message.prepend("\\n====================\\n")
-    message.prepend(journal.user.name)
+    message.prepend("*#{journal.user.name}*\n")
 
-    cmd = "msg #{chat_name} '#{message}'"
-    RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_ISSUE_NOTIFICATIONS_LOG)
+    TelegramMessageSenderWorker.perform_async(telegram_id, message)
   rescue ActiveRecord::RecordNotFound => e
     # ignore
   end

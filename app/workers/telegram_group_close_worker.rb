@@ -23,8 +23,7 @@ class TelegramGroupCloseWorker
         I18n.t('redmine_chat_telegram.messages.closed_automaticaly') :
         I18n.t('redmine_chat_telegram.messages.closed_from_issue')
 
-    cmd       = "msg #{chat_name} #{close_message_text}"
-    RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+    TelegramMessageSenderWorker.perform_async(telegram_id, close_message_text)
 
     # remove chat users
 
