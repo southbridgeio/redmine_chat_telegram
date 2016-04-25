@@ -22,7 +22,7 @@ class TelegramMessageSenderWorker
       bot.send_message(chat_id: -telegram_id.abs,
                        text: message,
                        disable_web_page_preview: true,
-                       parse_mode: 'Markdown')
+                       parse_mode: 'HTML')
 
       TELEGRAM_MESSAGE_SENDER_LOG.info "telegram_id: #{telegram_id}\tmessage: #{message}"
 
