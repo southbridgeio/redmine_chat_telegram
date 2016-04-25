@@ -43,8 +43,9 @@ class TelegramGroupChatsController < ApplicationController
 
     @project = @issue.project
 
-    @last_journal = @issue.journals.visible.order('created_on').last
-    redirect_to "#{issue_path(@issue)}#change-#{@last_journal.id}"
+    @last_journal    = @issue.journals.visible.order("created_on").last
+    new_journal_path = "#{issue_path(@issue)}/#change-#{@last_journal.id}"
+    render js: "window.location = '#{ new_journal_path }'"
   end
 
   def destroy
