@@ -1,5 +1,9 @@
-
 #### [Current]
+ * Fix styles in arhive modal window
+ * Fix sending issue notification to telegram chat
+ * Add formating for issue notification messages
+
+#### 1.1.0
  * [3dce957](../../commit/3dce957) - __(Artur Trofimov)__ Replace Telegram CLI command exec with run Telegram CLI as daemon
 
 #### 1.0.6
