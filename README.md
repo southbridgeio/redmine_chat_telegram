@@ -1,5 +1,7 @@
 # redmine_chat_telegram
 
+[Русская версия](https://github.com/centosadmin/redmine_chat_telegram/blob/master/README.ru.md)
+
 Plugin developed by [Centos-admin.ru](https://centos-admin.ru)
 
 Redmine plugin used to create Telegram group chats.
