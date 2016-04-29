@@ -68,6 +68,15 @@ def chat_telegram_bot_init
   end
 
   LOG.info "#{bot_name}: connected"
+
+  LOG.info 'Scheduling history update workers...'
+
+  RedmineChatTelegram::TelegramGroup.find_each do |telegram_group|
+    TelegramGroupHistoryUpdateWorker.perform_in(5.minutes, telegram_group.issue_id)
+  end
+
+  LOG.info 'Workers will start after 5 minutes'
+
   LOG.info "#{bot_name}: waiting for new messages in group chats..."
   bot
 end

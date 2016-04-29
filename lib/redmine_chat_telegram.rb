@@ -25,7 +25,7 @@ module RedmineChatTelegram
     result = %x( #{cli_base} "#{cmd_as_param}" )
     logger.debug result if logger
 
-    json_string = result.scan(/{.+}/).first
+    json_string = result.scan(/\[?{.+}\]?/).first
     JSON.parse(json_string) if json_string.present?
   end
 
