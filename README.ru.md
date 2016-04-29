@@ -1,5 +1,7 @@
 # redmine_chat_telegram
 
+[English version](https://github.com/centosadmin/redmine_chat_telegram/blob/master/README.md)
+
 Плагин разработан в компании [Centos-admin.ru](https://centos-admin.ru)
 
 [Описание плагина на habrahabr.ru](https://habrahabr.ru/company/centosadmin/blog/281044/)
