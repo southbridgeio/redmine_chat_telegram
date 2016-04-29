@@ -25,11 +25,11 @@ class TelegramGroupHistoryUpdateWorker
 
       chat_name         = "chat##{telegram_id.abs}"
       page              = 0
-      has_more_messages = create_new_messages(issue_id, chat_name, bot_ids, present_message_ids, page)
+      has_more_messages = create_new_messages(issue.id, chat_name, bot_ids, present_message_ids, page)
 
       while has_more_messages do
         page              += 1
-        has_more_messages = create_new_messages(issue_id, chat_name, bot_ids, present_message_ids, page)
+        has_more_messages = create_new_messages(issue.id, chat_name, bot_ids, present_message_ids, page)
       end
     end
   rescue ActiveRecord::RecordNotFound => e
