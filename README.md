@@ -53,6 +53,10 @@ Execute the following rake task to launch the bot:
 bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 ```
 
+### Archive synchronization
+
+Plugin can't log chat messages into archive when stopped. To avoid loss of messages plugin performs chat - archive synchronization on the next run with 5 minute delay from start.
+
 ### Usage
 
 Open the ticket. You'll see the new link `Create Telegram chat` on the right side of the ticket. Click it and the Telegram group chat associated with this ticket will be created. The link will change to `Enter Telegram chat`. Click on in to join the chat in your Telegram client. You'll be able to copy and pass the link to anyone you want to invite them to the Group Chat.
