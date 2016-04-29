@@ -71,9 +71,8 @@ def chat_telegram_bot_init
 
   LOG.info 'Scheduling history update workers...'
 
-  RedmineChatTelegram::TelegramGroup.find_each do |telegram_group|
-    TelegramGroupHistoryUpdateWorker.perform_in(5.minutes, telegram_group.issue_id)
-  end
+  TelegramGroupHistoryUpdateWorker.perform_in(5.minutes)
+
 
   LOG.info 'Workers will start after 5 minutes'
 

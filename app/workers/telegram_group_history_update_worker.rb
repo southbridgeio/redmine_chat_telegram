@@ -7,31 +7,31 @@ class TelegramGroupHistoryUpdateWorker
 
   CHAT_HISTORY_PAGE_SIZE = 100
 
-  def perform(issue_id)
+  def perform
     I18n.locale = Setting['default_language']
 
-    issue = Issue.find issue_id
+    RedmineChatTelegram::TelegramGroup.find_each do |telegram_group|
+      issue = telegram_group.issue
 
-    present_message_ids = issue.telegram_messages.pluck(:telegram_id)
+      present_message_ids = issue.telegram_messages.pluck(:telegram_id)
 
-    bot_ids = [Setting.plugin_redmine_chat_telegram['bot_id'].to_i,
-               Setting.plugin_redmine_chat_telegram['robot_id'].to_i]
+      bot_ids = [Setting.plugin_redmine_chat_telegram['bot_id'].to_i,
+                 Setting.plugin_redmine_chat_telegram['robot_id'].to_i]
 
-    telegram_group = issue.telegram_group
-    telegram_id    = telegram_group.telegram_id.abs
+      telegram_group = issue.telegram_group
+      telegram_id    = telegram_group.telegram_id.abs
 
-    TELEGRAM_GROUP_HISTORY_UPDATE_LOG.debug "chat##{telegram_id}"
+      TELEGRAM_GROUP_HISTORY_UPDATE_LOG.debug "chat##{telegram_id}"
 
-    chat_name         = "chat##{telegram_id.abs}"
-    page              = 0
-    has_more_messages = create_new_messages(issue_id, chat_name, bot_ids, present_message_ids, page)
-
-
-    while has_more_messages do
-      page              += 1
+      chat_name         = "chat##{telegram_id.abs}"
+      page              = 0
       has_more_messages = create_new_messages(issue_id, chat_name, bot_ids, present_message_ids, page)
-    end
 
+      while has_more_messages do
+        page              += 1
+        has_more_messages = create_new_messages(issue_id, chat_name, bot_ids, present_message_ids, page)
+      end
+    end
   rescue ActiveRecord::RecordNotFound => e
     # ignore
   end
