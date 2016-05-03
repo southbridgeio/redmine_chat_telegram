@@ -61,12 +61,14 @@ class TelegramGroupHistoryUpdateWorker
       from_last_name  = from['last_name']
       from_username   = from['username']
 
+      message_text   = message['text']
       TelegramMessage.where(telegram_id: message_id).first_or_create issue_id:        issue_id,
                                                                      sent_at:         sent_at,
                                                                      from_id:         from_id,
                                                                      from_first_name: from_first_name,
                                                                      from_last_name:  from_last_name,
-                                                                     from_username:   from_username
+                                                                     from_username:   from_username,
+                                                                     message: message_text
     end
     json_messages.size == CHAT_HISTORY_PAGE_SIZE
   end
