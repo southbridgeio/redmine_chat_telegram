@@ -24,7 +24,7 @@ class TelegramMessagesController < ApplicationController
   private
 
   def colored_chat_users
-    chat_user_ids = @telegram_messages.select(:from_id).uniq.pluck(:from_id)
+    chat_user_ids = @telegram_messages.pluck(:from_id).uniq
     colored_users = []
     current_color = 1
 
