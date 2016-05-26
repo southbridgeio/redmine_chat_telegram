@@ -91,11 +91,9 @@ namespace :chat_telegram do
 
     bot.get_updates(fail_silently: false) do |message|
       begin
-        if message.chat.present?
-          telegram_chat_id = message.chat.id
-        else
-          next
-        end
+        next unless message.is_a?(Telegrammer::DataTypes::Message) # Update for telegrammer gem 0.8.0
+
+        telegram_chat_id = message.chat.id
 
         begin
           issue = Issue.joins(:telegram_group).find_by!(redmine_chat_telegram_telegram_groups:
