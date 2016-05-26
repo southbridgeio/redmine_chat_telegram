@@ -39,7 +39,7 @@ def chat_telegram_bot_init
   LOG.info "Get Robot info"
 
   cmd      = 'get_self'
-  json = RedmineChatTelegram.run_cli_command(cmd)
+  json     = RedmineChatTelegram.run_cli_command(cmd)
   robot_id = json['id']
 
   LOG.info 'Telegram Bot: Connecting to telegram...'
@@ -91,7 +91,11 @@ namespace :chat_telegram do
 
     bot.get_updates(fail_silently: false) do |message|
       begin
-        telegram_chat_id = message.chat.id
+        if message.chat.present?
+          telegram_chat_id = message.chat.id
+        else
+          next
+        end
 
         begin
           issue = Issue.joins(:telegram_group).find_by!(redmine_chat_telegram_telegram_groups:
