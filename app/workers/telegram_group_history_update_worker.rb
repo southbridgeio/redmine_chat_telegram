@@ -42,34 +42,39 @@ class TelegramGroupHistoryUpdateWorker
 
     json_messages = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_HISTORY_UPDATE_LOG)
 
-    new_json_messages = json_messages.select do |message|
-      from = message['from']
+    if json_messages.present?
 
-      from.present? and
-          not present_message_ids.include?(message['id']) and
+      new_json_messages = json_messages.select do |message|
+        from = message['from']
 
-          not bot_ids.include?(from['id'])
+        from.present? and
+            !present_message_ids.include?(message['id']) and
+            !bot_ids.include?(from['id'])
+      end
+
+      new_json_messages.each do |message|
+        message_id = message['id']
+        sent_at    = Time.at message['date']
+
+        from            = message['from']
+        from_id         = from['id']
+        from_first_name = from['first_name']
+        from_last_name  = from['last_name']
+        from_username   = from['username']
+
+        message_text = message['text']
+        TelegramMessage.where(telegram_id: message_id).
+            first_or_create issue_id:        issue_id,
+                            sent_at:         sent_at,
+                            from_id:         from_id,
+                            from_first_name: from_first_name,
+                            from_last_name:  from_last_name,
+                            from_username:   from_username,
+                            message:         message_text
+      end
+      json_messages.size == CHAT_HISTORY_PAGE_SIZE
+    else
+      false
     end
-
-    new_json_messages.each do |message|
-      message_id = message['id']
-      sent_at    = Time.at message['date']
-
-      from            = message['from']
-      from_id         = from['id']
-      from_first_name = from['first_name']
-      from_last_name  = from['last_name']
-      from_username   = from['username']
-
-      message_text   = message['text']
-      TelegramMessage.where(telegram_id: message_id).first_or_create issue_id:        issue_id,
-                                                                     sent_at:         sent_at,
-                                                                     from_id:         from_id,
-                                                                     from_first_name: from_first_name,
-                                                                     from_last_name:  from_last_name,
-                                                                     from_username:   from_username,
-                                                                     message: message_text
-    end
-    json_messages.size == CHAT_HISTORY_PAGE_SIZE
   end
 end

@@ -1,3 +1,4 @@
+require 'timeout'
 module RedmineChatTelegram
   def self.table_name_prefix
     'redmine_chat_telegram_'
@@ -22,7 +23,16 @@ module RedmineChatTelegram
 
     cmd_as_param = cmd.gsub("\"", "\\\"")
 
-    result = %x( #{cli_base} "#{cmd_as_param}" )
+    tries = 0
+    result = ''
+
+    begin
+      tries += 1
+      Timeout::timeout(10) {result = %x( #{cli_base} "#{cmd_as_param}" ) }
+    rescue Timeout::Error
+      retry if tries < 4
+    end
+
     logger.debug result if logger
 
     json_string = result.scan(/\[?{.+}\]?/).first

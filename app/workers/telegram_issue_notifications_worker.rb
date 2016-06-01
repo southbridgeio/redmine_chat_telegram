@@ -11,7 +11,6 @@ class TelegramIssueNotificationsWorker
       Logger.new(Rails.root.join('log/chat_telegram', 'telegram-issue-notifications.log'))
 
   def perform(telegram_id, journal_id)
-    ActionView::Base.send(:include, Rails.application.routes.url_helpers)
     I18n.locale = Setting['default_language']
 
     journal = Journal.find(journal_id)
