@@ -5,14 +5,31 @@ end
 def chat_telegram_bot_init
   Process.daemon(true, true) if Rails.env.production?
 
-  if ENV['PID_DIR']
-    pid_dir = ENV['PID_DIR']
-    PidFile.new(piddir: pid_dir, pidfile: 'telegram-chat-bot.pid')
-  else
-    PidFile.new(pidfile: 'telegram-chat-bot.pid')
-  end
+  tries = 0
+  begin
+    tries += 1
 
-  at_exit { LOG.error 'aborted by some reasons' }
+    if ENV['PID_DIR']
+      pid_dir = ENV['PID_DIR']
+      PidFile.new(piddir: pid_dir, pidfile: 'telegram-chat-bot.pid')
+    else
+      PidFile.new(pidfile: 'telegram-chat-bot.pid')
+    end
+
+  rescue PidFile::DuplicateProcessError => e
+    LOG.error "#{e.class}: #{e.message}"
+    pid = e.message.match(/Process \(.+ - (\d+)\) is already running./)[1].to_i
+
+    LOG.info "Kill process with pid: #{pid}"
+
+    Process.kill('HUP', pid)
+    if tries < 4
+      LOG.info 'Waiting for 5 seconds...'
+      sleep 5
+      LOG.info 'Retry...'
+      retry
+    end
+  end
 
   Signal.trap('TERM') do
     at_exit { LOG.error 'Aborted with TERM signal' }
