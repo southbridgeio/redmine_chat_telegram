@@ -86,18 +86,53 @@ def chat_telegram_bot_init
 
   LOG.info "#{bot_name}: connected"
 
-  LOG.info 'Scheduling history update workers...'
+  LOG.info 'Scheduling history update rake task...'
 
-  TelegramGroupHistoryUpdateWorker.perform_in(5.minutes)
+  Thread.new do
+    sleep 5 * 60
+    Rake::Task['chat_telegram:history_update'].invoke
+  end
 
-
-  LOG.info 'Workers will start after 5 minutes'
+  LOG.info 'Task will start after 5 minutes'
 
   LOG.info "#{bot_name}: waiting for new messages in group chats..."
   bot
 end
 
 namespace :chat_telegram do
+  task :history_update => :environment do
+    begin
+      I18n.locale = Setting['default_language']
+
+      RedmineChatTelegram::TelegramGroup.find_each do |telegram_group|
+        issue = telegram_group.issue
+
+        present_message_ids = issue.telegram_messages.pluck(:telegram_id)
+
+        bot_ids = [Setting.plugin_redmine_chat_telegram['bot_id'].to_i,
+                   Setting.plugin_redmine_chat_telegram['robot_id'].to_i]
+
+        telegram_group = issue.telegram_group
+        telegram_id    = telegram_group.telegram_id.abs
+
+        RedmineChatTelegram::HISTORY_UPDATE_LOG.debug "chat##{telegram_id}"
+
+        chat_name         = "chat##{telegram_id.abs}"
+        page              = 0
+        has_more_messages = RedmineChatTelegram.create_new_messages(issue.id, chat_name, bot_ids,
+                                                                    present_message_ids, page)
+
+        while has_more_messages do
+          page              += 1
+          has_more_messages = RedmineChatTelegram.create_new_messages(issue.id, chat_name, bot_ids,
+                                                                      present_message_ids, page)
+        end
+      end
+    rescue ActiveRecord::RecordNotFound => e
+      # ignore
+    end
+  end
+
   # bundle exec rake chat_telegram:bot PID_DIR='/tmp'
   desc "Runs telegram bot process (options: PID_DIR='/pid/dir')"
   task :bot => :environment do
