@@ -88,10 +88,10 @@ def chat_telegram_bot_init
 
   LOG.info 'Scheduling history update rake task...'
 
-  Thread.new do
-    sleep 5 * 60
-    Rake::Task['chat_telegram:history_update'].invoke
-  end
+  # Thread.new do
+  #   sleep 5 * 60
+  #   Rake::Task['chat_telegram:history_update'].invoke
+  # end
 
   LOG.info 'Task will start after 5 minutes'
 
