@@ -23,16 +23,7 @@ module RedmineChatTelegram
 
     cmd_as_param = cmd.gsub("\"", "\\\"")
 
-    tries = 0
-    result = ''
-
     result = %x( #{cli_base} "#{cmd_as_param}" )
-    # begin
-    #   tries += 1
-    #   Timeout::timeout(10) {result = %x( #{cli_base} "#{cmd_as_param}" ) }
-    # rescue Timeout::Error
-    #   retry if tries < 4
-    # end
 
     logger.debug result if logger
 
