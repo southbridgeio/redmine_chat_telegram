@@ -1,4 +1,9 @@
-#### [Current]
+#### [1.1.2]
+* Add `history_update` rake task for sync old archive messages. Need if bot was turned off long time ago.
+* Add needed gems to `Gemfile`
+* Bug fixes
+
+#### [1.1.1]
  * Fix styles in arhive modal window
  * Fix sending issue notification to telegram chat
  * Add formating for issue notification messages
