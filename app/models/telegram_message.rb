@@ -1,6 +1,8 @@
 class TelegramMessage < ActiveRecord::Base
   unloadable
 
+  default_scope { order(:sent_at) }
+
   include Redmine::I18n
 
   COLORS_NUMBER = 8
@@ -32,7 +34,7 @@ class TelegramMessage < ActiveRecord::Base
     elsif from_last_name
       from_last_name[0..1]
     else
-      "--"
+      '--'
     end
   end
 

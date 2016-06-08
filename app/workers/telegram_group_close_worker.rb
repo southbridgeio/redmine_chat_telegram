@@ -27,22 +27,25 @@ class TelegramGroupCloseWorker
 
     # remove chat users
 
-    cmd       = "chat_info #{chat_name}"
+    cmd  = "chat_info #{chat_name}"
     json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
 
-    admin = json["admin"]
-    members = json["members"]
-    members_without_admin = members.select{|member| member['id'] != admin['id']}
+    admin   = json['admin']
+    members = json['members']
 
-    members_without_admin.each do |member|
-      telegram_user_id = "user##{member['id']}"
-      cmd = "chat_del_user #{chat_name} #{telegram_user_id}"
+    if members.present?
+      members_without_admin = members.select { |member| member['id'] != admin['id'] }
+
+      members_without_admin.each do |member|
+        telegram_user_id = "user##{member['id']}"
+        cmd              = "chat_del_user #{chat_name} #{telegram_user_id}"
+        RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+      end
+
+      telegram_user_id = "user##{admin['id']}"
+      cmd              = "chat_del_user #{chat_name} #{telegram_user_id}"
       RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
     end
-
-    telegram_user_id = "user##{admin['id']}"
-    cmd = "chat_del_user #{chat_name} #{telegram_user_id}"
-    RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
 
   rescue ActiveRecord::RecordNotFound => e
     # ignore
