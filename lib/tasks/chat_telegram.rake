@@ -86,14 +86,14 @@ def chat_telegram_bot_init
 
   LOG.info "#{bot_name}: connected"
 
-  LOG.info 'Scheduling history update rake task...'
+  # LOG.info 'Scheduling history update rake task...'
 
   # Thread.new do
   #   sleep 5 * 60
   #   Rake::Task['chat_telegram:history_update'].invoke
   # end
 
-  LOG.info 'Task will start after 5 minutes'
+  # LOG.info 'Task will start after 5 minutes'
 
   LOG.info "#{bot_name}: waiting for new messages in group chats..."
   bot
