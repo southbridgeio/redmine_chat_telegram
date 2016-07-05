@@ -18,6 +18,10 @@ module RedmineChatTelegram
     "#{cli_path} -WCD -v --json -k  #{public_key_path} -e "
   end
 
+  def self.mode
+    REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_mode'].to_i
+  end
+
   def self.run_cli_command(cmd, logger = nil)
     logger.debug cmd if logger
 
