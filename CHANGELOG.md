@@ -1,3 +1,7 @@
+#### [1.1.3]
+
+* Solve issue #6 by add `telegram_cli_mode` to `telegram.yml`
+
 #### [1.1.2]
 * Add `history_update` rake task for sync old archive messages. Need if bot was turned off long time ago.
 * Add needed gems to `Gemfile`

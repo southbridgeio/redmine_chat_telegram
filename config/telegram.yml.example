@@ -1,2 +1,3 @@
 telegram_cli_path: '/usr/bin/telegram-cli'
 telegram_cli_public_key_path: '/etc/telegram-cli/server.pub'
+telegram_cli_mode: 0 # can be 0 or 1; 0 is default, try 1 if you have problems with create chat from issue
