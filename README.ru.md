@@ -10,6 +10,9 @@
 
 Плагин `redmine_chat_telegram` используется для создания группового чата, связанного с тикетом, и записи его логов в архиве Redmine. Связанные групповые чаты могут легко быть созданы с помощью ссылки "Создать чат Telegram", которая появится на странице тикета. Вы сможете скопировать ссылку и передать её любому, кого Вы захотите подключить к этому чату.
 
+![Create telegram chat](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/create-link.png)
+![Chat links](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/chat-links.png)
+
 Пожалуйста помогите нам сделать этот плагин лучше, сообщая во вкладке [Issues](https://github.com/centosadmin/redmine_chat_telegram/issues) обо всех проблемах, с которыми Вы столкнётесь при его использовании. Мы готовы ответить на Все ваши вопросы, касающиеся этого плагина.
 
 ## Установка
@@ -19,8 +22,8 @@
 * [Telegram CLI](https://github.com/vysheng/tg) должен быть установлен
 * У Вас должен быть аккаунт пользователя Telegram
 * У Вас должен быть аккаунт для создания ботов в Telegram
-* Установите [Telegrammer gem](https://github.com/mayoral/telegrammer) и поместите его в `Gemfile.local`
 * Плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) должен быть установлен
+* Не забудьте запустить миграции `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
 
 ### Конфигурация в Telegram CLI
 
