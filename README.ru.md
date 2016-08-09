@@ -23,6 +23,7 @@
 * У Вас должен быть аккаунт пользователя Telegram
 * У Вас должен быть аккаунт для создания ботов в Telegram
 * Плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) должен быть установлен
+* Sidekiq должен обрабатывать очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_intouch/blob/master/tools/sidekiq.yml) - разместите его в папке `redmine/config`
 * Не забудьте запустить миграции `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
 
 ### Конфигурация в Telegram CLI

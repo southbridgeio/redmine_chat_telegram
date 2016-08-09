@@ -21,6 +21,7 @@ Please help us make this plugin better telling us of any [issues](https://github
 * You should have Telegram user account
 * You should have Telegram bot account
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
+* You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_intouch/blob/master/tools/sidekiq.yml) - place it to `redmine/config` directory
 * Don't forget to run migrations `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
 
 ### Telegram CLI configuration
