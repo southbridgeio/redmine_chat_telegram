@@ -154,6 +154,8 @@ namespace :chat_telegram do
           begin
             issue = Issue.joins(:telegram_group).find_by!(redmine_chat_telegram_telegram_groups:
                                                               { telegram_id: telegram_chat_id.abs })
+          rescue ActiveRecord::RecordNotFound => e
+            next
           rescue Exception => e
             LOG.error "#{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
             next
@@ -252,6 +254,11 @@ namespace :chat_telegram do
           print e.backtrace.join("\n")
         end
       end
+    rescue HTTPClient::ConnectTimeoutError, Errno::EIO, Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError => e
+      LOG.error "GLOBAL ERROR WITH RESTART #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
+      LOG.info 'Restart after 10 seconds...'
+      sleep 10
+      retry
     rescue Exception => e
       LOG.error "GLOBAL #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
     end
