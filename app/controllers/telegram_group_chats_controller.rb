@@ -6,7 +6,12 @@ class TelegramGroupChatsController < ApplicationController
 
     @issue = Issue.visible.find(params[:issue_id])
 
-    subject  = "#{@issue.project.name} ##{@issue.id}"
+    subject  = if RedmineChatTelegram.mode == 0
+                 "#{@issue.project.name} ##{@issue.id}"
+               else
+                 "#{@issue.project.name} #{@issue.id}"
+               end
+
     bot_name = Setting.plugin_redmine_chat_telegram['bot_name']
 
     cmd  = "create_group_chat \"#{subject}\" #{bot_name}"
@@ -20,8 +25,8 @@ class TelegramGroupChatsController < ApplicationController
                       end
 
 
-    cmd         = "chat_info #{subject_for_cli}"
-    json        = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
+    cmd  = "chat_info #{subject_for_cli}"
+    json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
 
     telegram_id = if RedmineChatTelegram.mode == 0
                     json['id']
