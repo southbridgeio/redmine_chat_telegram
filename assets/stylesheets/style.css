@@ -44,7 +44,8 @@
 
 .telegram-message-checkbox{
   float: right;
-  margin-right: 20px;
+  margin-right: 15px;
+  margin-left: 10px;
   visibility: hidden;
 }
 

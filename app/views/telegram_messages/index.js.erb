@@ -20,6 +20,10 @@ $('#ajax-modal').dialog({
   }
 })
 
+$(".ui-widget-overlay").click(function () {
+  $("#ajax-modal").dialog("close")
+})
+
 function scrollTo(container, scrollElement){
   container.animate({scrollTop: scrollElement.offset().top - container.offset().top +
                     container.scrollTop()})
@@ -59,16 +63,18 @@ $(".telegram-message").click(function(){
   if ($("#telegram-search-input").prop("value") != ""){
     clearSearch()
     scrollTo($(".archive-form"), $(this))
-  }
-})
-
-$(".telegram-message-checkbox").click(function(){
-  messageId = $(this).prop("value")
-  message = $("#telegram_message_" + messageId)
-  if ($(this).prop("checked")){
-    message.addClass("telegram-selected-message")
   } else {
-    message.removeClass("telegram-selected-message")
+    console.log(1)
+    checkbox = $(this).find(".telegram-message-checkbox")
+    messageId = checkbox.prop("value")
+    message = $("#telegram_message_" + messageId)
+    if ($(this).hasClass("telegram-selected-message")){
+      message.removeClass("telegram-selected-message")
+      checkbox.prop("checked", false)
+    } else {
+      message.addClass("telegram-selected-message")
+      checkbox.prop("checked", true)
+    }
   }
 })
 
