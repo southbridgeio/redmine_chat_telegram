@@ -27,6 +27,8 @@ module RedmineChatTelegram
 
     cmd_as_param = cmd.gsub("\"", "\\\"")
 
+    logger.debug %( #{cli_base} "#{cmd_as_param}" ) if logger
+
     result = %x( #{cli_base} "#{cmd_as_param}" )
 
     logger.debug result if logger
