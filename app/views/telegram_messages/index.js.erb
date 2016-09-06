@@ -1,4 +1,4 @@
-$('#ajax-modal').html('<%= escape_javascript(render partial: 'modal_window') %>')
+$('#ajax-modal').html('<%= escape_javascript(render partial: 'modal_window') %>');
 
 $('#ajax-modal').dialog({
   dialogClass: 'telegram-archive-modal',
@@ -12,21 +12,23 @@ $('#ajax-modal').dialog({
   },
   resizable: false,
   title: '<%= t 'redmine_chat_telegram.archive_title' %>',
-  open: function(){
+  open: function () {
     $("#datetimepicker").blur()
   },
-  close: function(){
+  close: function () {
     $('#datetimepicker').datetimepicker('destroy')
   }
-})
+});
 
 $(".ui-widget-overlay").click(function () {
   $("#ajax-modal").dialog("close")
-})
+});
 
-function scrollTo(container, scrollElement){
-  container.animate({scrollTop: scrollElement.offset().top - container.offset().top +
-                    container.scrollTop()})
+function scrollTo(container, scrollElement) {
+  container.animate({
+    scrollTop: scrollElement.offset().top - container.offset().top +
+    container.scrollTop()
+  })
 }
 
 $('#datetimepicker').datetimepicker({
@@ -35,69 +37,68 @@ $('#datetimepicker').datetimepicker({
   minDate: "<%= format_date @telegram_messages.first.sent_at %>",
   maxDate: "<%= format_date @telegram_messages.last.sent_at %>",
   formatDate: "<%= current_date_format %>",
-  onSelectTime: function(time){
-    var scrollElement = {}
-    var container = $('.archive-form')
-    var selectedUnixTime = time / 1000|0
+  onSelectTime: function (time) {
+    var scrollElement = {};
+    var container = $('.archive-form');
+    var selectedUnixTime = time / 1000 | 0;
 
     // find message to scroll
-    $('.telegram-message').each(function(){
-      var messageTime = $(this).data('sent-at')
-      scrollElement = $(this)
+    $('.telegram-message').each(function () {
+      var messageTime = $(this).data('sent-at');
+      scrollElement = $(this);
       if (messageTime > selectedUnixTime) {
         return false
       }
-    })
+    });
 
     scrollTo(container, scrollElement)
   }
-})
+});
 
-var formHeight = $('#ajax-modal').css('height').match(/\d+/)[0] - 75
+var formHeight = $('#ajax-modal').css('height').match(/\d+/)[0] - 75;
 $('.archive-form').css({
   height: formHeight
-})
+});
 
-$(".telegram-message").click(function(){
+$(".telegram-message").click(function () {
   // Go to message from search
-  if ($("#telegram-search-input").prop("value") != ""){
-    clearSearch()
+  if ($("#telegram-search-input").prop("value") != "") {
+    clearSearch();
     scrollTo($(".archive-form"), $(this))
   } else {
-    console.log(1)
-    checkbox = $(this).find(".telegram-message-checkbox")
-    messageId = checkbox.prop("value")
-    message = $("#telegram_message_" + messageId)
-    if ($(this).hasClass("telegram-selected-message")){
-      message.removeClass("telegram-selected-message")
+    checkbox = $(this).find(".telegram-message-checkbox");
+    messageId = checkbox.prop("value");
+    message = $("#telegram_message_" + messageId);
+    if ($(this).hasClass("telegram-selected-message")) {
+      message.removeClass("telegram-selected-message");
       checkbox.prop("checked", false)
     } else {
-      message.addClass("telegram-selected-message")
+      message.addClass("telegram-selected-message");
       checkbox.prop("checked", true)
     }
   }
-})
+});
 
-$(".telegram-message").hover(function(){
+$(".telegram-message").hover(function () {
   $(this).find(".telegram-message-checkbox").css("visibility", "visible");
-}, function(){
+}, function () {
   if (!$(this).hasClass("telegram-selected-message")) {
     $(this).find(".telegram-message-checkbox").css("visibility", "hidden");
   }
-})
+});
 
 
 // Search
-var messages = $("#telegram-search-input").data("messages")
+var messages = $("#telegram-search-input").data("messages");
 
-function clearSearch(){
-  $("#telegram-search-input").prop("value", "")
+function clearSearch() {
+  $("#telegram-search-input").prop("value", "");
 
-  $(".archive-form").children().show()
-  messages.forEach(function(message){
-    if (!message['is_system']){
+  $(".archive-form").children().show();
+  messages.forEach(function (message) {
+    if (!message['is_system']) {
       $("#telegram_message_" + message.id).show()
-      .find(".telegram-message-text").html(message.message)
+          .find(".telegram-message-text").html(message.message)
     }
   })
 }
@@ -115,21 +116,21 @@ var searchOptions = {
 
 var fuse = new Fuse(messages, searchOptions);
 
-$("#telegram-search-input").keyup(function(event){
-  query = event.target.value
-  if (query){
-    $(".archive-form").children().hide()
+$("#telegram-search-input").keyup(function (event) {
+  query = event.target.value;
+  if (query) {
+    $(".archive-form").children().hide();
 
-    matchedMessages = fuse.search(query)
-    matchedMessages.forEach(function(message){
-      var regexp = "^" + query + "| " + query
-      highlightedMessageText = message.message.replace(new RegExp(regexp, "ig"), '<strong>$&</strong>')
-      if (!message['is_system']){
+    matchedMessages = fuse.search(query);
+    matchedMessages.forEach(function (message) {
+      var regexp = "^" + query + "| " + query;
+      highlightedMessageText = message.message.replace(new RegExp(regexp, "ig"), '<strong>$&</strong>');
+      if (!message['is_system']) {
         $("#telegram_message_" + message.id).show()
-        .find(".telegram-message-text").html(highlightedMessageText)
+            .find(".telegram-message-text").html(highlightedMessageText)
       }
     })
   } else {
     clearSearch()
   }
-})
+});
