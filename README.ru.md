@@ -84,3 +84,9 @@ bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 ### При создании чата ссылка на чат содержит FAILED
 
 Попробуйте сменить `telegram_cli_mode` в `telegram.yml` на `1`.
+
+### Couldn't open public key file: tg-server.pub
+
+Это баг в Telegram CLI. Мы направили [pull request](https://github.com/Rondoozle/tg/pull/4) с решением.
+
+Временное решение: расположите файл `tg-server.pub` в корневом каталоге Redmine.  
