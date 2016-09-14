@@ -4,6 +4,7 @@ REDMINE_CHAT_TELEGRAM_CONFIG = YAML.load_file(File.expand_path('../config/telegr
 FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.root.join('log/chat_telegram'))
 TELEGRAM_CLI_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-cli.log'))
 
+require 'pluralization'
 require 'redmine_chat_telegram'
 
 ActionDispatch::Callbacks.to_prepare do
