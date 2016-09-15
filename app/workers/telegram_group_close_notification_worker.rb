@@ -18,8 +18,10 @@ class TelegramGroupCloseNotificationWorker
       TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG.debug "chat##{telegram_id}"
 
       # send notification to chat
-      time_in_words      = distance_of_time_in_words(Time.now, telegram_group.need_to_close_at)
-      close_message_text = I18n.t('redmine_chat_telegram.messages.close_notification', time_in_words: time_in_words)
+      days_count =  telegram_group.need_to_close_at.to_date.mjd - Date.today.mjd
+      days_word  = Pluralization::pluralize(days_count, "день", "дня", "дней", "дня")
+      days = [days_count, days_word].join " "
+      close_message_text = I18n.t('redmine_chat_telegram.messages.close_notification', time_in_words: days)
 
       TelegramMessageSenderWorker.perform_async(telegram_id, close_message_text)
 
