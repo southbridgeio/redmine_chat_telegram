@@ -20,7 +20,7 @@ class TelegramGroupCloseNotificationWorker
 
         # send notification to chat
         days_count         = telegram_group.need_to_close_at.to_date.mjd - Date.today.mjd
-        days_word          = Pluralization::pluralize(days_count, 'день', 'дня', 'дней', 'дня')
+        days_word          = Pluralization.pluralize(days_count, 'день', 'дня', 'дней', 'дня')
         days               = [days_count, days_word].join ' '
         close_message_text = I18n.t('redmine_chat_telegram.messages.close_notification', time_in_words: days)
 

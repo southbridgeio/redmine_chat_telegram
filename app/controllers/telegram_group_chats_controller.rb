@@ -6,7 +6,7 @@ class TelegramGroupChatsController < ApplicationController
 
     @issue = Issue.visible.find(params[:issue_id])
 
-    subject  = if RedmineChatTelegram.mode == 0
+    subject  = if RedmineChatTelegram.mode.zero?
                  "#{@issue.project.name} ##{@issue.id}"
                else
                  "#{@issue.project.name} #{@issue.id}"
@@ -17,18 +17,16 @@ class TelegramGroupChatsController < ApplicationController
     cmd  = "create_group_chat \"#{subject}\" #{bot_name}"
     json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
 
-
-    subject_for_cli = if RedmineChatTelegram.mode == 0
-                        subject.gsub(' ', '_').gsub('#', '@')
+    subject_for_cli = if RedmineChatTelegram.mode.zero?
+                        subject.tr(' ', '_').tr('#', '@')
                       else
-                        subject.gsub(' ', '_').gsub('#', '_')
+                        subject.tr(' ', '_').tr('#', '_')
                       end
-
 
     cmd  = "chat_info #{subject_for_cli}"
     json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
 
-    telegram_id = if RedmineChatTelegram.mode == 0
+    telegram_id = if RedmineChatTelegram.mode.zero?
                     json['id']
                   else
                     json['peer_id']
@@ -60,9 +58,9 @@ class TelegramGroupChatsController < ApplicationController
 
     @project = @issue.project
 
-    @last_journal    = @issue.journals.visible.order("created_on").last
+    @last_journal    = @issue.journals.visible.order('created_on').last
     new_journal_path = "#{issue_path(@issue)}/#change-#{@last_journal.id}"
-    render js: "window.location = '#{ new_journal_path }'"
+    render js: "window.location = '#{new_journal_path}'"
   end
 
   def destroy
@@ -84,5 +82,4 @@ class TelegramGroupChatsController < ApplicationController
     @last_journal = @issue.journals.visible.order('created_on').last
     redirect_to "#{issue_path(@issue)}#change-#{@last_journal.id}"
   end
-
 end

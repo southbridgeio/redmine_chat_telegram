@@ -41,5 +41,4 @@ class TelegramMessage < ActiveRecord::Base
   def user_id
     from_id
   end
-
 end

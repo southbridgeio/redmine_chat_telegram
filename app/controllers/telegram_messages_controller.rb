@@ -1,7 +1,6 @@
 class TelegramMessagesController < ApplicationController
   unloadable
 
-
   def index
     @issue = Issue.visible.find(params[:id])
     @telegram_messages = @issue.telegram_messages

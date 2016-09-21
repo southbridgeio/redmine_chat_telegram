@@ -17,7 +17,6 @@ class TelegramGroupCloseWorker
     cmd = "export_chat_link #{chat_name}"
     RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
 
-
     # send notification to chat
     close_message_text = user.anonymous? ?
         I18n.t('redmine_chat_telegram.messages.closed_automaticaly') :
