@@ -13,19 +13,24 @@ class TelegramGroupCloseNotificationWorker
     telegram_group = issue.telegram_group
 
     if telegram_group.present?
-      telegram_id = telegram_group.telegram_id.abs
+      telegram_id = telegram_group.telegram_id
 
-      TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG.debug "chat##{telegram_id}"
+      if telegram_id.present?
+        TELEGRAM_GROUP_CLOSE_NOTIFICATION_LOG.debug "chat##{telegram_id}"
 
-      # send notification to chat
-      days_count =  telegram_group.need_to_close_at.to_date.mjd - Date.today.mjd
-      days_word  = Pluralization::pluralize(days_count, "день", "дня", "дней", "дня")
-      days = [days_count, days_word].join " "
-      close_message_text = I18n.t('redmine_chat_telegram.messages.close_notification', time_in_words: days)
+        # send notification to chat
+        days_count         = telegram_group.need_to_close_at.to_date.mjd - Date.today.mjd
+        days_word          = Pluralization::pluralize(days_count, 'день', 'дня', 'дней', 'дня')
+        days               = [days_count, days_word].join ' '
+        close_message_text = I18n.t('redmine_chat_telegram.messages.close_notification', time_in_words: days)
 
-      TelegramMessageSenderWorker.perform_async(telegram_id, close_message_text)
+        TelegramMessageSenderWorker.perform_async(telegram_id, close_message_text)
 
-      telegram_group.update last_notification_at: Time.now
+        telegram_group.update last_notification_at: Time.now
+      else
+        telegram_group.destroy
+      end
+
     end
 
   rescue ActiveRecord::RecordNotFound => e
