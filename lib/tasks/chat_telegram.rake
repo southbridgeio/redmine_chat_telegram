@@ -148,12 +148,11 @@ namespace :chat_telegram do
   # bundle exec rake chat_telegram:bot PID_DIR='/tmp'
   desc "Runs telegram bot process (options: PID_DIR='/pid/dir')"
   task :bot => :environment do
+    LOG         = Rails.env.production? ? Logger.new(Rails.root.join('log/chat_telegram', 'bot.log')) : Logger.new(STDOUT)
+    I18n.locale = Setting['default_language']
+
+    bot = chat_telegram_bot_init
     begin
-      LOG         = Rails.env.production? ? Logger.new(Rails.root.join('log/chat_telegram', 'bot.log')) : Logger.new(STDOUT)
-      I18n.locale = Setting['default_language']
-
-      bot = chat_telegram_bot_init
-
       bot.get_updates(fail_silently: false) do |message|
         begin
           next unless message.is_a?(Telegrammer::DataTypes::Message) # Update for telegrammer gem 0.8.0
