@@ -9,6 +9,8 @@ ru:
     archive_title: Архив
     settings:
       daily_report: Публиковать комментарий со сводкой по чату раз в сутки
+      close_issue_statuses: Закрывать чат для задач со статусами
+      close_issue_statuses_hint: По умолчанию чат закрывается для закрытых задач
     messages:
       hello: "Всем привет! Это чат для задачи: %{issue_url}"
       closed_from_issue: Чат закрыт из задачи.

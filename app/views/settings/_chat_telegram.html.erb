@@ -8,6 +8,14 @@
   </label>
   <%= check_box_tag 'settings[daily_report]', '1', @settings['daily_report'] %>
 </p>
+<p>
+  <label>
+    <%= t 'redmine_chat_telegram.settings.close_issue_statuses' %>
+  </label>
+  <%= select_tag 'settings[close_issue_statuses]',
+  options_for_select(IssueStatus.sorted.map { |s| [s.name, s.id] }, @settings['close_issue_statuses']), multiple: true %>
+<em class="info"><%= t 'redmine_chat_telegram.settings.close_issue_statuses_hint' %></em>
+</p>
 <%= hidden_field_tag 'settings[bot_name]', @settings['bot_name'] %>
 <%= hidden_field_tag 'settings[bot_id]',   @settings['bot_id']   %>
 <%= hidden_field_tag 'settings[robot_id]', @settings['robot_id'] %>

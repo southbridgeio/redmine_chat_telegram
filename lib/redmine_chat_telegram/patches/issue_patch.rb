@@ -11,6 +11,7 @@ module RedmineChatTelegram
           before_save :set_need_to_close, :reset_need_to_close
           before_destroy :close_chat
 
+
           def set_need_to_close
             if closing? and telegram_group.present?
               telegram_group.update need_to_close_at:     2.weeks.from_now,

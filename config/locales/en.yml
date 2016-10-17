@@ -9,6 +9,8 @@ en:
     archive_title: Archive
     settings:
       daily_report: Post a comment with chat summary once a day
+      close_issue_statuses: Close chat for issues with statuses
+      close_issue_statuses_hint: By default chat will be closed for closed issues
     messages:
       hello: "Hello, everybody! This is a chat for issue: %{issue_url}"
       closed_from_issue: chat was closed from issue

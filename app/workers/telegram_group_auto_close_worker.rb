@@ -10,8 +10,14 @@ class TelegramGroupAutoCloseWorker
       TelegramGroupCloseNotificationWorker.perform_async(issue.id)
     end
 
-    need_to_close_issues = Issue.open(false).joins(:telegram_group)
-                                .where('redmine_chat_telegram_telegram_groups.need_to_close_at <= ?', Time.now)
+    if Setting['plugin_redmine_chat_telegram']['close_issue_statuses'].present?
+      need_to_close_issues = Issue.joins(:telegram_group)
+                             .where(status_id: Setting['plugin_redmine_chat_telegram']['close_issue_statuses'])
+                             .where('redmine_chat_telegram_telegram_groups.need_to_close_at <= ?', Time.now)
+    else
+      need_to_close_issues = Issue.open(false).joins(:telegram_group)
+                             .where('redmine_chat_telegram_telegram_groups.need_to_close_at <= ?', Time.now)
+    end
 
     need_to_close_issues.find_each do |issue|
       telegram_id = issue.telegram_group.telegram_id
