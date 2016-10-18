@@ -4,6 +4,14 @@ module RedmineChatTelegram
     'redmine_chat_telegram_'
   end
 
+  def self.bot_token
+    Setting.plugin_redmine_chat_telegram['bot_token']
+  end
+
+  def self.set_locale
+    I18n.locale = Setting['default_language']
+  end
+
   def self.issue_url(issue_id)
     if Setting['protocol'] == 'https'
       URI::HTTPS.build({ host: Setting['host_name'], path: "/issues/#{issue_id}" }).to_s
