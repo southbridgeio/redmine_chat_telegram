@@ -6,7 +6,6 @@ module RedmineChatTelegram
 
     def initialize(command, bot = nil)
       @bot     = bot.present? ? bot : Telegrammer::Bot.new(RedmineChatTelegram.bot_token)
-      @logger  = Logger.new(STDOUT)
       @command = command
       @issue   = find_issue
 
@@ -55,7 +54,7 @@ module RedmineChatTelegram
       if command.from.id == left_chat_participant.id
         message.message = 'left_group'
       else
-        message.message_text = 'kicked'
+        message.message = 'kicked'
         message.system_data  = chat_user_full_name(left_chat_participant)
       end
 
@@ -64,7 +63,6 @@ module RedmineChatTelegram
 
     def send_issue_link
       issue_url = RedmineChatTelegram.issue_url(issue.id)
-      command_text   = command.text
       issue_url_text = "#{issue.subject}\n#{issue_url}"
       bot.send_message(
         chat_id: command.chat.id,
@@ -73,7 +71,7 @@ module RedmineChatTelegram
     end
 
     def log_message
-      message.message = command.text.gsub('/log', '')
+      message.message = command.text.gsub('/log ', '')
       message.bot_message = false
       message.is_system = false
 
@@ -154,7 +152,7 @@ module RedmineChatTelegram
     end
 
     def chat_user_full_name(telegram_user)
-      [telegram_user.first_name, telegram_user.last_name].compact.join
+      [telegram_user.first_name, telegram_user.last_name].compact.join " "
     end
 
     def user_not_found

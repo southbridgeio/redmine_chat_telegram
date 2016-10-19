@@ -7,7 +7,7 @@ ru:
   redmine_chat_telegram:
     bot:
       connect:
-        already_connected: Ваши аккаунты уже связаны
+        already_connected: Ваши аккаунты уже связаны.
         wait_for_email: Мы отправили подтверждение на адрес "%{email}". Пожалуйста, следуйте инструкциям из письма.
     mailer:
       telegram_connect:
