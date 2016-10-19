@@ -105,8 +105,7 @@ module RedmineChatTelegram
         connect_message = I18n.t('redmine_chat_telegram.bot.connect.already_connected')
       else
         connect_message = I18n.t('redmine_chat_telegram.bot.connect.wait_for_email', email: email)
-
-        # Redmine2FA::Mailer.telegram_connect(redmine_user, account).deliver
+        RedmineChatTelegram::Mailer.telegram_connect(redmine_user, account).deliver
       end
 
       bot.send_message(chat_id: command.chat.id, text: connect_message)

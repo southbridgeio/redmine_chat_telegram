@@ -9,6 +9,14 @@ en:
       connect:
         already_connected: Your accounts already connected
         wait_for_email: We sent email to address "%{email}". Please follow instructions from it.
+    mailer:
+      telegram_connect:
+        subject: "Linking Redmine & Telegram accounts"
+        body: "For connect to %{telegram_account} account follow the link:"
+    redmine_telegram_connections:
+      create:
+        success: Accounts successfully connected
+        error: Accounts connection error
     tab_title: Chat Telegram
     archive_title: Archive
     settings:
