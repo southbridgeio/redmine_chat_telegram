@@ -5,6 +5,10 @@ ru:
   permission_view_telegram_chat_link: Просмотр ссылки на чат Telegram
   permission_view_telegram_chat_archive: Просмотр архива чата
   redmine_chat_telegram:
+    bot:
+      connect:
+        already_connected: Ваши аккаунты уже связаны
+        wait_for_email: Мы отправили подтверждение на адрес "%{email}". Пожалуйста, следуйте инструкциям из письма.
     tab_title: Chat Telegram
     archive_title: Архив
     settings:

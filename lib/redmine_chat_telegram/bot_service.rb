@@ -1,5 +1,6 @@
 module RedmineChatTelegram
   class BotService
+    EMAIL_REGEXP = /([^@\s]+@(?:[-a-z0-9]+\.)+[a-z]{2,})/i
 
     attr_reader :bot, :logger, :command, :issue, :message
 
@@ -20,7 +21,6 @@ module RedmineChatTelegram
       return unless can_execute_command?
 
       RedmineChatTelegram.set_locale
-      @message = init_message
 
       execute_command
     end
@@ -93,22 +93,54 @@ module RedmineChatTelegram
       message.save!
     end
 
+    def connect
+      email        = command.text.scan(EMAIL_REGEXP).try(:flatten).try(:first)
+      redmine_user = EmailAddress.find_by(address: email).try(:user)
+
+      return user_not_found if redmine_user.nil?
+
+      update_account
+
+      if account.user_id == redmine_user.id
+        connect_message = I18n.t('redmine_chat_telegram.bot.connect.already_connected')
+      else
+        connect_message = I18n.t('redmine_chat_telegram.bot.connect.wait_for_email', email: email)
+
+        # Redmine2FA::Mailer.telegram_connect(redmine_user, account).deliver
+      end
+
+      bot.send_message(chat_id: command.chat.id, text: connect_message)
+    end
+
     private
 
     def execute_command
       begin
-        if command.group_chat_created
-          group_chat_created
-        elsif command.new_chat_participant.present?
-          new_chat_participant
-        elsif command.left_chat_participant.present?
-          left_chat_participant
-        elsif command.text =~ /\/task|\/link|\/url/ && command.chat.type == 'group'
-          send_issue_link
-        elsif command.text =~ /\/log/ && command.chat.type == 'group'
-          log_message
-        elsif command.text.present? && command.chat.type == 'group'
-          save_message
+        if command.chat.type == 'group' && issue.present?
+          @message = init_message
+
+          if command.group_chat_created
+            group_chat_created
+
+          elsif command.new_chat_participant.present?
+            new_chat_participant
+
+          elsif command.left_chat_participant.present?
+            left_chat_participant
+
+          elsif command.text =~ /\/task|\/link|\/url/
+            send_issue_link
+
+          elsif command.text =~ /\/log/
+            log_message
+
+          elsif command.text.present?
+            save_message
+          end
+        elsif command.chat.type == 'private'
+          if command.text =~ /\/connect/
+            connect
+          end
         end
       rescue ActiveRecord::RecordNotFound
       # ignore
@@ -119,11 +151,15 @@ module RedmineChatTelegram
     end
 
     def can_execute_command?
-      command.is_a?(Telegrammer::DataTypes::Message) && issue.present?
+      command.is_a?(Telegrammer::DataTypes::Message)
     end
 
     def chat_user_full_name(telegram_user)
       [telegram_user.first_name, telegram_user.last_name].compact.join
+    end
+
+    def user_not_found
+      bot.send_message(chat_id: command.chat.id, text: 'User not found')
     end
 
     def init_message
@@ -151,6 +187,37 @@ module RedmineChatTelegram
         logger.error "#{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
         nil
       end
+    end
+
+    def user
+      command.from
+    end
+
+    def account
+      @account ||= fetch_account
+    end
+
+    def fetch_account
+      if Redmine::Plugin.installed?('redmine_2fa')
+        Redmine2FA::TelegramAccount.where(telegram_id: user.id).first_or_initialize
+      else
+        RedmineChatTelegram::Account.where(telegram_id: user.id).first_or_initialize
+      end
+    end
+
+    def update_account
+      account.assign_attributes(
+        username:   user.username,
+        first_name: user.first_name,
+        last_name:  user.last_name,
+        active:     true)
+      write_log_about_new_user if account.new_record?
+
+      account.save!
+    end
+
+    def write_log_about_new_user
+      logger.info "New telegram_user #{user.first_name} #{user.last_name} @#{user.username} added!"
     end
   end
 end

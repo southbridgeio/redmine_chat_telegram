@@ -5,6 +5,10 @@ en:
   permission_view_telegram_chat_link: View Telegram Chat Link
   permission_view_telegram_chat_archive: View Chat Archive
   redmine_chat_telegram:
+    bot:
+      connect:
+        already_connected: Your accounts already connected
+        wait_for_email: We sent email to address "%{email}". Please follow instructions from it.
     tab_title: Chat Telegram
     archive_title: Archive
     settings:
