@@ -1,3 +1,4 @@
+[![Code Climate](https://codeclimate.com/github/centosadmin/redmine_chat_telegram/badges/gpa.svg)](https://codeclimate.com/github/centosadmin/redmine_chat_telegram)
 # redmine_chat_telegram
 
 [Русская версия](https://github.com/centosadmin/redmine_chat_telegram/blob/master/README.ru.md)
