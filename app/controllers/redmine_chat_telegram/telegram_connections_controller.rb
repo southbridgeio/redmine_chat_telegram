@@ -1,4 +1,4 @@
-class RedmineTelegramConnectionsController < ApplicationController
+class RedmineChatTelegram::TelegramConnectionsController < ApplicationController
   unloadable
 
   skip_before_filter :check_if_login_required, :check_password_change
