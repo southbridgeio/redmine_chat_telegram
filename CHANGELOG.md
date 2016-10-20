@@ -1,3 +1,7 @@
+#### [1.2.0]
+
+* Add ability to connect telegram accounts to redmine
+
 #### [1.1.3]
 
 * Solve issue #6 by add `telegram_cli_mode` to `telegram.yml`
