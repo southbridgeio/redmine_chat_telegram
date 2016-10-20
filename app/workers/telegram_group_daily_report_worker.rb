@@ -21,7 +21,7 @@ class TelegramGroupDailyReportWorker
     if telegram_messages.present?
       date_string       = format_date(yesterday)
       user_names        = telegram_messages.map(&:author_name).uniq
-      joined_user_names = user_names.join(', ')
+      joined_user_names = user_names.join(', ').strip
       users_count       = Pluralization.pluralize(user_names.count,
                                                   'человек',
                                                   'человекa',
