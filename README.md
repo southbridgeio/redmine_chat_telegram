@@ -40,7 +40,7 @@ Start `telegram-cli` on your Redmine server and login to Telegram with it. You'l
 
 It is necessary to register a bot and get its token. There is a [@BotFather] bot used in Telegram for this purpose. Type `/start` to get a complete list of available commands.
 
-Type `/newbot` command to register a new bot. @BotFather will ask you about the name for the new bot. The bot's name must end with the "bot" word.
+Type `/newbot` command to register a new bot. @BotFather will ask you to name the new bot. The bot's name must end with the "bot" word.
 On success @BotFather will give you a token for your new bot and a link so you could quickly add the bot to the contact list.
 You'll have to come up with a new name if registration fails.
 
