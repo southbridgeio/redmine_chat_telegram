@@ -77,6 +77,6 @@ Try to change `telegram_cli_mode` in `telegram.yml` to `1`.
 
 ### Couldn't open public key file: tg-server.pub
 
-This is CLI bug. We have [pull request](https://github.com/Rondoozle/tg/pull/4) for fix it.
+This is CLI bug. We have [pull request](https://github.com/Rondoozle/tg/pull/4) to fix it.
 
 Temporary solution: place `tg-server.pub` into root of Redmine.  
