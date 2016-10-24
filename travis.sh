@@ -37,6 +37,7 @@ fi
 
 mv $TESTSPACE/database.yml.travis config/database.yml
 mv $TESTSPACE/additional_environment.rb config/
+mv $PATH_TO_PLUGIN/config/telegram.yml.example config/telegram.yml
 
 # create a link to the backlogs plugin
 ln -sf $PATH_TO_PLUGIN plugins/$NAME_OF_PLUGIN
