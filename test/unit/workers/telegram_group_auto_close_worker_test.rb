@@ -13,9 +13,11 @@ class TelegramGroupAutoCloseWorkerTest < ActiveSupport::TestCase
     Issue.find(2).update(status_id: @closed_status.id)
 
     @telegram_group = RedmineChatTelegram::TelegramGroup.create(need_to_close_at: 1.day.ago,
+                                                                last_notification_at: 1.day.ago,
                                                                 telegram_id: 123,
                                                                 issue_id: 1)
     @another_telegram_group = RedmineChatTelegram::TelegramGroup.create(need_to_close_at: 1.day.ago,
+                                                                        last_notification_at: 1.day.ago,
                                                                         telegram_id: 456,
                                                                         issue_id: 2)
   end
@@ -34,6 +36,11 @@ class TelegramGroupAutoCloseWorkerTest < ActiveSupport::TestCase
 
       mock_worker.verify
     end
+
+    it "notify only for issues with required statuses" do
+      TelegramGroupCloseNotificationWorker.expects(:perform_async).with(1)
+      TelegramGroupAutoCloseWorker.new.perform
+    end
   end
 
 
@@ -50,6 +57,11 @@ class TelegramGroupAutoCloseWorkerTest < ActiveSupport::TestCase
       end
 
       mock_worker.verify
+    end
+
+    it "notify only for issues with required statuses" do
+      TelegramGroupCloseNotificationWorker.expects(:perform_async).with(2)
+      TelegramGroupAutoCloseWorker.new.perform
     end
   end
 end
