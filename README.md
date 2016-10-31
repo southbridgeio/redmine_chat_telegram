@@ -48,6 +48,8 @@ Set the Privacy mode to disabled with `/setprivacy`. This will let the bot liste
 
 Enter the bot's token on the Plugin Settings page to add the bot to your chat.
 
+To add hints for commands for the bot, use command `/setcommands`
+
 ### Add bot to user contacts
 
 Type `/start` command to your bot from your user account.
@@ -65,9 +67,20 @@ bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 
 Plugin can't log chat messages into the archive when stopped. To avoid loss of messages plugin performs chat - archive synchronization on the next run with 5 minute delay from the start.
 
-### Usage
+## Usage
 
 Open the ticket. You'll see the new link `Create Telegram chat` on the right side of the ticket. Click on it and the Telegram group chat associated with this ticket will be created. The link will change to `Enter Telegram chat`. Click on it to join the chat in your Telegram client. You'll be able to copy and pass the link to anyone you want to invite to the Group Chat.
+
+### Available commands in bot chat
+
+- `/connect` - connect Telegram account to Redmine account
+- `/new` - create new issue
+- `/cancel` - cancel current command
+
+### Available commands in issue chat
+
+- `/task`, `/link`, `/url` - get link to the issue
+- `/log` - save message to the issue 
 
 ## Troubleshooting
 
