@@ -19,6 +19,9 @@ install: "echo skip bundle install"
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
 
+services:
+  - redis-server
+
 script:
   - export TESTSPACE=`pwd`/testspace
   - export NAME_OF_PLUGIN=redmine_chat_telegram
