@@ -7,6 +7,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
 
   let(:bot) { Minitest::Mock.new.expect(:present?, true) }
   let(:issue) { Issue.find(1) }
+  let(:user) { User.find(1) }
 
   let(:command_params) do
     {
@@ -147,7 +148,6 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
   end
 
   describe "connect" do
-    let(:user) { User.find(1) }
 
     it "sends what user not found if user not found" do
       bot.expect(:send_message, nil, [{chat_id: 123, text: 'User not found'}])
@@ -192,6 +192,46 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
 
       bot.verify
     end
+  end
 
+  describe 'new' do
+
+    it "exucutes new_isssue command" do
+      command = Telegrammer::DataTypes::Message
+                .new(command_params.merge(
+                      text: "/new",
+                      chat: { id: 123, type: 'private' }))
+
+      RedmineChatTelegram::Commands::NewIssueCommand.any_instance.expects(:execute)
+
+      RedmineChatTelegram::BotService.new(command, bot).call
+    end
+  end
+
+  describe 'cancel' do
+
+    it "cancel executing command if it's exist" do
+      command = Telegrammer::DataTypes::Message
+                .new(command_params.merge(
+                      text: "/cancel",
+                      chat: { id: 123, type: 'private' }))
+      account = RedmineChatTelegram::Account.create(telegram_id: command.from.id, user_id: user.id)
+      executing_command = account.create_executing_command(name: 'new')
+      RedmineChatTelegram::ExecutingCommand.any_instance.expects(:cancel)
+
+      RedmineChatTelegram::BotService.new(command, bot).call
+    end
+  end
+
+  it "runs executing command if it's present" do
+    command = Telegrammer::DataTypes::Message
+              .new(command_params.merge(
+                    text: "hello",
+                    chat: { id: 123, type: 'private' }))
+    account = RedmineChatTelegram::Account.create(telegram_id: command.from.id, user_id: user.id)
+    executing_command = account.create_executing_command(name: 'new')
+    RedmineChatTelegram::ExecutingCommand.any_instance.expects(:continue)
+
+    RedmineChatTelegram::BotService.new(command, bot).call
   end
 end

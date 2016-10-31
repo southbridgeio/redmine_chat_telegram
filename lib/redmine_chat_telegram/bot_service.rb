@@ -135,8 +135,14 @@ module RedmineChatTelegram
             save_message
           end
         elsif command.chat.type == 'private'
-          if command.text =~ /\/connect/
+          if executing_command.present? and command.text =~ /\/cancel/
+            executing_command.cancel(command, bot)
+          elsif executing_command.present?
+            executing_command.continue(command, bot)
+          elsif command.text =~ /\/connect/
             connect
+          elsif command.text =~ /\/new/
+            RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           end
         end
       rescue ActiveRecord::RecordNotFound
@@ -192,6 +198,12 @@ module RedmineChatTelegram
 
     def account
       @account ||= fetch_account
+    end
+
+    def executing_command
+      @executing_command ||= RedmineChatTelegram::ExecutingCommand
+                           .joins(:account)
+                           .find_by(redmine_chat_telegram_accounts: { telegram_id: user.id })
     end
 
     def fetch_account

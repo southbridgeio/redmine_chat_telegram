@@ -9,6 +9,14 @@ en:
       connect:
         already_connected: Your accounts already connected
         wait_for_email: We sent email to address "%{email}". Please follow instructions from it.
+      new_issue:
+        choice_project: "Select project."
+        choice_user: "Select user to assing new issue"
+        user_not_found: "There is no users for selected project."
+        input_subject: "Input issue subject."
+        input_text: "Input issue text."
+        success: "Issue is created: %{issue_url}"
+        error: "Failed to create issue."
     mailer:
       telegram_connect:
         subject: "Linking Redmine & Telegram accounts"

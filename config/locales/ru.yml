@@ -9,6 +9,14 @@ ru:
       connect:
         already_connected: Ваши аккаунты уже связаны.
         wait_for_email: Мы отправили подтверждение на адрес "%{email}". Пожалуйста, следуйте инструкциям из письма.
+      new_issue:
+        choice_project: "Выберите проект."
+        choice_user: "Выберите кому назначить задачу."
+        user_not_found: "Не найдено пользователей для выбранного проекта."
+        input_subject: "Введите тему задачи."
+        input_text: "Введите текст задачи."
+        success: "Задача создана: %{issue_url}"
+        error: "Не удалось создать задачу."
     mailer:
       telegram_connect:
         subject: Связывание аккаунтов Redmine и Telegram
