@@ -1,4 +1,6 @@
 require File.expand_path('../../../test_helper', __FILE__)
+require_relative '../../../app/workers/telegram_group_close_notification_worker.rb'
+require_relative '../../../app/workers/telegram_group_close_worker.rb'
 require 'minitest/mock'
 require 'minitest/autorun'
 
