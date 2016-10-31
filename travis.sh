@@ -42,6 +42,14 @@ mv $PATH_TO_PLUGIN/config/telegram.yml.example $PATH_TO_PLUGIN/config/telegram.y
 # create a link to the backlogs plugin
 ln -sf $PATH_TO_PLUGIN plugins/$NAME_OF_PLUGIN
 
+# install redis
+sudo add-apt-repository ppa:chris-lea/redis-server
+sudo apt-get update
+sudo apt-get install redis-server
+
+# run redis
+redis-server
+
 # install gems
 bundle install
 
