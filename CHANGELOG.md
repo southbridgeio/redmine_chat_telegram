@@ -1,3 +1,7 @@
+#### [1.2.1]
+
+* Add command to create new issues
+
 #### [1.2.0]
 
 * Add ability to connect telegram accounts to redmine
