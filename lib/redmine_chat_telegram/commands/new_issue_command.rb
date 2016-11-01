@@ -77,6 +77,7 @@ module RedmineChatTelegram
             assigned_to: assigned_to,
             subject: subject,
             description: text)
+          issue.priority = IssuePriority.where(is_default: true).first || IssuePriority.first
           issue.tracker = issue.project.trackers.first
           issue.status = issue.new_statuses_allowed_to(account.user).first
           issue.save!
@@ -114,7 +115,7 @@ module RedmineChatTelegram
 
       def account
         begin
-          @account ||= RedmineChatTelegram::Account.find_by!(telegram_id: command.from.id)
+          @account ||= ::TelegramCommon::Account.find_by!(telegram_id: command.from.id)
         rescue ActiveRecord::RecordNotFound
           bot.send_message(chat_id: command.chat.id, text: "Аккаунт не найден.")
           nil
@@ -127,7 +128,7 @@ module RedmineChatTelegram
                              .joins(:account)
                              .find_by!(
                                name: 'new',
-                               redmine_chat_telegram_accounts:
+                               telegram_common_accounts:
                                  { telegram_id: command.from.id })
         rescue ActiveRecord::RecordNotFound
           @executing_command ||= RedmineChatTelegram::ExecutingCommand.create(name: 'new',

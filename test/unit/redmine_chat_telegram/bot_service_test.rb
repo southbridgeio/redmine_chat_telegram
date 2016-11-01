@@ -168,7 +168,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
                       text: "/connect #{ user.email_address.address }",
                       chat: { id: 123, type: 'private' }))
 
-      RedmineChatTelegram::Account.create(
+      ::TelegramCommon::Account.create(
         telegram_id: command.from.id,
         user_id: user.id)
 
@@ -215,8 +215,8 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
                 .new(command_params.merge(
                       text: "/cancel",
                       chat: { id: 123, type: 'private' }))
-      account = RedmineChatTelegram::Account.create(telegram_id: command.from.id, user_id: user.id)
-      executing_command = account.create_executing_command(name: 'new')
+      account = ::TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
+      executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
       RedmineChatTelegram::ExecutingCommand.any_instance.expects(:cancel)
 
       RedmineChatTelegram::BotService.new(command, bot).call
@@ -228,8 +228,8 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
               .new(command_params.merge(
                     text: "hello",
                     chat: { id: 123, type: 'private' }))
-    account = RedmineChatTelegram::Account.create(telegram_id: command.from.id, user_id: user.id)
-    executing_command = account.create_executing_command(name: 'new')
+    account = ::TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
+    executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
     RedmineChatTelegram::ExecutingCommand.any_instance.expects(:continue)
 
     RedmineChatTelegram::BotService.new(command, bot).call

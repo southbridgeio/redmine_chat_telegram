@@ -103,7 +103,7 @@ module RedmineChatTelegram
         connect_message = I18n.t('redmine_chat_telegram.bot.connect.already_connected')
       else
         connect_message = I18n.t('redmine_chat_telegram.bot.connect.wait_for_email', email: email)
-        RedmineChatTelegram::Mailer.telegram_connect(redmine_user, account).deliver
+        TelegramCommon::Mailer.telegram_connect(redmine_user, account).deliver
       end
 
       bot.send_message(chat_id: command.chat.id, text: connect_message)
@@ -203,15 +203,11 @@ module RedmineChatTelegram
     def executing_command
       @executing_command ||= RedmineChatTelegram::ExecutingCommand
                            .joins(:account)
-                           .find_by(redmine_chat_telegram_accounts: { telegram_id: user.id })
+                           .find_by(telegram_common_accounts: { telegram_id: user.id })
     end
 
     def fetch_account
-      if Redmine::Plugin.installed?('redmine_2fa')
-        Redmine2FA::TelegramAccount.where(telegram_id: user.id).first_or_initialize
-      else
-        RedmineChatTelegram::Account.where(telegram_id: user.id).first_or_initialize
-      end
+      ::TelegramCommon::Account.where(telegram_id: user.id).first_or_initialize
     end
 
     def update_account

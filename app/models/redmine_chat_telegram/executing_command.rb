@@ -3,7 +3,7 @@ class RedmineChatTelegram::ExecutingCommand < ActiveRecord::Base
 
   serialize :data
 
-  belongs_to :account, class_name: 'RedmineChatTelegram::Account'
+  belongs_to :account, class_name: '::TelegramCommon::Account'
 
   before_create -> (model) { model.step_number = 1 }
 

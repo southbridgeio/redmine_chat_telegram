@@ -34,7 +34,7 @@ class RedmineChatTelegram::NewIssueCommandTest < ActiveSupport::TestCase
     describe "when account is present" do
 
       before do
-        @account = RedmineChatTelegram::Account.create(telegram_id: 998899, user: user)
+        @account = ::TelegramCommon::Account.create(telegram_id: 998899, user_id: user.id)
       end
 
       describe "step 1" do

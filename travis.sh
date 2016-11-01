@@ -39,6 +39,9 @@ mv $TESTSPACE/database.yml.travis config/database.yml
 mv $TESTSPACE/additional_environment.rb config/
 mv $PATH_TO_PLUGIN/config/telegram.yml.example $PATH_TO_PLUGIN/config/telegram.yml
 
+# add telegram_common plugin
+git clone git://github.com/centosadmin/redmine_telegram_common.git $PATH_TO_REDMINE/plugins/redmine_telegram_common
+
 # create a link to the backlogs plugin
 ln -sf $PATH_TO_PLUGIN plugins/$NAME_OF_PLUGIN
 

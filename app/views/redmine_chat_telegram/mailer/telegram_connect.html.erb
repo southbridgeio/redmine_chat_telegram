@@ -1,8 +1,0 @@
-<%= t('redmine_chat_telegram.mailer.telegram_connect.body',
-      telegram_account: @telegram_account.username.present? ? "@#{@telegram_account.username}" : 'Telegram'
-    ) %>
-<%= link_to redmine_chat_telegram_connect_url(user_id:     @user.id, user_email: @user.mail,
-                                             telegram_id: @telegram_account.telegram_id, token: @telegram_account.token),
-            redmine_chat_telegram_connect_url(user_id:     @user.id, user_email: @user.mail,
-                                             telegram_id: @telegram_account.telegram_id, token: @telegram_account.token)
-%>

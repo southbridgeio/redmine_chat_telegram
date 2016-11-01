@@ -17,14 +17,6 @@ ru:
         input_text: "Введите текст задачи."
         success: "Задача создана: %{issue_url}"
         error: "Не удалось создать задачу."
-    mailer:
-      telegram_connect:
-        subject: Связывание аккаунтов Redmine и Telegram
-        body: "Для привязки аккаунта %{telegram_account} пройдите по ссылке:"
-    redmine_telegram_connections:
-      create:
-        success: Аккаунты успешно связаны
-        error: Связать аккаунты не удалось
     tab_title: Chat Telegram
     archive_title: Архив
     settings:

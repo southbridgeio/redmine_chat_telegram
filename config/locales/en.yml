@@ -17,14 +17,6 @@ en:
         input_text: "Input issue text."
         success: "Issue is created: %{issue_url}"
         error: "Failed to create issue."
-    mailer:
-      telegram_connect:
-        subject: "Linking Redmine & Telegram accounts"
-        body: "For connect to %{telegram_account} account follow the link:"
-    redmine_telegram_connections:
-      create:
-        success: Accounts successfully connected
-        error: Accounts connection error
     tab_title: Chat Telegram
     archive_title: Archive
     settings:
