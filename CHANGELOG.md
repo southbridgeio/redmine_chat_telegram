@@ -1,3 +1,7 @@
+#### [1.2.2]
+
+* Use `redmine_telegram_common` plugin for account connections
+
 #### [1.2.1]
 
 * Add command to create new issues
