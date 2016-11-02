@@ -180,7 +180,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     it "sends message with success if user found and not connected" do
       bot.expect(:send_message, nil, [{chat_id: 123, text: "We sent email to address \"#{ user.email_address.address }\". Please follow instructions from it."}])
 
-      RedmineChatTelegram::Mailer.expects(:telegram_connect)
+      TelegramCommon::Mailer.expects(:telegram_connect)
         .returns(Minitest::Mock.new.expect(:deliver, nil))
 
       command = Telegrammer::DataTypes::Message
