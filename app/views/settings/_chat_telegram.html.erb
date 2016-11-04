@@ -1,3 +1,17 @@
+<% unless Redmine::Plugin.installed?('redmine_telegram_common') %>
+  <h1 style="text-align: center">
+    !!! <a href="https://github.com/centosadmin/redmine_telegram_common" target="_blank">redmine_telegram_common</a>
+    <%= t('redmine_chat_telegram.settings.required') %> !!!
+  </h1>
+<% end %>
+
+<% unless Redmine::Plugin.installed?('redmine_sidekiq') %>
+  <h1 style="text-align: center">
+    !!! <a href="https://github.com/ogom/redmine_sidekiq" target="_blank">redmine_sidekiq</a>
+    <%= t('redmine_chat_telegram.settings.required') %> !!!
+  </h1>
+<% end %>
+
 <p>
   <label for="settings_telegram_bot_token">Bot Token</label>
   <%= text_field_tag 'settings[bot_token]', @settings['bot_token'], size: 50 %>
