@@ -15,7 +15,7 @@ module Pluralization
   #   :many = 0, 5-20, 25-30, 35-40...
   #   :other = 1.31, 2.31, 5.31...
 
-  def self.pluralize(n, _one, _few, _many, _other)
+  def self.pluralize(n, one, few, many, other)
     variant = n % 10 == 1 && n % 100 != 11 ? :one : [2, 3, 4].include?(n % 10) && ![12, 13, 14].include?(n % 100) ? :few : n % 10 == 0 || [5, 6, 7, 8, 9].include?(n % 10) || [11, 12, 13, 14].include?(n % 100) ? :many : :other
 
     eval(variant.to_s)
