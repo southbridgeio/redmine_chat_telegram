@@ -14,9 +14,9 @@ module RedmineChatTelegram
 
   def self.issue_url(issue_id)
     if Setting['protocol'] == 'https'
-      URI::HTTPS.build({ host: Setting['host_name'], path: "/issues/#{issue_id}" }).to_s
+      URI::HTTPS.build(host: Setting['host_name'], path: "/issues/#{issue_id}").to_s
     else
-      URI::HTTP.build({ host: Setting['host_name'], path: "/issues/#{issue_id}" }).to_s
+      URI::HTTP.build(host: Setting['host_name'], path: "/issues/#{issue_id}").to_s
     end
   end
 
@@ -33,11 +33,11 @@ module RedmineChatTelegram
   def self.run_cli_command(cmd, logger = nil)
     logger.debug cmd if logger
 
-    cmd_as_param = cmd.gsub("\"", "\\\"")
+    cmd_as_param = cmd.gsub('"', '\\"')
 
     logger.debug %( #{cli_base} "#{cmd_as_param}" ) if logger
 
-    result = %x( #{cli_base} "#{cmd_as_param}" )
+    result = ` #{cli_base} "#{cmd_as_param}" `
 
     logger.debug result if logger
 
@@ -61,7 +61,7 @@ module RedmineChatTelegram
 
     JSON.parse result
   rescue
-    puts $!
+    puts $ERROR_INFO
   ensure
     socket.close if socket
   end
@@ -70,9 +70,7 @@ module RedmineChatTelegram
   HISTORY_UPDATE_LOG     = Logger.new(Rails.root.join('log/chat_telegram',
                                                       'telegram-group-history-update.log'))
 
-
   def self.create_new_messages(issue_id, chat_name, bot_ids, present_message_ids, page)
-
     cmd = "history #{chat_name} #{CHAT_HISTORY_PAGE_SIZE} #{CHAT_HISTORY_PAGE_SIZE * page}"
 
     json_messages = RedmineChatTelegram.run_cli_command(cmd, HISTORY_UPDATE_LOG)
@@ -82,9 +80,9 @@ module RedmineChatTelegram
       new_json_messages = json_messages.select do |message|
         from = message['from']
 
-        from.present? and
-            !present_message_ids.include?(message['id']) and
-            !bot_ids.include?(from['id'])
+        from.present? &&
+          !present_message_ids.include?(message['id']) &&
+          !bot_ids.include?(from['id'])
       end
 
       new_json_messages.each do |message|
@@ -98,14 +96,14 @@ module RedmineChatTelegram
         from_username   = from['username']
 
         message_text = message['text']
-        TelegramMessage.where(telegram_id: message_id).
-            first_or_create issue_id:        issue_id,
-                            sent_at:         sent_at,
-                            from_id:         from_id,
-                            from_first_name: from_first_name,
-                            from_last_name:  from_last_name,
-                            from_username:   from_username,
-                            message:         message_text
+        TelegramMessage.where(telegram_id: message_id)
+            .first_or_create issue_id:        issue_id,
+                             sent_at:         sent_at,
+                             from_id:         from_id,
+                             from_first_name: from_first_name,
+                             from_last_name:  from_last_name,
+                             from_username:   from_username,
+                             message:         message_text
       end
       json_messages.size == CHAT_HISTORY_PAGE_SIZE
     else

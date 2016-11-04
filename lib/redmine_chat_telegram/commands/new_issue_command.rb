@@ -1,7 +1,6 @@
 module RedmineChatTelegram
   module Commands
     class NewIssueCommand
-
       attr_reader :command, :bot
 
       def initialize(command, bot)
@@ -17,7 +16,7 @@ module RedmineChatTelegram
       private
 
       def execute_step
-        self.send("execute_step_#{ executing_command.step_number }")
+        send("execute_step_#{executing_command.step_number}")
       end
 
       def execute_step_1
@@ -34,7 +33,7 @@ module RedmineChatTelegram
                 .where(Project.visible_condition(account.user))
                 .find_by(name: project_name)
                 .try(:assignable_users)
-        if users.present? and users.count > 0
+        if users.present? && users.count > 0
           executing_command.update(step_number: 3, data: { project_name: project_name })
           bot.send_message(
             chat_id: command.chat.id,
@@ -46,7 +45,7 @@ module RedmineChatTelegram
       end
 
       def execute_step_3
-        firstname, lastname = command.text.split(" ")
+        firstname, lastname = command.text.split(' ')
 
         executing_command.update(
           step_number: 4,
@@ -104,7 +103,7 @@ module RedmineChatTelegram
 
       def users_list_markup(users)
         user_names = users.map do |user|
-          "#{ user.firstname } #{ user.lastname }"
+          "#{user.firstname} #{user.lastname}"
         end
 
         Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
@@ -114,26 +113,22 @@ module RedmineChatTelegram
       end
 
       def account
-        begin
-          @account ||= ::TelegramCommon::Account.find_by!(telegram_id: command.from.id)
-        rescue ActiveRecord::RecordNotFound
-          bot.send_message(chat_id: command.chat.id, text: "Аккаунт не найден.")
-          nil
-        end
+        @account ||= ::TelegramCommon::Account.find_by!(telegram_id: command.from.id)
+      rescue ActiveRecord::RecordNotFound
+        bot.send_message(chat_id: command.chat.id, text: 'Аккаунт не найден.')
+        nil
       end
 
       def executing_command
-        begin
-          @executing_command ||= RedmineChatTelegram::ExecutingCommand
-                             .joins(:account)
-                             .find_by!(
-                               name: 'new',
-                               telegram_common_accounts:
-                                 { telegram_id: command.from.id })
-        rescue ActiveRecord::RecordNotFound
-          @executing_command ||= RedmineChatTelegram::ExecutingCommand.create(name: 'new',
-                                                                              account: account)
-        end
+        @executing_command ||= RedmineChatTelegram::ExecutingCommand
+                           .joins(:account)
+                           .find_by!(
+                             name: 'new',
+                             telegram_common_accounts:
+                               { telegram_id: command.from.id })
+      rescue ActiveRecord::RecordNotFound
+        @executing_command ||= RedmineChatTelegram::ExecutingCommand.create(name: 'new',
+                                                                            account: account)
       end
     end
   end

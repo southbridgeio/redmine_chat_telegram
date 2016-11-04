@@ -15,4 +15,3 @@ class ActiveSupport::TestCase
   # Add spec DSL
   extend Minitest::Spec::DSL
 end
-

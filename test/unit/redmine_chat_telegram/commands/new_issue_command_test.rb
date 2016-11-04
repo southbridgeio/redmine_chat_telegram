@@ -12,9 +12,9 @@ class RedmineChatTelegram::NewIssueCommandTest < ActiveSupport::TestCase
   let(:command_params) do
     {
       chat: { id: 123, type: 'private' },
-      message_id: 123456,
+      message_id: 123_456,
       date: Date.today,
-      from: { id: 998899, first_name: "Qw", last_name: "Ert", username: "qwert"}
+      from: { id: 998_899, first_name: 'Qw', last_name: 'Ert', username: 'qwert' }
     }
   end
 
@@ -24,24 +24,23 @@ class RedmineChatTelegram::NewIssueCommandTest < ActiveSupport::TestCase
     I18n.locale = 'ru'
   end
 
-  describe "#execute" do
-    it "sends that account not found if there is no accout" do
-      bot.expect(:send_message, nil, [{chat_id: 123, text: "Аккаунт не найден."}])
+  describe '#execute' do
+    it 'sends that account not found if there is no accout' do
+      bot.expect(:send_message, nil, [{ chat_id: 123, text: 'Аккаунт не найден.' }])
       RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
       bot.verify
     end
 
-    describe "when account is present" do
-
+    describe 'when account is present' do
       before do
-        @account = ::TelegramCommon::Account.create(telegram_id: 998899, user_id: user.id)
+        @account = ::TelegramCommon::Account.create(telegram_id: 998_899, user_id: user.id)
       end
 
-      describe "step 1" do
-        it "sends projects available for the user" do
-          project_list = [["eCookbook", "Private child of eCookbook"],
-                          ["Child of private child", "eCookbook Subproject 1"],
-                          ["eCookbook Subproject 2", "OnlineStore"]]
+      describe 'step 1' do
+        it 'sends projects available for the user' do
+          project_list = [['eCookbook', 'Private child of eCookbook'],
+                          ['Child of private child', 'eCookbook Subproject 1'],
+                          ['eCookbook Subproject 2', 'OnlineStore']]
 
           Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: project_list, one_time_keyboard: true, resize_keyboard: true)
@@ -50,20 +49,20 @@ class RedmineChatTelegram::NewIssueCommandTest < ActiveSupport::TestCase
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: "Выберите проект.", reply_markup: nil }])
+            [{ chat_id: 123, text: 'Выберите проект.', reply_markup: nil }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end
       end
 
-      describe "step 2" do
+      describe 'step 2' do
         before do
           RedmineChatTelegram::ExecutingCommand.create(account: @account, name: 'new')
             .update(step_number: 2)
         end
 
-        it "sends list of project members if they are exist" do
+        it 'sends list of project members if they are exist' do
           member = Member.create(project_id: 1, user_id: 1)
           member.roles << Role.first
           member.save
@@ -71,7 +70,7 @@ class RedmineChatTelegram::NewIssueCommandTest < ActiveSupport::TestCase
           command = Telegrammer::DataTypes::Message
                     .new(command_params.merge(text: Project.first.name))
 
-          users_list = [["Redmine Admin"]]
+          users_list = [['Redmine Admin']]
           Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
@@ -79,80 +78,80 @@ class RedmineChatTelegram::NewIssueCommandTest < ActiveSupport::TestCase
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: "Выберите кому назначить задачу.", reply_markup: nil }])
+            [{ chat_id: 123, text: 'Выберите кому назначить задачу.', reply_markup: nil }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end
 
-        it "sends message that users are not found it there is no project members" do
+        it 'sends message that users are not found it there is no project members' do
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: "Не найдено пользователей для выбранного проекта." }])
+            [{ chat_id: 123, text: 'Не найдено пользователей для выбранного проекта.' }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end
       end
 
-      describe "step 3" do
+      describe 'step 3' do
         before do
           RedmineChatTelegram::ExecutingCommand.create(account: @account, name: 'new', data: {})
             .update(step_number: 3)
         end
 
-        it "asks to send issue subject" do
+        it 'asks to send issue subject' do
           command = Telegrammer::DataTypes::Message
-                    .new(command_params.merge(text: "Redmine Admin"))
+                    .new(command_params.merge(text: 'Redmine Admin'))
 
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: "Введите тему задачи." }])
+            [{ chat_id: 123, text: 'Введите тему задачи.' }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end
       end
 
-      describe "step 4" do
+      describe 'step 4' do
         before do
           RedmineChatTelegram::ExecutingCommand.create(account: @account, name: 'new', data: {})
             .update(step_number: 4)
         end
 
-        it "asks to send issue text" do
+        it 'asks to send issue text' do
           command = Telegrammer::DataTypes::Message
-                    .new(command_params.merge(text: "issue subject"))
+                    .new(command_params.merge(text: 'issue subject'))
 
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: "Введите текст задачи." }])
+            [{ chat_id: 123, text: 'Введите текст задачи.' }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end
       end
 
-      describe "step 5" do
+      describe 'step 5' do
         before do
-          IssuePriority.create(is_default: true, name: "normal")
+          IssuePriority.create(is_default: true, name: 'normal')
           Project.find(1).trackers << Tracker.first
-          Setting.host_name = "redmine.com"
+          Setting.host_name = 'redmine.com'
           RedmineChatTelegram::ExecutingCommand.create(
             account: @account,
             name: 'new',
-            data: { project_name: "eCookbook",
-                    user: { firstname: "Redmine",
-                            lastname: "Admin" },
-                    subject: "Issue created from telegram" }).update(step_number: 5)
+            data: { project_name: 'eCookbook',
+                    user: { firstname: 'Redmine',
+                            lastname: 'Admin' },
+                    subject: 'Issue created from telegram' }).update(step_number: 5)
         end
 
-        let(:command) { Telegrammer::DataTypes::Message.new(command_params.merge(text: "issue text")) }
+        let(:command) { Telegrammer::DataTypes::Message.new(command_params.merge(text: 'issue text')) }
 
-        it "sends message with link to the created issue" do
+        it 'sends message with link to the created issue' do
           new_issue_id = Issue.last.id + 1
           Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new)
             .with(hide_keyboard: true)
@@ -161,7 +160,7 @@ class RedmineChatTelegram::NewIssueCommandTest < ActiveSupport::TestCase
             :send_message,
             nil,
             [{ chat_id: 123,
-               text: "Задача создана: http://redmine.com/issues/#{ new_issue_id }",
+               text: "Задача создана: http://redmine.com/issues/#{new_issue_id}",
                reply_markup: nil }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute

@@ -42,8 +42,8 @@ module RedmineChatTelegram
       if command.from.id == new_chat_participant.id
         message.message = 'joined'
       else
-       message.message     = 'invited'
-       message.system_data = chat_user_full_name(new_chat_participant)
+        message.message = 'invited'
+        message.system_data = chat_user_full_name(new_chat_participant)
       end
 
       message.save!
@@ -56,7 +56,7 @@ module RedmineChatTelegram
         message.message = 'left_group'
       else
         message.message = 'kicked'
-        message.system_data  = chat_user_full_name(left_chat_participant)
+        message.system_data = chat_user_full_name(left_chat_participant)
       end
 
       message.save!
@@ -79,7 +79,7 @@ module RedmineChatTelegram
       journal_text = message.as_text(with_time: false)
       issue.init_journal(
         User.anonymous,
-        "_#{ I18n.t('redmine_chat_telegram.journal.from_telegram') }:_ \n\n#{journal_text}")
+        "_#{I18n.t('redmine_chat_telegram.journal.from_telegram')}:_ \n\n#{journal_text}")
 
       issue.save!
       message.save!
@@ -113,45 +113,43 @@ module RedmineChatTelegram
     private
 
     def execute_command
-      begin
-        if command.chat.type == 'group' && issue.present?
-          @message = init_message
+      if command.chat.type == 'group' && issue.present?
+        @message = init_message
 
-          if command.group_chat_created
-            group_chat_created
+        if command.group_chat_created
+          group_chat_created
 
-          elsif command.new_chat_participant.present?
-            new_chat_participant
+        elsif command.new_chat_participant.present?
+          new_chat_participant
 
-          elsif command.left_chat_participant.present?
-            left_chat_participant
+        elsif command.left_chat_participant.present?
+          left_chat_participant
 
-          elsif command.text =~ /\/task|\/link|\/url/
-            send_issue_link
+        elsif command.text =~ /\/task|\/link|\/url/
+          send_issue_link
 
-          elsif command.text =~ /\/log/
-            log_message
+        elsif command.text =~ /\/log/
+          log_message
 
-          elsif command.text.present?
-            save_message
-          end
-        elsif command.chat.type == 'private'
-          if executing_command.present? and command.text =~ /\/cancel/
-            executing_command.cancel(command, bot)
-          elsif executing_command.present?
-            executing_command.continue(command, bot)
-          elsif command.text =~ /\/connect/
-            connect
-          elsif command.text =~ /\/new/
-            RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-          end
+        elsif command.text.present?
+          save_message
         end
-      rescue ActiveRecord::RecordNotFound
-      # ignore
-      rescue Exception => e
-        logger.error "UPDATE #{e.class}: #{e.message} \n#{e.backtrace.join("\n")}"
-        print e.backtrace.join("\n")
+      elsif command.chat.type == 'private'
+        if executing_command.present? && command.text =~ /\/cancel/
+          executing_command.cancel(command, bot)
+        elsif executing_command.present?
+          executing_command.continue(command, bot)
+        elsif command.text =~ /\/connect/
+          connect
+        elsif command.text =~ /\/new/
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
+        end
       end
+    rescue ActiveRecord::RecordNotFound
+    # ignore
+    rescue Exception => e
+      logger.error "UPDATE #{e.class}: #{e.message} \n#{e.backtrace.join("\n")}"
+      print e.backtrace.join("\n")
     end
 
     def can_execute_command?
@@ -159,7 +157,7 @@ module RedmineChatTelegram
     end
 
     def chat_user_full_name(telegram_user)
-      [telegram_user.first_name, telegram_user.last_name].compact.join " "
+      [telegram_user.first_name, telegram_user.last_name].compact.join ' '
     end
 
     def user_not_found

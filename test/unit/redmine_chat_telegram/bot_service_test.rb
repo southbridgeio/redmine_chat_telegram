@@ -12,9 +12,9 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
   let(:command_params) do
     {
       chat: { id: 123, type: 'group' },
-      message_id: 123456,
+      message_id: 123_456,
       date: Date.today,
-      from: { id: 998899, first_name: "Qw", last_name: "Ert", username: "qwert"}
+      from: { id: 998_899, first_name: 'Qw', last_name: 'Ert', username: 'qwert' }
     }
   end
 
@@ -24,19 +24,19 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
       issue_id: 1)
   end
 
-  describe "new_chat_created" do
+  describe 'new_chat_created' do
     let(:command) do
       Telegrammer::DataTypes::Message
         .new(command_params.merge(group_chat_created: true))
     end
 
-    it "sends message to chat save telegram message" do
-      RedmineChatTelegram.stub :issue_url, "http://site.com/issue/1" do
+    it 'sends message to chat save telegram message' do
+      RedmineChatTelegram.stub :issue_url, 'http://site.com/issue/1' do
         bot.expect(:send_message,
                    nil,
-                   [{chat_id: command.chat.id,
-                     text: "Hello, everybody! This is a chat for issue: http://site.com/issue/1",
-                     disable_web_page_preview: true}])
+                   [{ chat_id: command.chat.id,
+                      text: 'Hello, everybody! This is a chat for issue: http://site.com/issue/1',
+                      disable_web_page_preview: true }])
         RedmineChatTelegram::BotService.new(command, bot).call
 
         message = TelegramMessage.last
@@ -47,11 +47,10 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     end
   end
 
-  describe "new_chat_participant" do
-
-    it "creates joined system message when user joined" do
+  describe 'new_chat_participant' do
+    it 'creates joined system message when user joined' do
       command = Telegrammer::DataTypes::Message
-        .new(command_params.merge(new_chat_participant: { id: 998899 }))
+        .new(command_params.merge(new_chat_participant: { id: 998_899 }))
       RedmineChatTelegram::BotService.new(command, bot).call
 
       message = TelegramMessage.last
@@ -59,7 +58,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
       assert_equal message.is_system, true
     end
 
-    it "creates invited system message when user was invited" do
+    it 'creates invited system message when user was invited' do
       command = Telegrammer::DataTypes::Message
         .new(command_params.merge(new_chat_participant: { id: 7777 }))
       RedmineChatTelegram::BotService.new(command, bot).call
@@ -70,11 +69,10 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     end
   end
 
-  describe "left_chat_participant" do
-
-    it "creates left_group system message when user left group" do
+  describe 'left_chat_participant' do
+    it 'creates left_group system message when user left group' do
       command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(left_chat_participant: { id: 998899 }))
+                .new(command_params.merge(left_chat_participant: { id: 998_899 }))
       RedmineChatTelegram::BotService.new(command, bot).call
 
       message = TelegramMessage.last
@@ -82,12 +80,12 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
       assert_equal message.is_system, true
     end
 
-    it "creates kicked system message when user was kicked" do
+    it 'creates kicked system message when user was kicked' do
       command = Telegrammer::DataTypes::Message
                 .new(command_params.merge(left_chat_participant:
                                             { id: 8888,
-                                              first_name: "As",
-                                              last_name: "Dfg"}))
+                                              first_name: 'As',
+                                              last_name: 'Dfg' }))
       RedmineChatTelegram::BotService.new(command, bot).call
 
       message = TelegramMessage.last
@@ -97,17 +95,17 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     end
   end
 
-  describe "send_issue_link" do
-    it "sends issue link with title" do
-      RedmineChatTelegram.stub :issue_url, "http://site.com/issue/1" do
+  describe 'send_issue_link' do
+    it 'sends issue link with title' do
+      RedmineChatTelegram.stub :issue_url, 'http://site.com/issue/1' do
         command = Telegrammer::DataTypes::Message
-                  .new(command_params.merge(text: "/link"))
+                  .new(command_params.merge(text: '/link'))
 
         bot.expect(:send_message,
                    nil,
-                   [{chat_id: command.chat.id,
-                     text: "#{ issue.subject}\nhttp://site.com/issue/1",
-                     disable_web_page_preview: true}])
+                   [{ chat_id: command.chat.id,
+                      text: "#{issue.subject}\nhttp://site.com/issue/1",
+                      disable_web_page_preview: true }])
         RedmineChatTelegram::BotService.new(command, bot).call
 
         bot.verify
@@ -115,18 +113,18 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     end
   end
 
-  describe "log_message" do
+  describe 'log_message' do
     before do
       command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(text: "/log this is text"))
+                .new(command_params.merge(text: '/log this is text'))
       RedmineChatTelegram::BotService.new(command, bot).call
     end
 
-    it "creates comment for issue" do
+    it 'creates comment for issue' do
       assert_equal issue.journals.last.notes, "_from Telegram:_ \n\nQw Ert: this is text"
     end
 
-    it "creates message" do
+    it 'creates message' do
       message = TelegramMessage.last
       assert_equal message.message, 'this is text'
       assert_equal message.bot_message, false
@@ -134,11 +132,10 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     end
   end
 
-  describe "save_message" do
-
-    it "creates message" do
+  describe 'save_message' do
+    it 'creates message' do
       command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(text: "message from telegram"))
+                .new(command_params.merge(text: 'message from telegram'))
       RedmineChatTelegram::BotService.new(command, bot).call
       message = TelegramMessage.last
       assert_equal message.message, 'message from telegram'
@@ -147,26 +144,25 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     end
   end
 
-  describe "connect" do
-
-    it "sends what user not found if user not found" do
-      bot.expect(:send_message, nil, [{chat_id: 123, text: 'User not found'}])
+  describe 'connect' do
+    it 'sends what user not found if user not found' do
+      bot.expect(:send_message, nil, [{ chat_id: 123, text: 'User not found' }])
 
       command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(text: "/connect not-exist@mail.com",
+                .new(command_params.merge(text: '/connect not-exist@mail.com',
                                           chat: { id: 123, type: 'private' }))
       RedmineChatTelegram::BotService.new(command, bot).call
 
       bot.verify
     end
 
-    it "sends what user already connected if user already connected" do
-      bot.expect(:send_message, nil, [{chat_id: 123, text: 'Your accounts already connected'}])
+    it 'sends what user already connected if user already connected' do
+      bot.expect(:send_message, nil, [{ chat_id: 123, text: 'Your accounts already connected' }])
 
       command = Telegrammer::DataTypes::Message
                 .new(command_params.merge(
-                      text: "/connect #{ user.email_address.address }",
-                      chat: { id: 123, type: 'private' }))
+                       text: "/connect #{user.email_address.address}",
+                       chat: { id: 123, type: 'private' }))
 
       ::TelegramCommon::Account.create(
         telegram_id: command.from.id,
@@ -177,16 +173,16 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
       bot.verify
     end
 
-    it "sends message with success if user found and not connected" do
-      bot.expect(:send_message, nil, [{chat_id: 123, text: "We sent email to address \"#{ user.email_address.address }\". Please follow instructions from it."}])
+    it 'sends message with success if user found and not connected' do
+      bot.expect(:send_message, nil, [{ chat_id: 123, text: "We sent email to address \"#{user.email_address.address}\". Please follow instructions from it." }])
 
       TelegramCommon::Mailer.expects(:telegram_connect)
         .returns(Minitest::Mock.new.expect(:deliver, nil))
 
       command = Telegrammer::DataTypes::Message
                 .new(command_params.merge(
-                      text: "/connect #{ user.email_address.address }",
-                      chat: { id: 123, type: 'private' }))
+                       text: "/connect #{user.email_address.address}",
+                       chat: { id: 123, type: 'private' }))
 
       RedmineChatTelegram::BotService.new(command, bot).call
 
@@ -195,12 +191,11 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
   end
 
   describe 'new' do
-
-    it "exucutes new_isssue command" do
+    it 'exucutes new_isssue command' do
       command = Telegrammer::DataTypes::Message
                 .new(command_params.merge(
-                      text: "/new",
-                      chat: { id: 123, type: 'private' }))
+                       text: '/new',
+                       chat: { id: 123, type: 'private' }))
 
       RedmineChatTelegram::Commands::NewIssueCommand.any_instance.expects(:execute)
 
@@ -209,12 +204,11 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
   end
 
   describe 'cancel' do
-
     it "cancel executing command if it's exist" do
       command = Telegrammer::DataTypes::Message
                 .new(command_params.merge(
-                      text: "/cancel",
-                      chat: { id: 123, type: 'private' }))
+                       text: '/cancel',
+                       chat: { id: 123, type: 'private' }))
       account = ::TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
       executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
       RedmineChatTelegram::ExecutingCommand.any_instance.expects(:cancel)
@@ -226,8 +220,8 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
   it "runs executing command if it's present" do
     command = Telegrammer::DataTypes::Message
               .new(command_params.merge(
-                    text: "hello",
-                    chat: { id: 123, type: 'private' }))
+                     text: 'hello',
+                     chat: { id: 123, type: 'private' }))
     account = ::TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
     executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
     RedmineChatTelegram::ExecutingCommand.any_instance.expects(:continue)

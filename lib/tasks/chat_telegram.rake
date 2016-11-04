@@ -53,7 +53,7 @@ def chat_telegram_bot_init
     exit
   end
 
-  LOG.info "Get Robot info"
+  LOG.info 'Get Robot info'
 
   cmd = 'get_self'
 
@@ -109,7 +109,7 @@ def chat_telegram_bot_init
 end
 
 namespace :chat_telegram do
-  task :history_update => :environment do
+  task history_update: :environment do
     begin
       I18n.locale = Setting['default_language']
 
@@ -132,13 +132,12 @@ namespace :chat_telegram do
           has_more_messages = RedmineChatTelegram.create_new_messages(issue.id, chat_name, bot_ids,
                                                                       present_message_ids, page)
 
-          while has_more_messages do
-            page              += 1
+          while has_more_messages
+            page += 1
             has_more_messages = RedmineChatTelegram.create_new_messages(issue.id, chat_name, bot_ids,
                                                                         present_message_ids, page)
           end
         end
-
       end
     rescue ActiveRecord::RecordNotFound => e
       # ignore
@@ -147,7 +146,7 @@ namespace :chat_telegram do
 
   # bundle exec rake chat_telegram:bot PID_DIR='/tmp'
   desc "Runs telegram bot process (options: PID_DIR='/pid/dir')"
-  task :bot => :environment do
+  task bot: :environment do
     LOG         = Rails.env.production? ? Logger.new(Rails.root.join('log/chat_telegram', 'bot.log')) : Logger.new(STDOUT)
     I18n.locale = Setting['default_language']
 
@@ -158,7 +157,7 @@ namespace :chat_telegram do
         RedmineChatTelegram::BotService.new(command, bot).call
       end
     rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected,
-        Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError, Errno::EIO => e
+           Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError, Errno::EIO => e
       LOG.error "GLOBAL ERROR WITH RESTART #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
       LOG.info 'Restarting...'
       retry
