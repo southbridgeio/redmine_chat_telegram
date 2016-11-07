@@ -6,6 +6,10 @@ ru:
   permission_view_telegram_chat_archive: Просмотр архива чата
   redmine_chat_telegram:
     bot:
+      hot: Назначенные вам задачи с активностью за последние сутки
+      me: Назначенные вам задачи
+      deadline: Назначенные вам задачи с просроченным дедлайном
+      issues_not_found: Не найдено задач.
       connect:
         already_connected: Ваши аккаунты уже связаны.
         wait_for_email: Мы отправили подтверждение на адрес "%{email}". Пожалуйста, следуйте инструкциям из письма.
