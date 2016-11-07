@@ -49,7 +49,13 @@ Set the Privacy mode to disabled with `/setprivacy`. This will let the bot liste
 
 Enter the bot's token on the Plugin Settings page to add the bot to your chat.
 
-To add hints for commands for the bot, use command `/setcommands`
+To add hints for commands for the bot, use command `/setcommands`. You need to send list of commands with descriptions. For example
+```
+new - Create new issue
+cancel - Cancel current command
+connect - Connect account to Redmine
+```
+
 
 ### Add bot to user contacts
 
