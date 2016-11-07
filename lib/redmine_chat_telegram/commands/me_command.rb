@@ -1,6 +1,6 @@
 module RedmineChatTelegram
   module Commands
-    class HotCommand < BaseBotCommand
+    class MeCommand < BaseBotCommand
 
       def execute
         if issues.count > 0
@@ -13,13 +13,11 @@ module RedmineChatTelegram
       private
 
       def issues
-        @issues ||= Issue.open
-                  .where(assigned_to: account.user)
-                  .where('updated_on >= ?', 24.hours.ago)
+        @issues ||= Issue.open.where(assigned_to: account.user)
       end
 
       def issues_list
-        message = "*Назначенные вам задачи с активностью за последние сутки:*\n"
+        message = "*Назначенные вам задачи:*\n"
         issues.inject(message) do |issues_list, issue|
           url = Rails.application.routes.url_helpers.issue_url(issue, host: Setting.host_name)
           issues_list << "#{ issue.subject }: #{ url }\n"

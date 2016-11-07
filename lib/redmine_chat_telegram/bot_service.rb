@@ -140,8 +140,8 @@ module RedmineChatTelegram
           connect
         elsif command.text =~ /\/new/
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-        elsif command.text =~ /\/hot/
-          RedmineChatTelegram::Commands::HotCommand.new(command, bot).execute
+        elsif command.text =~ /\/hot|\/me|\/dl|\/deadline/
+          RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
         end
       end
     rescue ActiveRecord::RecordNotFound
