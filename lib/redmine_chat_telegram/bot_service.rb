@@ -18,10 +18,7 @@ module RedmineChatTelegram
     end
 
     def call
-      return unless can_execute_command?
-
       RedmineChatTelegram.set_locale
-
       execute_command
     end
 
@@ -143,6 +140,8 @@ module RedmineChatTelegram
           connect
         elsif command.text =~ /\/new/
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
+        elsif command.text =~ /\/hot/
+          RedmineChatTelegram::Commands::HotCommand.new(command, bot).execute
         end
       end
     rescue ActiveRecord::RecordNotFound
@@ -150,10 +149,6 @@ module RedmineChatTelegram
     rescue Exception => e
       logger.error "UPDATE #{e.class}: #{e.message} \n#{e.backtrace.join("\n")}"
       print e.backtrace.join("\n")
-    end
-
-    def can_execute_command?
-      command.is_a?(Telegrammer::DataTypes::Message)
     end
 
     def chat_user_full_name(telegram_user)
