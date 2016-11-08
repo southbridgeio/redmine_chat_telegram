@@ -3,6 +3,7 @@ module RedmineChatTelegram
     class FindIssuesCommand < BaseBotCommand
 
       def execute
+        return unless account.present?
         if issues.count > 0
           bot.send_message(chat_id: command.chat.id, text: issues_list, parse_mode: 'Markdown')
         else

@@ -1,13 +1,11 @@
 module RedmineChatTelegram
   class BotService
-    EMAIL_REGEXP = /([^@\s]+@(?:[-a-z0-9]+\.)+[a-z]{2,})/i
 
     attr_reader :bot, :logger, :command, :issue, :message
 
     def initialize(command, bot = nil)
       @bot     = bot.present? ? bot : Telegrammer::Bot.new(RedmineChatTelegram.bot_token)
       @command = command
-      @issue   = find_issue
 
       if Rails.env.production?
         FileUtils.mkdir_p(Rails.root.join('log/redmine_chat_telegram'))
@@ -89,28 +87,11 @@ module RedmineChatTelegram
       message.save!
     end
 
-    def connect
-      email        = command.text.scan(EMAIL_REGEXP).try(:flatten).try(:first)
-      redmine_user = EmailAddress.find_by(address: email).try(:user)
-
-      return user_not_found if redmine_user.nil?
-
-      update_account
-
-      if account.user_id == redmine_user.id
-        connect_message = I18n.t('redmine_chat_telegram.bot.connect.already_connected')
-      else
-        connect_message = I18n.t('redmine_chat_telegram.bot.connect.wait_for_email', email: email)
-        TelegramCommon::Mailer.telegram_connect(redmine_user, account).deliver
-      end
-
-      bot.send_message(chat_id: command.chat.id, text: connect_message)
-    end
-
     private
 
     def execute_command
       if command.chat.type == 'group' && issue.present?
+        @issue   = find_issue
         @message = init_message
 
         if command.group_chat_created
@@ -132,21 +113,7 @@ module RedmineChatTelegram
           save_message
         end
       elsif command.chat.type == 'private'
-        if executing_command.present? && command.text =~ /\/cancel/
-          executing_command.cancel(command, bot)
-        elsif executing_command.present?
-          executing_command.continue(command, bot)
-        elsif command.text =~ /\/connect/
-          connect
-        elsif command.text =~ /\/new/
-          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-        elsif command.text =~ /\/hot|\/me|\/dl|\/deadline/
-          RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
-        elsif command.text =~ /\/spent|\/yspent/
-          RedmineChatTelegram::Commands::TimeStatsCommand.new(command, bot).execute
-        elsif command.text =~ /\/last/
-          RedmineChatTelegram::Commands::LastIssuesNotesCommand.new(command, bot).execute
-        end
+        RedmineChatTelegram::Commands::BotCommand.new(command, bot, logger).execute
       end
     rescue ActiveRecord::RecordNotFound
     # ignore
@@ -157,10 +124,6 @@ module RedmineChatTelegram
 
     def chat_user_full_name(telegram_user)
       [telegram_user.first_name, telegram_user.last_name].compact.join ' '
-    end
-
-    def user_not_found
-      bot.send_message(chat_id: command.chat.id, text: 'User not found')
     end
 
     def init_message
@@ -188,39 +151,6 @@ module RedmineChatTelegram
         logger.error "#{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
         nil
       end
-    end
-
-    def user
-      command.from
-    end
-
-    def account
-      @account ||= fetch_account
-    end
-
-    def executing_command
-      @executing_command ||= RedmineChatTelegram::ExecutingCommand
-                           .joins(:account)
-                           .find_by(telegram_common_accounts: { telegram_id: user.id })
-    end
-
-    def fetch_account
-      ::TelegramCommon::Account.where(telegram_id: user.id).first_or_initialize
-    end
-
-    def update_account
-      account.assign_attributes(
-        username:   user.username,
-        first_name: user.first_name,
-        last_name:  user.last_name,
-        active:     true)
-      write_log_about_new_user if account.new_record?
-
-      account.save!
-    end
-
-    def write_log_about_new_user
-      logger.info "New telegram_user #{user.first_name} #{user.last_name} @#{user.username} added!"
     end
   end
 end
