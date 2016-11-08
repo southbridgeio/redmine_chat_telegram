@@ -10,6 +10,8 @@ en:
       me: Assigned to you issues
       deadline: Assigned to you issues with expired deadline
       issues_not_found: Issues not found.
+      spent: "Number of hours set today: %{hours}"
+      yspent: "Number of hours set yesterday: %{hours}"
       connect:
         already_connected: Your accounts already connected
         wait_for_email: We sent email to address "%{email}". Please follow instructions from it.

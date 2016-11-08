@@ -142,6 +142,8 @@ module RedmineChatTelegram
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
         elsif command.text =~ /\/hot|\/me|\/dl|\/deadline/
           RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
+        else command.text =~ /\/spent|\/yspent/
+          RedmineChatTelegram::Commands::TimeStatsCommand.new(command, bot).execute
         end
       end
     rescue ActiveRecord::RecordNotFound
