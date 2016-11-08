@@ -13,15 +13,18 @@ module RedmineChatTelegram
       end
 
       def issues
-        @issues ||= Issue.open.where(project_id: visible_project_ids).order(:updated_on).last(5)
+        @issues ||= Issue.open
+                  .where(project_id: visible_project_ids)
+                  .order(updated_on: :desc).limit(5)
       end
 
       def last_issue_journal(issue)
         last_journal = issue.journals.where.not(notes: "").last
         if last_journal.present?
-          "```text #{ last_journal.notes }```"
+          time = I18n.l(last_journal.created_on, format: :long)
+          "```text #{ last_journal.notes }```_#{ time }_"
         else
-          "```text Без комментариев```"
+          "```text #{ I18n.t('redmine_chat_telegram.bot.without_comments') }```"
         end
       end
 

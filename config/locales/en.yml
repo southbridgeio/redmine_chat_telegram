@@ -12,6 +12,7 @@ en:
       issues_not_found: Issues not found.
       spent: "Number of hours set today: %{hours}"
       yspent: "Number of hours set yesterday: %{hours}"
+      without_comments: Without comments
       connect:
         already_connected: Your accounts already connected
         wait_for_email: We sent email to address "%{email}". Please follow instructions from it.
