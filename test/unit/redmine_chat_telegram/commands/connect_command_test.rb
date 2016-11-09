@@ -18,6 +18,10 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
     }
   end
 
+  before do
+    I18n.locale = 'en'
+  end
+
   it 'sends what user not found if user not found' do
     bot.expect(:send_message, nil, [{ chat_id: 123, text: 'User not found' }])
 

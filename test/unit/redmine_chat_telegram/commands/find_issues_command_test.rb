@@ -19,6 +19,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
   let(:user) { User.find(1) }
 
   before do
+    I18n.locale = 'en'
     TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
   end
 
