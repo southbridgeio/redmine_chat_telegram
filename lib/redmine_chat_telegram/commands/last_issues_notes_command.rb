@@ -10,7 +10,7 @@ module RedmineChatTelegram
       private
 
       def visible_project_ids
-        Project.where(Project.visible_condition(account.user))
+        Project.where(Project.visible_condition(account.user)).pluck(:id)
       end
 
       def issues
