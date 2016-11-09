@@ -1,7 +1,6 @@
 module RedmineChatTelegram
   module Commands
     class BotCommand < BaseBotCommand
-
       def execute
         if executing_command.present? && command.text =~ /\/cancel/
           executing_command.cancel(command, bot)
@@ -22,7 +21,7 @@ module RedmineChatTelegram
 
       def execute_command
         command_name = command.text.match(/\/(\w+)/)[1]
-        send("execute_command_#{ command_name }")
+        send("execute_command_#{command_name}")
       rescue NameError
         # do nothing
       end

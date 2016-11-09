@@ -1,6 +1,5 @@
 module RedmineChatTelegram
   class BotService
-
     attr_reader :bot, :logger, :command, :issue, :message
 
     def initialize(command, bot = nil)

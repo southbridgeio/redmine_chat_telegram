@@ -1,7 +1,6 @@
 module RedmineChatTelegram
   module Commands
     class FindIssuesCommand < BaseBotCommand
-
       def execute
         return unless account.present?
         if issues.count > 0
@@ -22,13 +21,11 @@ module RedmineChatTelegram
           'me'
         when /\/deadline|\/dl/
           'deadline'
-        else
-          nil
         end
       end
 
       def message
-        @message ||= I18n.t("redmine_chat_telegram.bot.#{ command_name }")
+        @message ||= I18n.t("redmine_chat_telegram.bot.#{command_name}")
       end
 
       def issues
@@ -45,10 +42,10 @@ module RedmineChatTelegram
       end
 
       def issues_list
-        message_title = "*#{ message }:*\n"
+        message_title = "*#{message}:*\n"
         issues.inject(message_title) do |message_text, issue|
           url = Rails.application.routes.url_helpers.issue_url(issue, host: Setting.host_name)
-          message_text << "[##{ issue.id }](#{ url }): #{ issue.subject }\n"
+          message_text << "[##{issue.id}](#{url}): #{issue.subject}\n"
         end
       end
     end

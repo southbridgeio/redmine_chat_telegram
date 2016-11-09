@@ -33,8 +33,8 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
 
     command = Telegrammer::DataTypes::Message
               .new(command_params.merge(
-                    text: "/connect #{user.email_address.address}",
-                    chat: { id: 123, type: 'private' }))
+                     text: "/connect #{user.email_address.address}",
+                     chat: { id: 123, type: 'private' }))
 
     ::TelegramCommon::Account.create(
       telegram_id: command.from.id,

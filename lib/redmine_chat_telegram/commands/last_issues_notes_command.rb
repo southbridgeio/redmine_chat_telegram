@@ -1,7 +1,6 @@
 module RedmineChatTelegram
   module Commands
     class LastIssuesNotesCommand < BaseBotCommand
-
       def execute
         return unless account.present?
         bot.send_message(chat_id: command.chat.id, text: message_text, parse_mode: 'Markdown')
@@ -20,20 +19,20 @@ module RedmineChatTelegram
       end
 
       def last_issue_journal(issue)
-        last_journal = issue.journals.where.not(notes: "").last
+        last_journal = issue.journals.where.not(notes: '').last
         if last_journal.present?
           time = I18n.l(last_journal.created_on, format: :long)
-          "```text #{ last_journal.notes }```_#{ time }_"
+          "```text #{last_journal.notes}```_#{time}_"
         else
-          "```text #{ I18n.t('redmine_chat_telegram.bot.without_comments') }```"
+          "```text #{I18n.t('redmine_chat_telegram.bot.without_comments')}```"
         end
       end
 
       def message_text
-        issues.inject("") do |message, issue|
+        issues.inject('') do |message, issue|
           url = Rails.application.routes.url_helpers.issue_url(issue, host: Setting.host_name)
           journal = last_issue_journal(issue)
-          message << "[##{ issue.id }](#{ url }) #{ issue.subject } #{ journal }\n\n"
+          message << "[##{issue.id}](#{url}) #{issue.subject} #{journal}\n\n"
         end
       end
     end

@@ -1,7 +1,6 @@
 module RedmineChatTelegram
   module Commands
     class NewIssueCommand < BaseBotCommand
-
       def execute
         return unless account.present?
         execute_step

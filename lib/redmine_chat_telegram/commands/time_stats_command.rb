@@ -1,7 +1,6 @@
 module RedmineChatTelegram
   module Commands
     class TimeStatsCommand < BaseBotCommand
-
       def execute
         return unless account.present?
         bot.send_message(chat_id: command.chat.id, text: message_text)
@@ -21,7 +20,7 @@ module RedmineChatTelegram
       end
 
       def message_text
-        I18n.t("redmine_chat_telegram.bot.#{ command_name }", hours: hours_sum[command_name])
+        I18n.t("redmine_chat_telegram.bot.#{command_name}", hours: hours_sum[command_name])
       end
     end
   end
