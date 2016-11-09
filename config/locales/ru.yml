@@ -12,7 +12,7 @@ ru:
       issues_not_found: Не найдено задач.
       spent: "Количество проставленного времени за текущие сутки: %{hours}"
       yspent: "Количество проставленного времени за вчерашние сутки: %{hours}"
-      without_comments: Без комментариев
+      without_comments: Новая задача
       account_not_found: Аккаунт не найден.
       connect:
         already_connected: Ваши аккаунты уже связаны.
