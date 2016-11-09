@@ -2,7 +2,7 @@ require File.expand_path('../../../../test_helper', __FILE__)
 require 'minitest/mock'
 require 'minitest/autorun'
 
-class RedmineChatTelegram::NewIssueCommandTest < ActiveSupport::TestCase
+class RedmineChatTelegram:::Commands::NewIssueCommandTest < ActiveSupport::TestCase
   fixtures :projects, :trackers, :issues, :users, :email_addresses, :roles, :issue_statuses
 
   let(:bot) { Minitest::Mock.new }

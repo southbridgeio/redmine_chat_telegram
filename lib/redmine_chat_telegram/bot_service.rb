@@ -90,8 +90,10 @@ module RedmineChatTelegram
     private
 
     def execute_command
-      if command.chat.type == 'group' && issue.present?
-        @issue   = find_issue
+      if command.chat.type == 'group'
+        @issue = find_issue
+        return unless issue.present?
+
         @message = init_message
 
         if command.group_chat_created

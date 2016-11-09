@@ -144,52 +144,6 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     end
   end
 
-  describe 'connect' do
-    it 'sends what user not found if user not found' do
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: 'User not found' }])
-
-      command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(text: '/connect not-exist@mail.com',
-                                          chat: { id: 123, type: 'private' }))
-      RedmineChatTelegram::BotService.new(command, bot).call
-
-      bot.verify
-    end
-
-    it 'sends what user already connected if user already connected' do
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: 'Your accounts already connected' }])
-
-      command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(
-                       text: "/connect #{user.email_address.address}",
-                       chat: { id: 123, type: 'private' }))
-
-      ::TelegramCommon::Account.create(
-        telegram_id: command.from.id,
-        user_id: user.id)
-
-      RedmineChatTelegram::BotService.new(command, bot).call
-
-      bot.verify
-    end
-
-    it 'sends message with success if user found and not connected' do
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: "We sent email to address \"#{user.email_address.address}\". Please follow instructions from it." }])
-
-      TelegramCommon::Mailer.expects(:telegram_connect)
-        .returns(Minitest::Mock.new.expect(:deliver, nil))
-
-      command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(
-                       text: "/connect #{user.email_address.address}",
-                       chat: { id: 123, type: 'private' }))
-
-      RedmineChatTelegram::BotService.new(command, bot).call
-
-      bot.verify
-    end
-  end
-
   describe 'new' do
     it 'exucutes new_isssue command' do
       command = Telegrammer::DataTypes::Message
@@ -201,31 +155,5 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
 
       RedmineChatTelegram::BotService.new(command, bot).call
     end
-  end
-
-  describe 'cancel' do
-    it "cancel executing command if it's exist" do
-      command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(
-                       text: '/cancel',
-                       chat: { id: 123, type: 'private' }))
-      account = ::TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
-      executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
-      RedmineChatTelegram::ExecutingCommand.any_instance.expects(:cancel)
-
-      RedmineChatTelegram::BotService.new(command, bot).call
-    end
-  end
-
-  it "runs executing command if it's present" do
-    command = Telegrammer::DataTypes::Message
-              .new(command_params.merge(
-                     text: 'hello',
-                     chat: { id: 123, type: 'private' }))
-    account = ::TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
-    executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
-    RedmineChatTelegram::ExecutingCommand.any_instance.expects(:continue)
-
-    RedmineChatTelegram::BotService.new(command, bot).call
   end
 end
