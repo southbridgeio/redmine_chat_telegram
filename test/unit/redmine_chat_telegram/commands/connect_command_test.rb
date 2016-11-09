@@ -11,7 +11,7 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
 
   let(:command_params) do
     {
-      chat: { id: 123, type: 'group' },
+      chat: { id: 123, type: 'private' },
       message_id: 123_456,
       date: Date.today,
       from: { id: 998_899, first_name: 'Qw', last_name: 'Ert', username: 'qwert' }
@@ -22,8 +22,7 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
     bot.expect(:send_message, nil, [{ chat_id: 123, text: 'User not found' }])
 
     command = Telegrammer::DataTypes::Message
-              .new(command_params.merge(text: '/connect not-exist@mail.com',
-                                        chat: { id: 123, type: 'private' }))
+              .new(command_params.merge(text: '/connect not-exist@mail.com'))
     RedmineChatTelegram::Commands::ConnectCommand.new(command, bot, logger).execute
 
     bot.verify
@@ -53,9 +52,7 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
       .returns(Minitest::Mock.new.expect(:deliver, nil))
 
     command = Telegrammer::DataTypes::Message
-              .new(command_params.merge(
-                    text: "/connect #{user.email_address.address}",
-                    chat: { id: 123, type: 'private' }))
+              .new(command_params.merge(text: "/connect #{user.email_address.address}"))
 
     RedmineChatTelegram::Commands::ConnectCommand.new(command, bot, logger).execute
 

@@ -21,9 +21,7 @@ class RedmineChatTelegram::Commands::BotCommandTest < ActiveSupport::TestCase
   describe 'cancel' do
     it "cancel executing command if it's exist" do
       command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(
-                       text: '/cancel',
-                       chat: { id: 123, type: 'private' }))
+                .new(command_params.merge(text: '/cancel'))
       account = ::TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
       executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
       RedmineChatTelegram::ExecutingCommand.any_instance.expects(:cancel)
@@ -34,9 +32,7 @@ class RedmineChatTelegram::Commands::BotCommandTest < ActiveSupport::TestCase
 
   it "runs executing command if it's present" do
     command = Telegrammer::DataTypes::Message
-              .new(command_params.merge(
-                     text: 'hello',
-                     chat: { id: 123, type: 'private' }))
+              .new(command_params.merge(text: 'hello'))
     account = ::TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
     executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
     RedmineChatTelegram::ExecutingCommand.any_instance.expects(:continue)
