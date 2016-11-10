@@ -1,13 +1,6 @@
 module RedmineChatTelegram
   module Commands
-    class NewIssueCommand
-      attr_reader :command, :bot
-
-      def initialize(command, bot)
-        @command = command
-        @bot = bot
-      end
-
+    class NewIssueCommand < BaseBotCommand
       def execute
         return unless account.present?
         execute_step
@@ -110,13 +103,6 @@ module RedmineChatTelegram
           keyboard: user_names.each_slice(2).to_a,
           one_time_keyboard: true,
           resize_keyboard: true)
-      end
-
-      def account
-        @account ||= ::TelegramCommon::Account.find_by!(telegram_id: command.from.id)
-      rescue ActiveRecord::RecordNotFound
-        bot.send_message(chat_id: command.chat.id, text: 'Аккаунт не найден.')
-        nil
       end
 
       def executing_command

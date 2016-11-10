@@ -6,6 +6,14 @@ en:
   permission_view_telegram_chat_archive: View Chat Archive
   redmine_chat_telegram:
     bot:
+      hot: Assigned to you issues with recent activity
+      me: Assigned to you issues
+      deadline: Assigned to you issues with expired deadline
+      issues_not_found: Issues not found.
+      spent: "Number of hours set today: %{hours}"
+      yspent: "Number of hours set yesterday: %{hours}"
+      without_comments: New issue
+      account_not_found: Account not found.
       connect:
         already_connected: Your accounts already connected
         wait_for_email: We sent email to address "%{email}". Please follow instructions from it.
