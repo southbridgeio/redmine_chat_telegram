@@ -1,3 +1,12 @@
+#### [1.3.0]
+
+* Add /hot command
+* Add /me command
+* Add /deadline command
+* Add /spent command
+* Add /yspent command
+* Add /last command
+
 #### [1.2.2]
 
 * Use `redmine_telegram_common` plugin for account connections
