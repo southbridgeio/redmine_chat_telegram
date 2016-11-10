@@ -20,6 +20,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
 
   before do
     I18n.locale = 'en'
+    Setting['host_name'] = 'redmine.com'
     TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
   end
 
@@ -28,7 +29,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
 
     it 'sends list of issues assigned to user and updated today' do
       Issue.find(1).update(assigned_to: user)
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: "*Assigned to you issues with recent activity:*\n[#1](http://localhost:3000/issues/1): Cannot print recipes\n", parse_mode: 'Markdown' }])
+      bot.expect(:send_message, nil, [{ chat_id: 123, text: "*Assigned to you issues with recent activity:*\n[#1](http://redmine.com/issues/1): Cannot print recipes\n", parse_mode: 'Markdown' }])
       RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
       bot.verify
     end
@@ -40,7 +41,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
     it 'sends assigned to user issues' do
       Issue.update_all(assigned_to_id: 2)
       Issue.second.update(assigned_to: user)
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: "*Assigned to you issues:*\n[#2](http://localhost:3000/issues/2): Add ingredients categories\n", parse_mode: 'Markdown' }])
+      bot.expect(:send_message, nil, [{ chat_id: 123, text: "*Assigned to you issues:*\n[#2](http://redmine.com/issues/2): Add ingredients categories\n", parse_mode: 'Markdown' }])
       RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
       bot.verify
     end
@@ -52,7 +53,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
     it 'sends assigned to user issues with deadline' do
       Issue.update_all(assigned_to_id: 2)
       Issue.third.update(assigned_to: user, due_date: Date.yesterday)
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: "*Assigned to you issues with expired deadline:*\n[#3](http://localhost:3000/issues/3): Error 281 when updating a recipe\n", parse_mode: 'Markdown' }])
+      bot.expect(:send_message, nil, [{ chat_id: 123, text: "*Assigned to you issues with expired deadline:*\n[#3](http://redmine.com/issues/3): Error 281 when updating a recipe\n", parse_mode: 'Markdown' }])
       RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
       bot.verify
     end
