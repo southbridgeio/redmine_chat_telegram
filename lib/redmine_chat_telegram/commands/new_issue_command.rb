@@ -29,32 +29,23 @@ module RedmineChatTelegram
 
       def execute_step_2
         project_name = command.text
-        users = Project
+        assignables = Project
                 .where(Project.visible_condition(account.user))
                 .find_by(name: project_name)
                 .try(:assignable_users)
-        if users.present? && users.count > 0
+        if assignables.present? && assignables.count > 0
           executing_command.update(step_number: 3, data: { project_name: project_name })
           bot.send_message(
             chat_id: command.chat.id,
             text: I18n.t('redmine_chat_telegram.bot.new_issue.choice_user'),
-            reply_markup: users_list_markup(users))
+            reply_markup: assignable_list_markup(assignables))
         else
           bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.user_not_found'))
         end
       end
 
       def execute_step_3
-        if command.text == I18n.t('redmine_chat_telegram.bot.without_user')
-          executing_command.update(
-            step_number: 4,
-            data: executing_command.data.merge(user: nil))
-        else
-          firstname, lastname = command.text.split(' ')
-          executing_command.update(
-            step_number: 4,
-            data: executing_command.data.merge(user: { firstname: firstname, lastname: lastname }))
-        end
+        save_assignable
 
         bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.input_subject'))
       end
@@ -70,13 +61,7 @@ module RedmineChatTelegram
       def execute_step_5
         project = Project.find_by(name: executing_command.data[:project_name])
 
-        if executing_command.data[:user].present?
-          assigned_to = User.find_by(firstname: executing_command.data[:user][:firstname],
-                                     lastname: executing_command.data[:user][:lastname])
-        else
-          assigned_to = nil
-        end
-
+        assigned_to = find_assignable
         subject = executing_command.data[:subject]
         text = command.text
 
@@ -115,14 +100,18 @@ module RedmineChatTelegram
           resize_keyboard: true)
       end
 
-      def users_list_markup(users)
-        user_names = users.map do |user|
-          "#{user.firstname} #{user.lastname}"
+      def assignable_list_markup(assignables)
+        assignables_names = assignables.map do |assignable|
+          if assignable.is_a? Group
+            "#{assignable.name} (#{I18n.t(:label_group)})"
+          else
+            "#{assignable.firstname} #{assignable.lastname}"
+          end
         end
-        user_names.prepend I18n.t('redmine_chat_telegram.bot.new_issue.without_user')
+        assignables_names.prepend I18n.t('redmine_chat_telegram.bot.new_issue.without_user')
 
         Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
-          keyboard: user_names.each_slice(2).to_a,
+          keyboard: assignables_names.each_slice(2).to_a,
           one_time_keyboard: true,
           resize_keyboard: true)
       end
@@ -137,6 +126,35 @@ module RedmineChatTelegram
       rescue ActiveRecord::RecordNotFound
         @executing_command ||= RedmineChatTelegram::ExecutingCommand.create(name: 'new',
                                                                             account: account)
+      end
+
+      def save_assignable
+        if command.text == I18n.t('redmine_chat_telegram.bot.without_user')
+          executing_command.update(
+            step_number: 4,
+            data: executing_command.data.merge(user: nil))
+        elsif command.text =~ /\(#{I18n.t(:label_group)}\)/
+          group_name = command.text.match(/^(.+) \(#{I18n.t(:label_group)}\)$/)[1]
+          executing_command.update(
+            step_number: 4,
+            data: executing_command.data.merge(group: group_name))
+        else
+          firstname, lastname = command.text.split(' ')
+          executing_command.update(
+            step_number: 4,
+            data: executing_command.data.merge(user: { firstname: firstname, lastname: lastname }))
+        end
+      end
+
+      def find_assignable
+        if executing_command.data[:user].present?
+          User.find_by(firstname: executing_command.data[:user][:firstname],
+                       lastname: executing_command.data[:user][:lastname])
+        elsif executing_command.data[:group].present?
+          Group.find_by(lastname: executing_command.data[:group])
+        else
+          nil
+        end
       end
     end
   end
