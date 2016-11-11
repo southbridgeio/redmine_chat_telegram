@@ -1,6 +1,10 @@
 module RedmineChatTelegram
   module Commands
     class BotCommand < BaseBotCommand
+
+      @@command_helps = []
+      cattr_accessor :command_helps, instance_accessor: false
+
       def execute
         if executing_command.present? && command.text =~ /\/cancel/
           executing_command.cancel(command, bot)
@@ -13,6 +17,22 @@ module RedmineChatTelegram
 
       private
 
+      def command_helps
+        [
+          "*connect* - #{I18n.t('redmine_chat_telegram.bot.help.connect')}",
+          "*new* - #{I18n.t('redmine_chat_telegram.bot.help.new')}",
+          "*hot* - #{I18n.t('redmine_chat_telegram.bot.help.hot')}",
+          "*me* - #{I18n.t('redmine_chat_telegram.bot.help.me')}",
+          "*deadline* - #{I18n.t('redmine_chat_telegram.bot.help.deadline')}",
+          "*dl* - #{I18n.t('redmine_chat_telegram.bot.help.deadline')}",
+          "*spent* - #{I18n.t('redmine_chat_telegram.bot.help.spent')}",
+          "*yspent* - #{I18n.t('redmine_chat_telegram.bot.help.yspent')}",
+          "*last* - #{I18n.t('redmine_chat_telegram.bot.help.last')}",
+          "*help* - #{I18n.t('redmine_chat_telegram.bot.help.help')}",
+        ] + self.class.command_helps
+
+      end
+
       def executing_command
         @executing_command ||= RedmineChatTelegram::ExecutingCommand
                              .joins(:account)
@@ -24,6 +44,13 @@ module RedmineChatTelegram
         send("execute_command_#{command_name}")
       rescue NameError
         # do nothing
+      end
+
+      def execute_command_help
+        bot.send_message(
+          chat_id: command.chat.id,
+          text: command_helps.join("\n"),
+          parse_mode: 'Markdown')
       end
 
       def execute_command_new

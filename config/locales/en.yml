@@ -27,6 +27,16 @@ en:
         success: "Issue is created:"
         error: "Failed to create issue."
         projects_not_found: "There is no projects you can access."
+      help:
+        connect: Connect accaunt to Redmine
+        new: Create new issue
+        hot: Assigned to you issues updated today
+        me:  Assigned to you issues
+        deadline: Assigned to you issues with expired deadline
+        spent: Number of hours set today
+        yspent: Number of hours set yesterday
+        last: Last 5 issues with comments
+        help: Help
     tab_title: Chat Telegram
     archive_title: Archive
     settings:
