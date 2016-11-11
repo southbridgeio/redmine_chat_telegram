@@ -157,7 +157,7 @@ namespace :chat_telegram do
         RedmineChatTelegram::BotService.new(command, bot).call
       end
     rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected,
-           Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError, Errno::EIO => e
+           Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError => e
       LOG.error "GLOBAL ERROR WITH RESTART #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
       LOG.info 'Restarting...'
       retry
