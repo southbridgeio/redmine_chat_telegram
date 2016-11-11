@@ -38,11 +38,16 @@ module RedmineChatTelegram
       end
 
       def execute_step_3
-        firstname, lastname = command.text.split(' ')
-
-        executing_command.update(
-          step_number: 4,
-          data: executing_command.data.merge(user: { firstname: firstname, lastname: lastname }))
+        if command.text == I18n.t('redmine_chat_telegram.bot.without_user')
+          executing_command.update(
+            step_number: 4,
+            data: executing_command.data.merge(user: nil))
+        else
+          firstname, lastname = command.text.split(' ')
+          executing_command.update(
+            step_number: 4,
+            data: executing_command.data.merge(user: { firstname: firstname, lastname: lastname }))
+        end
 
         bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.input_subject'))
       end
@@ -57,8 +62,14 @@ module RedmineChatTelegram
 
       def execute_step_5
         project = Project.find_by(name: executing_command.data[:project_name])
-        assigned_to = User.find_by(firstname: executing_command.data[:user][:firstname],
-                                   lastname: executing_command.data[:user][:lastname])
+
+        if executing_command.data[:user].present?
+          assigned_to = User.find_by(firstname: executing_command.data[:user][:firstname],
+                                     lastname: executing_command.data[:user][:lastname])
+        else
+          assigned_to = nil
+        end
+
         subject = executing_command.data[:subject]
         text = command.text
 
@@ -101,6 +112,7 @@ module RedmineChatTelegram
         user_names = users.map do |user|
           "#{user.firstname} #{user.lastname}"
         end
+        user_names.prepend I18n.t('redmine_chat_telegram.bot.new_issue.without_user')
 
         Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
           keyboard: user_names.each_slice(2).to_a,

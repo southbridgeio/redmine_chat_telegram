@@ -21,6 +21,7 @@ en:
         choice_project: "Select project."
         choice_user: "Select user to assing new issue"
         user_not_found: "There is no users for selected project."
+        without_user: "Without user"
         input_subject: "Input issue subject."
         input_text: "Input issue text."
         success: "Issue is created:"
