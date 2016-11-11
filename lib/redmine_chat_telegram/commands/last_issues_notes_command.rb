@@ -30,7 +30,7 @@ module RedmineChatTelegram
 
       def message_text
         issues.inject('') do |message, issue|
-          url = Rails.application.routes.url_helpers.issue_url(issue, host: Setting.host_name)
+          url = issue_url
           journal = last_issue_journal(issue)
           message << "[##{issue.id}](#{url}) #{issue.subject} #{journal}\n\n"
         end

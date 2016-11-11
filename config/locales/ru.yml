@@ -23,7 +23,7 @@ ru:
         user_not_found: "Не найдено пользователей для выбранного проекта."
         input_subject: "Введите тему задачи."
         input_text: "Введите текст задачи."
-        success: "Задача создана: %{issue_url}"
+        success: "Задача создана:"
         error: "Не удалось создать задачу."
     tab_title: Chat Telegram
     archive_title: Архив

@@ -23,7 +23,7 @@ en:
         user_not_found: "There is no users for selected project."
         input_subject: "Input issue subject."
         input_text: "Input issue text."
-        success: "Issue is created: %{issue_url}"
+        success: "Issue is created:"
         error: "Failed to create issue."
     tab_title: Chat Telegram
     archive_title: Archive

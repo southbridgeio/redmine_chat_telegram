@@ -76,10 +76,13 @@ module RedmineChatTelegram
 
           executing_command.destroy
 
-          issue_url = Rails.application.routes.url_helpers.issue_url(issue, host: Setting.host_name)
+          issue_url = issue_url(issue)
+          message_text = I18n.t('redmine_chat_telegram.bot.new_issue.success') +
+                         " [##{issue.id}](#{issue_url})"
           bot.send_message(
             chat_id: command.chat.id,
-            text: I18n.t('redmine_chat_telegram.bot.new_issue.success', issue_url: issue_url),
+            text: message_text,
+            parse_mode: 'Markdown',
             reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
         rescue
           bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.error'))
