@@ -26,6 +26,7 @@ ru:
         input_text: "Введите текст задачи."
         success: "Задача создана:"
         error: "Не удалось создать задачу."
+        projects_not_found: "Не найдено доступных вам проектов."
     tab_title: Chat Telegram
     archive_title: Архив
     settings:

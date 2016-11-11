@@ -13,11 +13,18 @@ module RedmineChatTelegram
       end
 
       def execute_step_1
-        executing_command.update(step_number: 2)
-        bot.send_message(
-          chat_id: command.chat.id,
-          text: I18n.t('redmine_chat_telegram.bot.new_issue.choice_project'),
-          reply_markup: projects_list_markup)
+        projects = Project.where(Project.visible_condition(account.user)).sorted
+        if projects.count > 0
+          executing_command.update(step_number: 2)
+          bot.send_message(
+            chat_id: command.chat.id,
+            text: I18n.t('redmine_chat_telegram.bot.new_issue.choice_project'),
+            reply_markup: projects_list_markup(projects))
+        else
+          bot.send_message(
+            chat_id: command.chat.id,
+            text: I18n.t('redmine_chat_telegram.bot.new_issue.projects_not_found'))
+        end
       end
 
       def execute_step_2
@@ -100,8 +107,8 @@ module RedmineChatTelegram
         end
       end
 
-      def projects_list_markup
-        project_names = Project.where(Project.visible_condition(account.user)).sorted.pluck(:name)
+      def projects_list_markup(projects)
+        project_names = projects.pluck(:name)
         Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
           keyboard: project_names.each_slice(2).to_a,
           one_time_keyboard: true,

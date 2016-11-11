@@ -26,6 +26,7 @@ en:
         input_text: "Input issue text."
         success: "Issue is created:"
         error: "Failed to create issue."
+        projects_not_found: "There is no projects you can access."
     tab_title: Chat Telegram
     archive_title: Archive
     settings:
