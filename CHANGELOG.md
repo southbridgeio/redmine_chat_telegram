@@ -1,3 +1,7 @@
+#### [1.3.1]
+
+* Add exception notification on bot restart
+
 #### [1.3.0]
 
 * Add /hot command

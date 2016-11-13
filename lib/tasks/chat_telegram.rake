@@ -158,6 +158,7 @@ namespace :chat_telegram do
       end
     rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected,
            Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError => e
+      ExceptionNotifier.notify_exception(e)
       LOG.error "GLOBAL ERROR WITH RESTART #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
       LOG.info 'Restarting...'
       retry
