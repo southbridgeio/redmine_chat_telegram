@@ -28,7 +28,7 @@ en:
         error: "Failed to create issue."
         projects_not_found: "There is no projects you can access."
       help:
-        connect: Connect accaunt to Redmine
+        connect: Connect account to Redmine
         new: Create new issue
         hot: Assigned to you issues updated today
         me:  Assigned to you issues
