@@ -1,7 +1,6 @@
 module RedmineChatTelegram
   module Commands
     class BotCommand < BaseBotCommand
-
       @@command_helps = []
       cattr_accessor :command_helps, instance_accessor: false
 
@@ -28,9 +27,8 @@ module RedmineChatTelegram
           "*spent* - #{I18n.t('redmine_chat_telegram.bot.help.spent')}",
           "*yspent* - #{I18n.t('redmine_chat_telegram.bot.help.yspent')}",
           "*last* - #{I18n.t('redmine_chat_telegram.bot.help.last')}",
-          "*help* - #{I18n.t('redmine_chat_telegram.bot.help.help')}",
+          "*help* - #{I18n.t('redmine_chat_telegram.bot.help.help')}"
         ] + self.class.command_helps
-
       end
 
       def executing_command
