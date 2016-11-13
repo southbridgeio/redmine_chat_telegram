@@ -13,7 +13,7 @@ module RedmineChatTelegram
         raise 'not implemented'
       end
 
-      protected
+      private
 
       def account
         @account ||= ::TelegramCommon::Account.find_by!(telegram_id: command.from.id)
