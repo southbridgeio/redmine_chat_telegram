@@ -87,7 +87,7 @@ module RedmineChatTelegram
             text: message_text,
             parse_mode: 'Markdown',
             reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
-        rescue
+        rescue StandardError
           bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.error'))
         end
       end
@@ -152,8 +152,6 @@ module RedmineChatTelegram
                        lastname: executing_command.data[:user][:lastname])
         elsif executing_command.data[:group].present?
           Group.find_by(lastname: executing_command.data[:group])
-        else
-          nil
         end
       end
     end

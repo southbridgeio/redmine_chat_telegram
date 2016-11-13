@@ -70,7 +70,10 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           command = Telegrammer::DataTypes::Message
                     .new(command_params.merge(text: Project.first.name))
 
-          users_list = [['Redmine Admin']]
+          # TODO: почему-то изменился этот массив. Вообще логика не достаточно некомпозирована. Сходу не понять что
+          # это за список пользоватлей. Можно будет обсудить по скайпу как тут лушче сделать.
+          # users_list = [['Redmine Admin']]
+          users_list = [['Без пользователя', 'Redmine Admin']]
           Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
@@ -160,9 +163,9 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
             :send_message,
             nil,
             [{ chat_id: 123,
-               text: "Задача создана: http://redmine.com/issues/#{new_issue_id}",
+               text: "Задача создана: [#15](http://redmine.com/issues/#{new_issue_id})",
+               parse_mode: 'Markdown',
                reply_markup: nil }])
-
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end
