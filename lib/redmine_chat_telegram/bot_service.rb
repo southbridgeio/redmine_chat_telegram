@@ -7,8 +7,7 @@ module RedmineChatTelegram
       @command = command
 
       if Rails.env.production?
-        FileUtils.mkdir_p(Rails.root.join('log/redmine_chat_telegram'))
-        @logger = Logger.new(Rails.root.join('log/redmine_chat_telegram', 'bot.log'))
+        @logger = Logger.new(Rails.root.join('log/chat_telegram', 'bot.log'))
       else
         @logger = Logger.new(STDOUT)
       end

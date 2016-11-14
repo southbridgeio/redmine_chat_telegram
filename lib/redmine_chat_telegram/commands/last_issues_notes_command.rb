@@ -33,7 +33,7 @@ module RedmineChatTelegram
           url = issue_url(issue)
           journal = last_issue_journal(issue)
           message << "[##{issue.id}](#{url}) #{issue.subject} #{journal}\n\n"
-        end
+        end.to_s[0, 4000]
       end
     end
   end
