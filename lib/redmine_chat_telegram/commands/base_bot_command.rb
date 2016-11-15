@@ -3,7 +3,7 @@ module RedmineChatTelegram
     class BaseBotCommand
       attr_reader :command, :bot, :logger
 
-      def initialize(command, bot, logger = nil)
+      def initialize(command, bot, logger = Logger.new(STDOUT))
         @command = command
         @bot = bot
         @logger = logger
