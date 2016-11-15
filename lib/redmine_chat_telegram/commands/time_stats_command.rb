@@ -14,8 +14,8 @@ module RedmineChatTelegram
 
       def hours_sum
         {
-          'spent' => TimeEntry.where(spent_on: Date.today).sum(:hours),
-          'yspent' => TimeEntry.where(spent_on: Date.yesterday).sum(:hours)
+          'spent' => TimeEntry.where(spent_on: Date.today, user: account.user).sum(:hours),
+          'yspent' => TimeEntry.where(spent_on: Date.yesterday, user: account.user).sum(:hours)
         }
       end
 
