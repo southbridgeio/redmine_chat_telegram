@@ -6,8 +6,7 @@ module RedmineChatTelegram
       def execute
         return unless account.present?
         if issues.count > 0
-          logger.debug "FindIssuesCommand:\n#{command.inspect}\n\n#{issues_list}\n*******************"
-          bot.send_message(chat_id: command.chat.id, text: issues_list, parse_mode: 'Markdown')
+          bot.send_message(chat_id: command.chat.id, text: issues_list, parse_mode: 'HTML')
         else
           issues_not_found = I18n.t('redmine_chat_telegram.bot.issues_not_found')
           bot.send_message(chat_id: command.chat.id, text: issues_not_found)
@@ -18,11 +17,11 @@ module RedmineChatTelegram
 
       def command_name
         case command.text
-        when /\/hot/
+        when %r{/hot}
           'hot'
-        when /\/me/
+        when %r{/me}
           'me'
-        when /\/deadline|\/dl/
+        when %r{/deadline|/dl}
           'deadline'
         end
       end
@@ -45,10 +44,10 @@ module RedmineChatTelegram
       end
 
       def issues_list
-        message_title = "*#{message}:*\n"
+        message_title = "<b>#{message}:</b>\n"
         issues.inject(message_title) do |message_text, issue|
           url = issue_url(issue)
-          message_text << "[##{issue.id}](#{url}): #{issue.subject}\n"
+          message_text << %(<a href="#{url}">##{issue.id}</a>: #{issue.subject}\n)
         end
       end
     end
