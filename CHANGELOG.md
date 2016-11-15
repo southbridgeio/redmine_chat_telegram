@@ -1,3 +1,7 @@
+#### [1.3.3]
+
+* Change commands /spent and /yspent to show only current user time entires
+
 #### [1.3.1]
 
 * Add exception notification on bot restart
