@@ -20,7 +20,8 @@ module RedmineChatTelegram
       end
 
       def message_text
-        I18n.t("redmine_chat_telegram.bot.#{command_name}", hours: hours_sum[command_name])
+        hours = hours_sum[command_name].round(2)
+        I18n.t("redmine_chat_telegram.bot.#{command_name}", hours: hours)
       end
     end
   end
