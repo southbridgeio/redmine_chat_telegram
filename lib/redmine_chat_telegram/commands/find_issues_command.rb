@@ -4,6 +4,7 @@ module RedmineChatTelegram
       def execute
         return unless account.present?
         if issues.count > 0
+          logger.debug "FindIssuesCommand:\n#{command.inspect}\n\n#{issues_list}\n*******************"
           bot.send_message(chat_id: command.chat.id, text: issues_list, parse_mode: 'Markdown')
         else
           issues_not_found = I18n.t('redmine_chat_telegram.bot.issues_not_found')
