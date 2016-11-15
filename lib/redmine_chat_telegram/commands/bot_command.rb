@@ -55,20 +55,17 @@ module RedmineChatTelegram
         RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
       end
 
-      def execute_command_hot
-        RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
+      def execute_find_issues_command
+        RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot, find_issues_logger).execute
       end
 
-      def execute_command_me
-        RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
-      end
+      alias_method :execute_command_hot, :execute_find_issues_command
+      alias_method :execute_command_me, :execute_find_issues_command
+      alias_method :execute_command_dl, :execute_find_issues_command
+      alias_method :execute_command_deadline, :execute_find_issues_command
 
-      def execute_command_dl
-        RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
-      end
-
-      def execute_command_deadline
-        RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
+      def find_issues_logger
+        RedmineChatTelegram::Commands::FindIssuesCommand::LOGGER
       end
 
       def execute_command_spent
@@ -86,6 +83,8 @@ module RedmineChatTelegram
       def execute_command_connect
         RedmineChatTelegram::Commands::ConnectCommand.new(command, bot, logger).execute
       end
+
+
     end
   end
 end

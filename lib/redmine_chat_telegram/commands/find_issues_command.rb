@@ -1,6 +1,8 @@
 module RedmineChatTelegram
   module Commands
     class FindIssuesCommand < BaseBotCommand
+      LOGGER = Logger.new(Rails.root.join('log/chat_telegram', 'bot-command-find-issues.log'))
+
       def execute
         return unless account.present?
         if issues.count > 0
