@@ -27,6 +27,10 @@ en:
         success: "Issue is created:"
         error: "Failed to create issue."
         projects_not_found: "There is no projects you can access."
+        create_chat_question: Create a chat?
+        yes_answer: "Yes"
+        no_answer: "No"
+      creating_chat: Creating chat. Please wait.
       help:
         connect: Connect account to Redmine
         new: Create new issue

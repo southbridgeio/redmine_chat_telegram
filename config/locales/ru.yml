@@ -27,6 +27,10 @@ ru:
         success: "Задача создана:"
         error: "Не удалось создать задачу."
         projects_not_found: "Не найдено доступных вам проектов."
+        create_chat_question: Создать чат?
+        yes_answer: Да
+        no_answer: Нет
+      creating_chat: Создаю чат. Пожалуйста, подождите.
       help:
         connect: Присоединить аккаунт к Redmine
         new: Создать новую задачу
