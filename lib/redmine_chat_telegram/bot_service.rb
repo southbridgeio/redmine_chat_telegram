@@ -117,9 +117,6 @@ module RedmineChatTelegram
       end
     rescue ActiveRecord::RecordNotFound
     # ignore
-    rescue Exception => e
-      logger.error "UPDATE #{e.class}: #{e.message} \n#{e.backtrace.join("\n")}"
-      print e.backtrace.join("\n")
     end
 
     def chat_user_full_name(telegram_user)

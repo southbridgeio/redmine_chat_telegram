@@ -22,7 +22,7 @@ module RedmineChatTelegram
         last_journal = issue.journals.where.not(notes: '').last
         if last_journal.present?
           time = I18n.l(last_journal.created_on, format: :long)
-          "<pre> #{last_journal.notes}</pre> <i>#{time}</i>"
+          "<pre> #{last_journal.notes[0,500]}</pre> <i>#{time}</i>"
         else
           "<pre>#{I18n.t('redmine_chat_telegram.bot.without_comments')}</pre>"
         end
@@ -33,7 +33,7 @@ module RedmineChatTelegram
           url = issue_url(issue)
           journal = last_issue_journal(issue)
           message << %(<a href="#{url}">##{issue.id}</a>: #{issue.subject} #{journal}\n\n)
-        end.to_s[0, 4000]
+        end
       end
     end
   end
