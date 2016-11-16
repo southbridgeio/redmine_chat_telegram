@@ -35,7 +35,9 @@ module RedmineChatTelegram
       end
 
       def issue_filters
-        assigned_to_me = Issue.open.where(assigned_to: account.user)
+        assigned_to_me = Issue.joins(:project).open
+                         .where(projects: {status: 1})
+                         .where(assigned_to: account.user)
         {
           'me' => assigned_to_me,
           'hot' => assigned_to_me.where('updated_on >= ?', 24.hours.ago),
