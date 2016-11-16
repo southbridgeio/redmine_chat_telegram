@@ -31,6 +31,16 @@ en:
         yes_answer: "Yes"
         no_answer: "No"
       creating_chat: Creating chat. Please wait.
+      chat:
+        destroyed: Chat was successfully destroyed.
+        chat_not_found: Chat not found.
+        issue_not_found: Issue not found.
+        incorrect_command: Incorrect command format.
+        help: |
+          /chat info issue_number - link to chat
+          /chat create issue_number - create new chat for issue
+          /chat close issue_number - close chat for issue
+          To print this help, input /chat without parameters.
       help:
         connect: Connect account to Redmine
         new: Create new issue

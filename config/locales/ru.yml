@@ -31,6 +31,16 @@ ru:
         yes_answer: Да
         no_answer: Нет
       creating_chat: Создаю чат. Пожалуйста, подождите.
+      chat:
+        destroyed: Чат успешно удален.
+        chat_not_found: Чат не найден.
+        issue_not_found: Задача не найдена.
+        incorrect_command: Неверный формат команды.
+        help: |
+          /chat info номер_задачи - ссылка на чат
+          /chat create номер_задачи - создать чат для задачи
+          /chat close номер_задачи - закрыть чат для задачи
+          Для получения этой справки введите /chat без параметров.
       help:
         connect: Присоединить аккаунт к Redmine
         new: Создать новую задачу

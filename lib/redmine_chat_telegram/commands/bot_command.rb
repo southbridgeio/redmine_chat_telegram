@@ -84,7 +84,9 @@ module RedmineChatTelegram
         RedmineChatTelegram::Commands::ConnectCommand.new(command, bot, logger).execute
       end
 
-
+      def execute_command_chat
+        RedmineChatTelegram::Commands::IssueChatCommand.new(command, bot).execute
+      end
     end
   end
 end
