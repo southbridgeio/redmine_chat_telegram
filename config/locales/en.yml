@@ -52,6 +52,7 @@ en:
         yspent: Number of hours set yesterday
         last: Last 5 issues with comments
         help: Help
+        chat: Manage issues chats.
     tab_title: Chat Telegram
     archive_title: Archive
     settings:
