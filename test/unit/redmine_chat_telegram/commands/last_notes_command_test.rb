@@ -28,7 +28,10 @@ class RedmineChatTelegram::Commands::LastIssuesNotesCommandTest < ActiveSupport:
     Issue.update_all(project_id: 1)
     Issue.where.not(id: [1, 5]).destroy_all
     issue_journal_time = I18n.l Issue.find(1).journals.last.created_on, format: :long
-    bot.expect(:send_message, nil, [{ chat_id: 123, text: "[#1](http://redmine.com/issues/1) Cannot print recipes ```text Some notes with Redmine links: #2, r2.```_#{issue_journal_time}_\n\n[#5](http://redmine.com/issues/5) Subproject issue ```text New issue```\n\n", parse_mode: 'Markdown' }])
+
+    text = "<a href=\"http://redmine.com/issues/1\">#1</a>: Cannot print recipes <pre> Some notes with Redmine links: #2, r2.</pre> <i>November 14, 2016 21:00</i>\n\n<a href=\"http://redmine.com/issues/5\">#5</a>: Subproject issue <pre>New issue</pre>\n\n"
+
+    bot.expect(:send_message, nil, [{chat_id: 123, text: text, parse_mode: 'HTML'}])
 
     RedmineChatTelegram::Commands::LastIssuesNotesCommand.new(command, bot).execute
 
