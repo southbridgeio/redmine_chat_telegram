@@ -31,6 +31,7 @@ en:
         yes_answer: "Yes"
         no_answer: "No"
       creating_chat: Creating chat. Please wait.
+      access_denied: Access denied.
       chat:
         destroyed: Chat was successfully destroyed.
         chat_not_found: Chat not found.
