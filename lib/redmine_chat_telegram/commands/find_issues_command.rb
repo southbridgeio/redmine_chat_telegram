@@ -40,7 +40,7 @@ module RedmineChatTelegram
                          .where(assigned_to: account.user)
         {
           'me' => assigned_to_me,
-          'hot' => assigned_to_me.where('updated_on >= ?', 24.hours.ago),
+          'hot' => assigned_to_me.where('issues.updated_on >= ?', 24.hours.ago),
           'deadline' => assigned_to_me.where('due_date < ?', Date.today)
         }
       end
