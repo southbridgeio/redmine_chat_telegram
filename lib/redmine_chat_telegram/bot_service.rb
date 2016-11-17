@@ -56,6 +56,8 @@ module RedmineChatTelegram
     end
 
     def send_issue_link
+      return unless can_access_issue?
+
       issue_url = RedmineChatTelegram.issue_url(issue.id)
       issue_url_text = "#{issue.subject}\n#{issue_url}"
       bot.send_message(
@@ -65,6 +67,8 @@ module RedmineChatTelegram
     end
 
     def log_message
+      return unless can_access_issue?
+
       message.message = command.text.gsub('/log ', '')
       message.bot_message = false
       message.is_system = false
@@ -134,6 +138,23 @@ module RedmineChatTelegram
         from_username:   command.from.username,
         is_system:       true,
         bot_message:     true)
+    end
+
+    def user
+      @user ||= TelegramCommon::Account.find_by!(telegram_id: command.from.id).try(:user)
+    rescue ActiveRecord::RecordNotFound
+      nil
+    end
+
+    def can_access_issue?
+      if user.present? && issue.present? && user.allowed_to?(:view_issues, issue.project)
+        true
+      else
+        bot.send_message(
+          chat_id: command.chat.id,
+          text: I18n.t('redmine_chat_telegram.bot.access_denied'))
+        false
+      end
     end
 
     def find_issue
