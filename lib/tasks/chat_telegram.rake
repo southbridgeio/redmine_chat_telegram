@@ -162,7 +162,7 @@ namespace :chat_telegram do
       LOG.info 'Restarting...'
       retry
     rescue Exception => e
-      ExceptionNotifier.notify_exception(e)
+      ExceptionNotifier.notify_exception(e) if defined?(ExceptionNotifier)
       LOG.error "GLOBAL #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
     end
   end
