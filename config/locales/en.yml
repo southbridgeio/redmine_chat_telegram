@@ -32,6 +32,7 @@ en:
         no_answer: "No"
       creating_chat: Creating chat. Please wait.
       access_denied: Access denied.
+      module_disabled: Telegam chat plugin for current project is disabled.
       chat:
         destroyed: Chat was successfully destroyed.
         chat_not_found: Chat not found.

@@ -32,6 +32,7 @@ ru:
         no_answer: Нет
       creating_chat: Создаю чат. Пожалуйста, подождите.
       access_denied: У вас нет доступа для выполнения этой команды.
+      module_disabled: Плагин не включен для текущего проекта.
       chat:
         destroyed: Чат успешно удален.
         chat_not_found: Чат не найден.

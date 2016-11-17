@@ -19,6 +19,8 @@ module RedmineChatTelegram
 
       def create_issue_chat
         if account.user.allowed_to?(:create_telegram_chat, issue.project)
+          return unless plugin_module_enabled?
+
           creating_chat_message = I18n.t('redmine_chat_telegram.bot.creating_chat')
           bot.send_message(chat_id: command.chat.id, text: creating_chat_message)
 
@@ -62,6 +64,17 @@ module RedmineChatTelegram
       def access_denied
         message_text = I18n.t('redmine_chat_telegram.bot.access_denied')
         bot.send_message(chat_id: command.chat.id, text: message_text, parse_mode: 'HTML')
+      end
+
+      def plugin_module_enabled?
+        plugin_module = EnabledModule.find_by(project_id: issue.project.id, name: 'chat_telegram')
+        if plugin_module.present?
+          true
+        else
+          message_text = I18n.t('redmine_chat_telegram.bot.module_disabled')
+          bot.send_message(chat_id: command.chat.id, text: message_text)
+          false
+        end
       end
 
       def execute_command
