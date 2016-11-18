@@ -70,9 +70,6 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           command = Telegrammer::DataTypes::Message
                     .new(command_params.merge(text: Project.first.name))
 
-          # TODO: почему-то изменился этот массив. Вообще логика не достаточно некомпозирована. Сходу не понять что
-          # это за список пользоватлей. Можно будет обсудить по скайпу как тут лушче сделать.
-          # users_list = [['Redmine Admin']]
           users_list = [['Без пользователя', 'Redmine Admin']]
           Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
@@ -154,18 +151,50 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
 
         let(:command) { Telegrammer::DataTypes::Message.new(command_params.merge(text: 'issue text')) }
 
-        it 'sends message with link to the created issue' do
+        it 'sends message with link to the created issue and question to create chat' do
           new_issue_id = Issue.last.id + 1
-          Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new)
-            .with(hide_keyboard: true)
+
+          users_list = [['Да', 'Нет']]
+          Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
+            .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
-          bot.expect(
-            :send_message,
-            nil,
-            [{ chat_id: 123,
-               text: "Задача создана: [#15](http://redmine.com/issues/#{new_issue_id})",
-               parse_mode: 'Markdown',
-               reply_markup: nil }])
+          bot.expect(:send_message, nil,
+                     [{chat_id: 123, text: "Задача создана: <a href=\"http://redmine.com/issues/15\">#15</a>\nСоздать чат?", parse_mode: "HTML", reply_markup: nil}])
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
+          bot.verify
+        end
+      end
+
+      describe 'step 6' do
+        before do
+          IssuePriority.create(is_default: true, name: 'normal')
+          Project.find(1).trackers << Tracker.first
+          Setting.host_name = 'redmine.com'
+          RedmineChatTelegram::ExecutingCommand
+            .create(account: @account, data: {issue_id: 1}, name: 'new').update(step_number: 6)
+        end
+
+        let(:chat) do
+          issue.create_telegram_group(shared_url: 'http://telegram.me/chat', telegram_id: 123_456)
+        end
+
+        it 'creates chat for issue is user send "yes"' do
+          Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new).returns(nil)
+          RedmineChatTelegram::GroupChatCreator.any_instance.stubs(:run)
+          chat # GroupChatCreator creates chat, but here it's stubbed, so do it manually
+
+          command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'Да'))
+          bot.expect(:send_message, nil, [{chat_id: 123,
+                                           text: "Создаю чат. Пожалуйста, подождите.",
+                                           reply_markup: nil}])
+          bot.expect(:send_message, nil, [{chat_id: 123,
+                                           text: "По ссылке http://telegram.me/chat создан чат."}])
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
+          bot.verify
+        end
+
+        it 'hides keyborad and do nothing when user send "no"' do
+          command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'Нет'))
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end

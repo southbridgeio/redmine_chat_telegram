@@ -23,6 +23,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
   end
 
   before do
+    I18n.locale = 'en'
     TelegramCommon::Account.create(user_id: user.id, telegram_id: 998_899)
   end
 
