@@ -1,3 +1,9 @@
+#### [1.4.0]
+
+* Add /chat command to manage issues chats
+* Add one more step to /new command to create issue chat
+* Check access for /log and /link commands in group chat
+
 #### [1.3.3]
 
 * Change commands /spent and /yspent to show only current user time entires
