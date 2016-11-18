@@ -27,6 +27,22 @@ en:
         success: "Issue is created:"
         error: "Failed to create issue."
         projects_not_found: "There is no projects you can access."
+        create_chat_question: Create a chat?
+        yes_answer: "Yes"
+        no_answer: "No"
+      creating_chat: Creating chat. Please wait.
+      access_denied: Access denied.
+      module_disabled: Telegam chat plugin for current project is disabled.
+      chat:
+        destroyed: Chat was successfully destroyed.
+        chat_not_found: Chat not found.
+        issue_not_found: Issue not found.
+        incorrect_command: Incorrect command format.
+        help: |
+          /chat info issue_number - link to chat
+          /chat create issue_number - create new chat for issue
+          /chat close issue_number - close chat for issue
+          To print this help, input /chat without parameters.
       help:
         connect: Connect account to Redmine
         new: Create new issue
@@ -37,6 +53,7 @@ en:
         yspent: Number of hours set yesterday
         last: Last 5 issues with comments
         help: Help
+        chat: Manage issues chats.
     tab_title: Chat Telegram
     archive_title: Archive
     settings:

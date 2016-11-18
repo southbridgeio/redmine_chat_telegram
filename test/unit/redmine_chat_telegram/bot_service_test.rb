@@ -19,9 +19,8 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
   end
 
   before do
-    RedmineChatTelegram::TelegramGroup.create(
-      telegram_id: 123,
-      issue_id: 1)
+    RedmineChatTelegram::TelegramGroup.create(telegram_id: 123, issue_id: 1)
+    TelegramCommon::Account.create(user_id: user.id, telegram_id: 998_899)
   end
 
   describe 'new_chat_created' do
@@ -96,7 +95,8 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
   end
 
   describe 'send_issue_link' do
-    it 'sends issue link with title' do
+    it 'sends issue link with title if user has required rights' do
+      User.any_instance.stubs(:allowed_to?).returns(true)
       RedmineChatTelegram.stub :issue_url, 'http://site.com/issue/1' do
         command = Telegrammer::DataTypes::Message
                   .new(command_params.merge(text: '/link'))
@@ -111,24 +111,43 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
         bot.verify
       end
     end
+
+    it 'sends access denied if user has not access to issue' do
+      User.any_instance.stubs(:allowed_to?).returns(false)
+      RedmineChatTelegram.stub :issue_url, 'http://site.com/issue/1' do
+        command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/link'))
+        bot.expect(:send_message, nil, [{ chat_id: command.chat.id, text: "Access denied."}])
+        RedmineChatTelegram::BotService.new(command, bot).call
+        bot.verify
+      end
+    end
   end
 
   describe 'log_message' do
-    before do
-      command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(text: '/log this is text'))
-      RedmineChatTelegram::BotService.new(command, bot).call
+    let(:command) do
+      Telegrammer::DataTypes::Message.new(command_params.merge(text: '/log this is text'))
     end
 
     it 'creates comment for issue' do
+      User.any_instance.stubs(:allowed_to?).returns(true)
+      RedmineChatTelegram::BotService.new(command, bot).call
       assert_equal issue.journals.last.notes, "_from Telegram:_ \n\nQw Ert: this is text"
     end
 
     it 'creates message' do
+      User.any_instance.stubs(:allowed_to?).returns(true)
+      RedmineChatTelegram::BotService.new(command, bot).call
       message = TelegramMessage.last
       assert_equal message.message, 'this is text'
       assert_equal message.bot_message, false
       assert_equal message.is_system, false
+    end
+
+    it 'sends access denied if user has not access to issue' do
+      bot.expect(:send_message, nil, [{ chat_id: command.chat.id, text: "Access denied."}])
+      User.any_instance.stubs(:allowed_to?).returns(false)
+      RedmineChatTelegram::BotService.new(command, bot).call
+      bot.verify
     end
   end
 

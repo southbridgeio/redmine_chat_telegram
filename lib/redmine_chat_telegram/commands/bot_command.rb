@@ -27,6 +27,7 @@ module RedmineChatTelegram
           "*spent* - #{I18n.t('redmine_chat_telegram.bot.help.spent')}",
           "*yspent* - #{I18n.t('redmine_chat_telegram.bot.help.yspent')}",
           "*last* - #{I18n.t('redmine_chat_telegram.bot.help.last')}",
+          "*chat* - #{I18n.t('redmine_chat_telegram.bot.help.chat')}",
           "*help* - #{I18n.t('redmine_chat_telegram.bot.help.help')}"
         ] + self.class.command_helps
       end
@@ -84,7 +85,9 @@ module RedmineChatTelegram
         RedmineChatTelegram::Commands::ConnectCommand.new(command, bot, logger).execute
       end
 
-
+      def execute_command_chat
+        RedmineChatTelegram::Commands::IssueChatCommand.new(command, bot).execute
+      end
     end
   end
 end

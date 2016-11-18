@@ -59,37 +59,70 @@ module RedmineChatTelegram
       end
 
       def execute_step_5
+        issue = create_issue
+
+        executing_command.update(step_number: 6, data: executing_command.data.merge(issue_id: issue.id))
+
+        issue_url = issue_url(issue)
+        message_text = I18n.t('redmine_chat_telegram.bot.new_issue.success') +
+                       %( <a href="#{issue_url}">##{issue.id}</a>\n) +
+                       I18n.t('redmine_chat_telegram.bot.new_issue.create_chat_question')
+
+        keyboard = Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
+          keyboard: [[I18n.t('redmine_chat_telegram.bot.new_issue.yes_answer'),
+                      I18n.t('redmine_chat_telegram.bot.new_issue.no_answer')]],
+          one_time_keyboard: true,
+          resize_keyboard: true)
+
+        bot.send_message(
+          chat_id: command.chat.id,
+          text: message_text,
+          parse_mode: 'HTML',
+          reply_markup: keyboard)
+      rescue StandardError
+        bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.error'))
+      end
+
+      def execute_step_6
+        executing_command.destroy
+        create_chat if command.text == I18n.t('redmine_chat_telegram.bot.new_issue.yes_answer')
+      end
+
+      def create_chat
+        issue_id = executing_command.data[:issue_id]
+        issue = Issue.find(issue_id)
+
+        bot.send_message(
+          chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.creating_chat'),
+          reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
+
+        RedmineChatTelegram::GroupChatCreator.new(issue, account.user).run
+
+        issue.reload
+        message_text = I18n.t('redmine_chat_telegram.journal.chat_was_created',
+                              telegram_chat_url: issue.telegram_group.shared_url)
+
+        bot.send_message(chat_id: command.chat.id, text: message_text)
+      end
+
+      def create_issue
         project = Project.find_by(name: executing_command.data[:project_name])
 
         assigned_to = find_assignable
         subject = executing_command.data[:subject]
         text = command.text
 
-        begin
-          issue = Issue.new(
-            author: account.user,
-            project: project,
-            assigned_to: assigned_to,
-            subject: subject,
-            description: text)
-          issue.priority = IssuePriority.where(is_default: true).first || IssuePriority.first
-          issue.tracker = issue.project.trackers.first
-          issue.status = issue.new_statuses_allowed_to(account.user).first
-          issue.save!
-
-          executing_command.destroy
-
-          issue_url = issue_url(issue)
-          message_text = I18n.t('redmine_chat_telegram.bot.new_issue.success') +
-                         " [##{issue.id}](#{issue_url})"
-          bot.send_message(
-            chat_id: command.chat.id,
-            text: message_text,
-            parse_mode: 'Markdown',
-            reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
-        rescue StandardError
-          bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.error'))
-        end
+        issue = Issue.new(
+          author: account.user,
+          project: project,
+          assigned_to: assigned_to,
+          subject: subject,
+          description: text)
+        issue.priority = IssuePriority.where(is_default: true).first || IssuePriority.first
+        issue.tracker = issue.project.trackers.first
+        issue.status = issue.new_statuses_allowed_to(account.user).first
+        issue.save!
+        issue
       end
 
       def projects_list_markup(projects)
