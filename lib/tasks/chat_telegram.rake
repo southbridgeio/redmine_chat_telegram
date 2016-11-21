@@ -33,15 +33,7 @@ def chat_telegram_bot_init
 
   Signal.trap('TERM') do
     at_exit { LOG.error 'Aborted with TERM signal' }
-    abort 'Aborted with TERM signal'
-  end
-  Signal.trap('QUIT') do
-    at_exit { LOG.error 'Aborted with QUIT signal' }
-    abort 'Aborted with QUIT signal'
-  end
-  Signal.trap('HUP') do
-    at_exit { LOG.error 'Aborted with HUP signal' }
-    abort 'Aborted with HUP signal'
+    abort 
   end
 
   LOG.info 'Start daemon...'
