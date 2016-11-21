@@ -150,8 +150,8 @@ namespace :chat_telegram do
     LOG         = Rails.env.production? ? Logger.new(Rails.root.join('log/chat_telegram', 'bot.log')) : Logger.new(STDOUT)
     I18n.locale = Setting['default_language']
 
+    bot = chat_telegram_bot_init
     begin
-      bot = chat_telegram_bot_init
       bot.get_updates(fail_silently: false) do |command|
         next unless command.is_a?(Telegrammer::DataTypes::Message)
         RedmineChatTelegram::BotService.new(command, bot).call
