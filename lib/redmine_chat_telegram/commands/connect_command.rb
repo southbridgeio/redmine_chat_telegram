@@ -18,13 +18,13 @@ module RedmineChatTelegram
           TelegramCommon::Mailer.telegram_connect(redmine_user, account).deliver
         end
 
-        bot.send_message(chat_id: command.chat.id, text: connect_message)
+        send_message(connect_message)
       end
 
       private
 
       def user_not_found
-        bot.send_message(chat_id: command.chat.id, text: 'User not found')
+        send_message('User not found')
       end
 
       def user

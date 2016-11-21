@@ -49,7 +49,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: 'Выберите проект.', reply_markup: nil }])
+            [{ chat_id: 123, text: 'Выберите проект.', reply_markup: nil, parse_mode: 'HTML' }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
@@ -78,7 +78,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: 'Выберите кому назначить задачу.', reply_markup: nil }])
+            [{ chat_id: 123, text: 'Выберите кому назначить задачу.', reply_markup: nil, parse_mode: 'HTML' }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
@@ -88,7 +88,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: 'Не найдено пользователей для выбранного проекта.' }])
+            [{ chat_id: 123, text: 'Не найдено пользователей для выбранного проекта.', parse_mode: 'HTML' }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
@@ -108,7 +108,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: 'Введите тему задачи.' }])
+            [{ chat_id: 123, text: 'Введите тему задачи.', parse_mode: 'HTML' }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
@@ -128,7 +128,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           bot.expect(
             :send_message,
             nil,
-            [{ chat_id: 123, text: 'Введите текст задачи.' }])
+            [{ chat_id: 123, text: 'Введите текст задачи.', parse_mode: 'HTML' }])
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
@@ -186,9 +186,10 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'Да'))
           bot.expect(:send_message, nil, [{chat_id: 123,
                                            text: "Создаю чат. Пожалуйста, подождите.",
-                                           reply_markup: nil}])
+                                           reply_markup: nil, parse_mode: 'HTML'}])
           bot.expect(:send_message, nil, [{chat_id: 123,
-                                           text: "По ссылке http://telegram.me/chat создан чат."}])
+                                           text: "По ссылке http://telegram.me/chat создан чат.",
+                                           parse_mode: 'HTML'}])
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end

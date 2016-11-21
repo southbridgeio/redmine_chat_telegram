@@ -3,7 +3,7 @@ module RedmineChatTelegram
     class LastIssuesNotesCommand < BaseBotCommand
       def execute
         return unless account.present?
-        bot.send_message(chat_id: command.chat.id, text: message_text, parse_mode: 'HTML')
+        send_message(message_text)
       end
 
       private

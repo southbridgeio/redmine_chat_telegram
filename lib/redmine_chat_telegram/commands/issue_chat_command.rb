@@ -9,7 +9,7 @@ module RedmineChatTelegram
 
       def send_help
         message_text = I18n.t('redmine_chat_telegram.bot.chat.help')
-        bot.send_message(chat_id: command.chat.id, text: message_text)
+        send_message(message_text)
       end
 
       def issue
@@ -22,15 +22,14 @@ module RedmineChatTelegram
           return unless plugin_module_enabled?
 
           creating_chat_message = I18n.t('redmine_chat_telegram.bot.creating_chat')
-          bot.send_message(chat_id: command.chat.id, text: creating_chat_message)
+          send_message(creating_chat_message)
 
           RedmineChatTelegram::GroupChatCreator.new(issue, account.user).run
 
           issue.reload
           message_text = I18n.t('redmine_chat_telegram.journal.chat_was_created',
                                 telegram_chat_url: issue.telegram_group.shared_url)
-
-          bot.send_message(chat_id: command.chat.id, text: message_text, parse_mode: 'HTML')
+          send_message(message_text)
         else
           access_denied
         end
@@ -40,7 +39,7 @@ module RedmineChatTelegram
         if account.user.allowed_to?(:close_telegram_chat, issue.project)
           RedmineChatTelegram::GroupChatDestroyer.new(issue, account.user).run
           message_text = I18n.t('redmine_chat_telegram.bot.chat.destroyed')
-          bot.send_message(chat_id: command.chat.id, text: message_text, parse_mode: 'HTML')
+          send_message(message_text)
         else
           access_denied
         end
@@ -54,16 +53,16 @@ module RedmineChatTelegram
 
         chat = issue.telegram_group
         if chat.present?
-          bot.send_message(chat_id: command.chat.id, text: chat.shared_url)
+          send_message(chat.shared_url)
         else
           message_text = I18n.t('redmine_chat_telegram.bot.chat.chat_not_found')
-          bot.send_message(chat_id: command.chat.id, text: message_text)
+          send_message(message_text)
         end
       end
 
       def access_denied
         message_text = I18n.t('redmine_chat_telegram.bot.access_denied')
-        bot.send_message(chat_id: command.chat.id, text: message_text, parse_mode: 'HTML')
+        send_message(message_text)
       end
 
       def plugin_module_enabled?
@@ -72,7 +71,7 @@ module RedmineChatTelegram
           true
         else
           message_text = I18n.t('redmine_chat_telegram.bot.module_disabled')
-          bot.send_message(chat_id: command.chat.id, text: message_text)
+          send_message(message_text)
           false
         end
       end
@@ -90,11 +89,11 @@ module RedmineChatTelegram
         else
           message_text = I18n.t('redmine_chat_telegram.bot.chat.incorrect_command') + "\n" +
                          I18n.t('redmine_chat_telegram.bot.chat.help')
-          bot.send_message(chat_id: command.chat.id, text: message_text)
+          send_message(message_text)
         end
       rescue ActiveRecord::RecordNotFound
         message_text = I18n.t('redmine_chat_telegram.bot.chat.issue_not_found')
-        bot.send_message(chat_id: command.chat.id, text: message_text)
+        send_message(message_text)
       end
     end
   end

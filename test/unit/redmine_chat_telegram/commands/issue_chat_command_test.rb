@@ -31,7 +31,8 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
 
     it 'sends help' do
       bot.expect(:send_message, nil, [{chat_id: 123,
-                                       text: I18n.t('redmine_chat_telegram.bot.chat.help')}])
+                                       text: I18n.t('redmine_chat_telegram.bot.chat.help'),
+                                       parse_mode: 'HTML'}])
 
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command, bot).execute
@@ -45,7 +46,8 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
       User.any_instance.stubs(:allowed_to?).returns(true)
       chat
       bot.expect(:send_message, nil, [{chat_id: 123,
-                                       text: 'http://telegram.me/chat'}])
+                                       text: 'http://telegram.me/chat',
+                                       parse_mode: 'HTML'}])
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat info 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command, bot).execute
       bot.verify
@@ -61,7 +63,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
     end
 
     it "sends 'chat not found' message if chat not found" do
-      bot.expect(:send_message, nil, [{chat_id: 123, text: 'Chat not found.'}])
+      bot.expect(:send_message, nil, [{chat_id: 123, text: 'Chat not found.', parse_mode: 'HTML'}])
       User.any_instance.stubs(:allowed_to?).returns(true)
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat info 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command, bot).execute
@@ -70,7 +72,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
 
     it "sends 'issue not found' message if issue not found" do
       issue.destroy
-      bot.expect(:send_message, nil, [{chat_id: 123, text: 'Issue not found.'}])
+      bot.expect(:send_message, nil, [{chat_id: 123, text: 'Issue not found.', parse_mode: 'HTML'}])
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat info 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command, bot).execute
       bot.verify
@@ -80,7 +82,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
   describe "/chat create" do
     it "creates chat if user has required rights and module is enabled" do
       EnabledModule.create(name: 'chat_telegram', project_id: 1)
-      bot.expect(:send_message, nil, [{chat_id: 123, text: 'Creating chat. Please wait.'}])
+      bot.expect(:send_message, nil, [{chat_id: 123, text: 'Creating chat. Please wait.', parse_mode: 'HTML'}])
       bot.expect(:send_message, nil,
                  [{chat_id: 123, text: 'Chat was created. Join it here: http://telegram.me/chat',
                    parse_mode: 'HTML'}])
@@ -95,7 +97,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
 
     it "doesn't create chat is plugins module is disabled" do
       bot.expect(:send_message, nil,
-                 [{chat_id: 123, text: 'Telegam chat plugin for current project is disabled.'}])
+                 [{chat_id: 123, text: 'Telegam chat plugin for current project is disabled.', parse_mode: 'HTML'}])
       User.any_instance.stubs(:allowed_to?).returns(true)
 
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat create 1'))

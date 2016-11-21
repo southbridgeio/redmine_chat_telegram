@@ -17,6 +17,11 @@ module RedmineChatTelegram
 
       private
 
+      def send_message(text, params = {})
+        message = {chat_id: command.chat.id, text: text, parse_mode: 'HTML'}
+        bot.send_message(message.merge(params))
+      end
+
       def account
         @account ||= ::TelegramCommon::Account.find_by!(telegram_id: command.from.id)
       rescue ActiveRecord::RecordNotFound

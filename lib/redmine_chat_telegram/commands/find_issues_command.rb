@@ -6,10 +6,10 @@ module RedmineChatTelegram
       def execute
         return unless account.present?
         if issues.count > 0
-          bot.send_message(chat_id: command.chat.id, text: issues_list, parse_mode: 'HTML')
+          send_message(issues_list)
         else
           issues_not_found = I18n.t('redmine_chat_telegram.bot.issues_not_found')
-          bot.send_message(chat_id: command.chat.id, text: issues_not_found)
+          send_message(issues_not_found)
         end
       end
 

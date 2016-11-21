@@ -16,14 +16,10 @@ module RedmineChatTelegram
         projects = Project.where(Project.visible_condition(account.user)).sorted
         if projects.count > 0
           executing_command.update(step_number: 2)
-          bot.send_message(
-            chat_id: command.chat.id,
-            text: I18n.t('redmine_chat_telegram.bot.new_issue.choice_project'),
-            reply_markup: projects_list_markup(projects))
+          send_message(I18n.t('redmine_chat_telegram.bot.new_issue.choice_project'),
+                       reply_markup: projects_list_markup(projects))
         else
-          bot.send_message(
-            chat_id: command.chat.id,
-            text: I18n.t('redmine_chat_telegram.bot.new_issue.projects_not_found'))
+          send_message(I18n.t('redmine_chat_telegram.bot.new_issue.projects_not_found'))
         end
       end
 
@@ -35,19 +31,16 @@ module RedmineChatTelegram
                 .try(:assignable_users)
         if assignables.present? && assignables.count > 0
           executing_command.update(step_number: 3, data: { project_name: project_name })
-          bot.send_message(
-            chat_id: command.chat.id,
-            text: I18n.t('redmine_chat_telegram.bot.new_issue.choice_user'),
-            reply_markup: assignable_list_markup(assignables))
+          send_message(I18n.t('redmine_chat_telegram.bot.new_issue.choice_user'),
+                       reply_markup: assignable_list_markup(assignables))
         else
-          bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.user_not_found'))
+          send_message(I18n.t('redmine_chat_telegram.bot.new_issue.user_not_found'))
         end
       end
 
       def execute_step_3
         save_assignable
-
-        bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.input_subject'))
+        send_message(I18n.t('redmine_chat_telegram.bot.new_issue.input_subject'))
       end
 
       def execute_step_4
@@ -55,7 +48,7 @@ module RedmineChatTelegram
           step_number: 5,
           data: executing_command.data.merge(subject: command.text))
 
-        bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.input_text'))
+        send_message(I18n.t('redmine_chat_telegram.bot.new_issue.input_text'))
       end
 
       def execute_step_5
@@ -74,13 +67,11 @@ module RedmineChatTelegram
           one_time_keyboard: true,
           resize_keyboard: true)
 
-        bot.send_message(
-          chat_id: command.chat.id,
-          text: message_text,
-          parse_mode: 'HTML',
-          reply_markup: keyboard)
+
+        send_message(message_text,
+                     reply_markup: keyboard)
       rescue StandardError
-        bot.send_message(chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.new_issue.error'))
+        send_message(I18n.t('redmine_chat_telegram.bot.new_issue.error'))
       end
 
       def execute_step_6
@@ -92,9 +83,8 @@ module RedmineChatTelegram
         issue_id = executing_command.data[:issue_id]
         issue = Issue.find(issue_id)
 
-        bot.send_message(
-          chat_id: command.chat.id, text: I18n.t('redmine_chat_telegram.bot.creating_chat'),
-          reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
+        send_message(I18n.t('redmine_chat_telegram.bot.creating_chat'),
+                     reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
 
         RedmineChatTelegram::GroupChatCreator.new(issue, account.user).run
 
@@ -102,7 +92,7 @@ module RedmineChatTelegram
         message_text = I18n.t('redmine_chat_telegram.journal.chat_was_created',
                               telegram_chat_url: issue.telegram_group.shared_url)
 
-        bot.send_message(chat_id: command.chat.id, text: message_text)
+        send_message(message_text)
       end
 
       def create_issue

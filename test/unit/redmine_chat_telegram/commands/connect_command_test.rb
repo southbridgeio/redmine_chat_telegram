@@ -23,7 +23,7 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
   end
 
   it 'sends what user not found if user not found' do
-    bot.expect(:send_message, nil, [{ chat_id: 123, text: 'User not found' }])
+    bot.expect(:send_message, nil, [{ chat_id: 123, text: 'User not found', parse_mode: 'HTML' }])
 
     command = Telegrammer::DataTypes::Message
               .new(command_params.merge(text: '/connect not-exist@mail.com'))
@@ -33,7 +33,7 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
   end
 
   it 'sends what user already connected if user already connected' do
-    bot.expect(:send_message, nil, [{ chat_id: 123, text: 'Your accounts already connected' }])
+    bot.expect(:send_message, nil, [{ chat_id: 123, text: 'Your accounts already connected', parse_mode: 'HTML' }])
 
     command = Telegrammer::DataTypes::Message
               .new(command_params.merge(
@@ -50,7 +50,7 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
   end
 
   it 'sends message with success if user found and not connected' do
-    bot.expect(:send_message, nil, [{ chat_id: 123, text: "We sent email to address \"#{user.email_address.address}\". Please follow instructions from it." }])
+    bot.expect(:send_message, nil, [{ chat_id: 123, text: "We sent email to address \"#{user.email_address.address}\". Please follow instructions from it.", parse_mode: 'HTML' }])
 
     TelegramCommon::Mailer.expects(:telegram_connect)
       .returns(Minitest::Mock.new.expect(:deliver, nil))
