@@ -33,7 +33,7 @@ def chat_telegram_bot_init
 
   Signal.trap('TERM') do
     at_exit { LOG.error 'Aborted with TERM signal' }
-    abort 
+    abort
   end
 
   LOG.info 'Start daemon...'
@@ -153,7 +153,7 @@ namespace :chat_telegram do
       LOG.error "GLOBAL ERROR WITH RESTART #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
       LOG.info 'Restarting...'
       retry
-    rescue Exception => e
+    rescue => e
       ExceptionNotifier.notify_exception(e) if defined?(ExceptionNotifier)
       LOG.error "GLOBAL #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
     end
