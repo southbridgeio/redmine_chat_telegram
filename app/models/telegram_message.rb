@@ -20,7 +20,7 @@ class TelegramMessage < ActiveRecord::Base
   end
 
   def author_name
-    full_name = [from_first_name, from_last_name].join(' ')
+    full_name = [from_first_name, from_last_name].join(' ').strip
     full_name.present? ? full_name : from_username
   end
 
