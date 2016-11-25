@@ -1,7 +1,6 @@
 module RedmineChatTelegram
   module Commands
     class IssueChatCommand < BaseBotCommand
-
       def execute
         return unless account.present?
         execute_command
@@ -80,11 +79,11 @@ module RedmineChatTelegram
         case command.text
         when '/chat'
           send_help
-        when %r(^/chat create \d+$)
+        when %r{^/chat create \d+$}
           create_issue_chat
-        when %r(^/chat close \d+$)
+        when %r{^/chat close \d+$}
           close_issue_chat
-        when %r(^/chat info \d+$)
+        when %r{^/chat info \d+$}
           send_chat_info
         else
           message_text = I18n.t('redmine_chat_telegram.bot.chat.incorrect_command') + "\n" +

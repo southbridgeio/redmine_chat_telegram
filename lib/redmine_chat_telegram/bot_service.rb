@@ -120,7 +120,7 @@ module RedmineChatTelegram
         RedmineChatTelegram::Commands::BotCommand.new(command, bot, logger).execute
       end
     rescue ActiveRecord::RecordNotFound
-    # ignore
+      # ignore
     end
 
     def chat_user_full_name(telegram_user)

@@ -154,12 +154,12 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
         it 'sends message with link to the created issue and question to create chat' do
           new_issue_id = Issue.last.id + 1
 
-          users_list = [['Да', 'Нет']]
+          users_list = [%w(Да Нет)]
           Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
           bot.expect(:send_message, nil,
-                     [{chat_id: 123, text: "Задача создана: <a href=\"http://redmine.com/issues/15\">#15</a>\nСоздать чат?", parse_mode: "HTML", reply_markup: nil}])
+                     [{ chat_id: 123, text: "Задача создана: <a href=\"http://redmine.com/issues/15\">#15</a>\nСоздать чат?", parse_mode: 'HTML', reply_markup: nil }])
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end
@@ -171,7 +171,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           Project.find(1).trackers << Tracker.first
           Setting.host_name = 'redmine.com'
           RedmineChatTelegram::ExecutingCommand
-            .create(account: @account, data: {issue_id: 1}, name: 'new').update(step_number: 6)
+            .create(account: @account, data: { issue_id: 1 }, name: 'new').update(step_number: 6)
         end
 
         let(:chat) do
@@ -184,12 +184,12 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           chat # GroupChatCreator creates chat, but here it's stubbed, so do it manually
 
           command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'Да'))
-          bot.expect(:send_message, nil, [{chat_id: 123,
-                                           text: "Создаю чат. Пожалуйста, подождите.",
-                                           reply_markup: nil, parse_mode: 'HTML'}])
-          bot.expect(:send_message, nil, [{chat_id: 123,
-                                           text: "По ссылке http://telegram.me/chat создан чат.",
-                                           parse_mode: 'HTML'}])
+          bot.expect(:send_message, nil, [{ chat_id: 123,
+                                            text: 'Создаю чат. Пожалуйста, подождите.',
+                                            reply_markup: nil, parse_mode: 'HTML' }])
+          bot.expect(:send_message, nil, [{ chat_id: 123,
+                                            text: 'По ссылке http://telegram.me/chat создан чат.',
+                                            parse_mode: 'HTML' }])
           RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
           bot.verify
         end

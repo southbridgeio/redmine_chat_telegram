@@ -59,10 +59,10 @@ module RedmineChatTelegram
         RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot, find_issues_logger).execute
       end
 
-      alias_method :execute_command_hot, :execute_find_issues_command
-      alias_method :execute_command_me, :execute_find_issues_command
-      alias_method :execute_command_dl, :execute_find_issues_command
-      alias_method :execute_command_deadline, :execute_find_issues_command
+      alias execute_command_hot execute_find_issues_command
+      alias execute_command_me execute_find_issues_command
+      alias execute_command_dl execute_find_issues_command
+      alias execute_command_deadline execute_find_issues_command
 
       def find_issues_logger
         RedmineChatTelegram::Commands::FindIssuesCommand::LOGGER
