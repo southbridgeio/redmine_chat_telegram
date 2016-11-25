@@ -165,9 +165,6 @@ module RedmineChatTelegram
           .find_by!(redmine_chat_telegram_telegram_groups: { telegram_id: chat_id.abs })
       rescue ActiveRecord::RecordNotFound => e
         nil
-      rescue Exception => e
-        logger.error "#{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
-        nil
       end
     end
   end
