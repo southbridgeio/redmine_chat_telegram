@@ -43,6 +43,8 @@ en:
           /chat create issue_number - create new chat for issue
           /chat close issue_number - close chat for issue
           To print this help, input /chat without parameters.
+      arguments_help:
+        connect: Email is not entered.
       help:
         connect: Connect account to Redmine
         new: Create new issue

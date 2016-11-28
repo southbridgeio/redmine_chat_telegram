@@ -4,6 +4,8 @@ module RedmineChatTelegram
       EMAIL_REGEXP = /([^@\s]+@(?:[-a-z0-9]+\.)+[a-z]{2,})/i
 
       def execute
+        return send_message(arguments_help) unless command_arguments.present?
+
         email        = command.text.scan(EMAIL_REGEXP).try(:flatten).try(:first)
         redmine_user = EmailAddress.find_by(address: email).try(:user)
 

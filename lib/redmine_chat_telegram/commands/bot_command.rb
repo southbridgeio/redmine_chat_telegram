@@ -39,7 +39,6 @@ module RedmineChatTelegram
       end
 
       def execute_command
-        command_name = command.text.match(/\/(\w+)/)[1]
         send("execute_command_#{command_name}")
       rescue NameError
         # do nothing

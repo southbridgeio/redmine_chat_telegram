@@ -17,6 +17,18 @@ module RedmineChatTelegram
 
       private
 
+      def command_name
+        command.text.match(/^\/(\w+)/)[1]
+      end
+
+      def command_arguments
+        command.text.match(/^\/\w+ (.+)$/).try(:[], 1)
+      end
+
+      def arguments_help
+        I18n.t("redmine_chat_telegram.bot.arguments_help.#{command_name}")
+      end
+
       def send_message(text, params = {})
         message = {chat_id: command.chat.id, text: text, parse_mode: 'HTML'}
         bot.send_message(message.merge(params))
