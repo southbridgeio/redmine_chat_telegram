@@ -6,7 +6,7 @@ module RedmineChatTelegram
       def execute
         return send_message(arguments_help) unless command_arguments.present?
 
-        email        = command.text.scan(EMAIL_REGEXP).try(:flatten).try(:first)
+        email        = command.text.scan(EMAIL_REGEXP).try(:flatten).try(:first).try(:downcase)
         redmine_user = EmailAddress.find_by(address: email).try(:user)
 
         return user_not_found if redmine_user.nil?
