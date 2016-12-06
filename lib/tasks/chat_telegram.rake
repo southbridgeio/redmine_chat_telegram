@@ -1,7 +1,3 @@
-def chat_user_full_name(telegram_user)
-  [telegram_user.first_name, telegram_user.last_name].compact.join
-end
-
 def chat_telegram_bot_init
   Process.daemon(true, true) if Rails.env.production?
 
@@ -146,7 +142,7 @@ namespace :chat_telegram do
     begin
       bot.get_updates(fail_silently: false) do |command|
         next unless command.is_a?(Telegrammer::DataTypes::Message)
-        RedmineChatTelegram::BotService.new(command, bot).call
+        RedmineChatTelegram::Bot.new(command, bot).call
       end
     rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected,
            Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError => e
