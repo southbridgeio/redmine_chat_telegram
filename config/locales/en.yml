@@ -20,10 +20,10 @@ en:
           chat: Manage issues chats.
       group:
         help:
-          task: получить ссылку на задачу
-          link: получить ссылку на задачу
-          url: получить ссылку на задачу
-          log: сохранить сообщение в задачу (укажите команду в любом месте сообщения)
+          task: get link to the issue
+          link: get link to the issue
+          url: get link to the issue
+          log: save message to the issue
           help: help
 
       hot: Assigned to you issues with recent activity
