@@ -1,4 +1,5 @@
 class RedmineChatTelegram::Bot < TelegramCommon::Bot
+  include PrivateCommand
   include GroupCommand
 
   attr_reader :bot, :logger, :command, :issue
@@ -9,11 +10,6 @@ class RedmineChatTelegram::Bot < TelegramCommon::Bot
     @command = initialize_command(command)
   end
 
-  def call
-    RedmineChatTelegram.set_locale
-    execute_command
-  end
-
   private
 
   def initialize_command(command)
@@ -22,9 +18,17 @@ class RedmineChatTelegram::Bot < TelegramCommon::Bot
 
   def execute_command
     if private_command?
-      RedmineChatTelegram::Commands::BotCommand.new(command, bot, logger).execute
+      handle_private_command
     else
-      handle_group_message
+      handle_group_command
     end
+  end
+
+  def private_help_message
+    help_command_list(private_commands, namespace: 'redmine_chat_telegram', type: 'private')
+  end
+
+  def group_help_message
+    help_command_list(group_commands, namespace: 'redmine_chat_telegram', type: 'group')
   end
 end

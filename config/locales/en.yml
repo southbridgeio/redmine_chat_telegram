@@ -6,6 +6,26 @@ en:
   permission_view_telegram_chat_archive: View Chat Archive
   redmine_chat_telegram:
     bot:
+      private:
+        help:
+          connect: Connect account to Redmine
+          new: Create new issue
+          hot: Assigned to you issues updated today
+          me:  Assigned to you issues
+          deadline: Assigned to you issues with expired deadline
+          spent: Number of hours set today
+          yspent: Number of hours set yesterday
+          last: Last 5 issues with comments
+          help: Help
+          chat: Manage issues chats.
+      group:
+        help:
+          task: получить ссылку на задачу
+          link: получить ссылку на задачу
+          url: получить ссылку на задачу
+          log: сохранить сообщение в задачу (укажите команду в любом месте сообщения)
+          help: help
+
       hot: Assigned to you issues with recent activity
       me: Assigned to you issues
       deadline: Assigned to you issues with expired deadline

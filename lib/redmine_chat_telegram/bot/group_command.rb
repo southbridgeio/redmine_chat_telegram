@@ -3,7 +3,43 @@ module RedmineChatTelegram
     module GroupCommand
       private
 
+      def group_common_commands
+        %w(help)
+      end
+
+      def group_plugin_commands
+        %w(task link url log)
+      end
+
+
+      def group_ext_commands
+        []
+      end
+
+      def group_commands
+        (group_common_commands +
+          group_plugin_commands +
+          group_ext_commands
+        ).uniq
+      end
+
       attr_reader :message
+
+      def handle_group_command
+        if private_commands.include?(command_name) && !group_commands.include?(command_name)
+          send_message(command.chat.id, I18n.t('telegram_common.bot.group.private_command'))
+        else
+          if group_common_command?
+            execute_group_command
+          else
+            handle_group_message
+          end
+        end
+      end
+
+      def group_common_command?
+        group_common_commands.include?(command_name)
+      end
 
       def handle_group_message
         @issue = find_issue
@@ -130,14 +166,14 @@ module RedmineChatTelegram
         [telegram_user.first_name, telegram_user.last_name].compact.join ' '
       end
 
-      def user
-        @user ||= TelegramCommon::Account.find_by!(telegram_id: command.from.id).try(:user)
+      def redmine_user
+        @redmine_user ||= TelegramCommon::Account.find_by!(telegram_id: command.from.id).try(:user)
       rescue ActiveRecord::RecordNotFound
         nil
       end
 
       def can_access_issue?
-        if user.present? && issue.present? && user.allowed_to?(:view_issues, issue.project)
+        if redmine_user.present? && issue.present? && redmine_user.allowed_to?(:view_issues, issue.project)
           true
         else
           bot.send_message(

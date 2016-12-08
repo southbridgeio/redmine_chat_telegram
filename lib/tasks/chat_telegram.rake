@@ -43,18 +43,18 @@ def chat_telegram_bot_init
 
   LOG.info 'Get Robot info'
 
-  cmd = 'get_self'
-
-  begin
-    json = RedmineChatTelegram.run_cli_command(cmd, LOG)
-    LOG.debug json
-    robot_id = json['id']
-  rescue NoMethodError => e
-    LOG.error "TELEGRAM get_self #{e.class}: #{e.message} \n#{e.backtrace.join("\n")}"
-    LOG.info 'May be problem with Telegram service. I will retry after 15 seconds'
-    sleep 15
-    retry
-  end
+  # cmd = 'get_self'
+  #
+  # begin
+  #   json = RedmineChatTelegram.run_cli_command(cmd, LOG)
+  #   LOG.debug json
+  #   robot_id = json['id']
+  # rescue NoMethodError => e
+  #   LOG.error "TELEGRAM get_self #{e.class}: #{e.message} \n#{e.backtrace.join("\n")}"
+  #   LOG.info 'May be problem with Telegram service. I will retry after 15 seconds'
+  #   sleep 15
+  #   retry
+  # end
 
   LOG.info 'Telegram Bot: Connecting to telegram...'
   bot      = Telegrammer::Bot.new(token)
@@ -65,7 +65,7 @@ def chat_telegram_bot_init
   plugin_settings_hash             = plugin_settings.value
   plugin_settings_hash['bot_name'] = "user##{bot.me.id}"
   plugin_settings_hash['bot_id']   = bot.me.id
-  plugin_settings_hash['robot_id'] = robot_id
+  # plugin_settings_hash['robot_id'] = robot_id
   plugin_settings.value            = plugin_settings_hash
 
   plugin_settings.save
