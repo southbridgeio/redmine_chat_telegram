@@ -18,7 +18,7 @@ module RedmineChatTelegram
       bot_name = Setting.plugin_redmine_chat_telegram['bot_name']
 
       cmd  = "create_group_chat \"#{subject}\" #{bot_name}"
-      json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
+      json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
 
       subject_for_cli = if RedmineChatTelegram.mode.zero?
                           subject.tr(' ', '_').tr('#', '@')
@@ -27,7 +27,7 @@ module RedmineChatTelegram
                         end
 
       cmd  = "chat_info #{subject_for_cli}"
-      json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
+      json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
 
       telegram_id = if RedmineChatTelegram.mode.zero?
                       json['id']
@@ -36,7 +36,7 @@ module RedmineChatTelegram
                     end
 
       cmd  = "export_chat_link #{subject_for_cli}"
-      json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_CLI_LOG)
+      json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
 
       telegram_chat_url = json['result']
 
