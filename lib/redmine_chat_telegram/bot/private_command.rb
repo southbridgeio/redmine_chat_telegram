@@ -16,7 +16,7 @@ module RedmineChatTelegram
       end
 
       def private_commands
-        ( private_common_commands +
+        (private_common_commands +
           private_plugin_commands +
           private_ext_commands
         ).uniq
@@ -37,7 +37,6 @@ module RedmineChatTelegram
       def private_common_command?
         private_common_commands.include?(command_name)
       end
-
     end
   end
 end

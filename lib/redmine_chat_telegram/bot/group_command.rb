@@ -11,7 +11,6 @@ module RedmineChatTelegram
         %w(task link url log)
       end
 
-
       def group_ext_commands
         []
       end

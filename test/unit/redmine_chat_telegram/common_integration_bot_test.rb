@@ -118,7 +118,6 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
     end
   end
 
-
   context '/help' do
     context 'private' do
       setup do

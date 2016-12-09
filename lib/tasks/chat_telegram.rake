@@ -99,7 +99,7 @@ end
 namespace :chat_telegram do
   task history_update: :environment do
     begin
-      I18n.locale = Setting['default_language']
+      RedmineChatTelegram.set_locale
 
       RedmineChatTelegram::TelegramGroup.find_each do |telegram_group|
         issue = telegram_group.issue
@@ -135,8 +135,8 @@ namespace :chat_telegram do
   # bundle exec rake chat_telegram:bot PID_DIR='/tmp'
   desc "Runs telegram bot process (options: PID_DIR='/pid/dir')"
   task bot: :environment do
-    LOG         = Rails.env.production? ? Logger.new(Rails.root.join('log/chat_telegram', 'bot.log')) : Logger.new(STDOUT)
-    I18n.locale = Setting['default_language']
+    LOG = Rails.env.production? ? Logger.new(Rails.root.join('log/chat_telegram', 'bot.log')) : Logger.new(STDOUT)
+    RedmineChatTelegram.set_locale
 
     bot = chat_telegram_bot_init
     begin
