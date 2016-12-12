@@ -75,7 +75,7 @@ bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 
 ### Доступные команды в чате с ботом
 
-- `/connect` - связать аккаунт Telegram и Redmine
+- `/connect account@redmine.com` - связать аккаунт Telegram и Redmine
 - `/new` - команда для создания новой задачи
 - `/cancel` - отмена текущей команды
 

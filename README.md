@@ -75,14 +75,14 @@ Open the ticket. You'll see the new link `Create Telegram chat` on the right sid
 
 ### Available commands in bot chat
 
-- `/connect` - connect Telegram account to Redmine account
+- `/connect account@redmine.com` - connect Telegram account to Redmine account
 - `/new` - create new issue
 - `/cancel` - cancel current command
 
 ### Available commands in issue chat
 
 - `/task`, `/link`, `/url` - get link to the issue
-- `/log` - save message to the issue 
+- `/log` - save message to the issue
 
 ## Troubleshooting
 

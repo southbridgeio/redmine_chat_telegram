@@ -57,13 +57,12 @@ module RedmineChatTelegram
     result = socket.read(length)
     logger.debug result if logger
 
-    socket.close
-
     JSON.parse result
+
   rescue
-    puts $ERROR_INFO
+     puts $ERROR_INFO
   ensure
-    socket.close if socket
+     socket.close if socket
   end
 
   CHAT_HISTORY_PAGE_SIZE = 100
