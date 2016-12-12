@@ -135,6 +135,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
       end
 
       should 'send help for private chat' do
+        RedmineChatTelegram::Bot.any_instance.stubs(:private_ext_commands).returns([])
         text = <<~TEXT
           /start - #{I18n.t('redmine_chat_telegram.bot.private.help.start')}
           /help - #{I18n.t('redmine_chat_telegram.bot.private.help.help')}
