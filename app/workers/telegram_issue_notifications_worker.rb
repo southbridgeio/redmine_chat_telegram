@@ -6,7 +6,7 @@ class TelegramIssueNotificationsWorker
     Logger.new(Rails.root.join('log/chat_telegram', 'telegram-issue-notifications.log'))
 
   def perform(telegram_id, journal_id)
-    I18n.locale = Setting['default_language']
+    RedmineChatTelegram.set_locale
 
     journal = Journal.find(journal_id)
 

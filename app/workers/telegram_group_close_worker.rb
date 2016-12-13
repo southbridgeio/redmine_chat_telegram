@@ -1,52 +1,72 @@
 class TelegramGroupCloseWorker
   include Sidekiq::Worker
-  TELEGRAM_GROUP_CLOSE_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-group-close.log'))
 
   def perform(telegram_id, user_id = nil)
-    I18n.locale = Setting['default_language']
+    RedmineChatTelegram.set_locale
 
-    user = user_id.present? ? User.find(user_id) : User.anonymous
+    find_user(user_id)
 
-    TELEGRAM_GROUP_CLOSE_LOG.debug user.inspect
+    store_chat_name(telegram_id)
 
-    chat_name = "chat##{telegram_id.abs}"
+    reset_chat_link # Old link will not work after it.
 
-    TELEGRAM_GROUP_CLOSE_LOG.debug chat_name
+    send_chat_notification(telegram_id)
 
-    # Reset chat link. Old link will not work after it.
+    remove_users_from_chat
+  end
+
+  private
+
+  attr_reader :user, :chat_name
+
+  def find_user(user_id)
+    @user = User.find_by(id: user_id) || User.anonymous
+    logger.debug user.inspect
+  end
+
+  def store_chat_name(telegram_id)
+    @chat_name = "chat##{telegram_id.abs}"
+    logger.debug chat_name
+  end
+
+  def reset_chat_link
     cmd = "export_chat_link #{chat_name}"
-    RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+    RedmineChatTelegram.socket_cli_command(cmd, logger)
+  end
 
-    # send notification to chat
-    close_message_text = user.anonymous? ?
-        I18n.t('redmine_chat_telegram.messages.closed_automaticaly') :
-        I18n.t('redmine_chat_telegram.messages.closed_from_issue')
-
+  def send_chat_notification(telegram_id)
     TelegramMessageSenderWorker.perform_async(telegram_id, close_message_text)
+  end
 
-    # remove chat users
+  def close_message_text
+    user.anonymous? ?
+      I18n.t('redmine_chat_telegram.messages.closed_automaticaly') :
+      I18n.t('redmine_chat_telegram.messages.closed_from_issue')
+  end
 
-    cmd  = "chat_info #{chat_name}"
-    json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+  def remove_users_from_chat
+    cmd = "chat_info #{chat_name}"
+    json = RedmineChatTelegram.socket_cli_command(cmd, logger)
 
-    admin   = json['admin']
+    admin = json['admin']
     members = json['members']
 
-    if members.present?
-      members_without_admin = members.select { |member| member['id'] != admin['id'] }
+    return unless members.present?
 
-      members_without_admin.each do |member|
-        telegram_user_id = "user##{member['id']}"
-        cmd              = "chat_del_user #{chat_name} #{telegram_user_id}"
-        RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
-      end
+    members_without_admin = members.select { |member| member['id'] != admin['id'] }
 
-      telegram_user_id = "user##{admin['id']}"
-      cmd              = "chat_del_user #{chat_name} #{telegram_user_id}"
-      RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+    members_without_admin.each do |member|
+      telegram_user_id = "user##{member['id']}"
+      cmd = "chat_del_user #{chat_name} #{telegram_user_id}"
+      RedmineChatTelegram.socket_cli_command(cmd, logger)
     end
 
-  rescue ActiveRecord::RecordNotFound => e
-    # ignore
+    telegram_user_id = "user##{admin['id']}"
+    cmd = "chat_del_user #{chat_name} #{telegram_user_id}"
+    RedmineChatTelegram.socket_cli_command(cmd, logger)
+  end
+
+  def logger
+    @logger ||= Logger.new(Rails.root.join('log/chat_telegram', 'telegram-group-close.log'))
   end
 end

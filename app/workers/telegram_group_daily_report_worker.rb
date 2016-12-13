@@ -5,7 +5,7 @@ class TelegramGroupDailyReportWorker
   TELEGRAM_GROUP_DAILY_REPORT_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-group-daily-report.log'))
 
   def perform(issue_id, yesterday_string)
-    I18n.locale = Setting['default_language']
+    RedmineChatTelegram.set_locale
 
     yesterday = Date.parse yesterday_string
     time_from = yesterday.beginning_of_day

@@ -2,7 +2,7 @@ require File.expand_path('../../../test_helper', __FILE__)
 require 'minitest/mock'
 require 'minitest/autorun'
 
-class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
+class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
   fixtures :projects, :trackers, :issues, :users, :email_addresses
 
   let(:bot) { Minitest::Mock.new.expect(:present?, true) }
@@ -36,7 +36,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
                    [{ chat_id: command.chat.id,
                       text: 'Hello, everybody! This is a chat for issue: http://site.com/issue/1',
                       disable_web_page_preview: true }])
-        RedmineChatTelegram::BotService.new(command, bot).call
+        RedmineChatTelegram::Bot.new(command, bot).call
 
         message = TelegramMessage.last
         assert_equal message.message, 'chat_was_created'
@@ -50,7 +50,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     it 'creates joined system message when user joined' do
       command = Telegrammer::DataTypes::Message
         .new(command_params.merge(new_chat_participant: { id: 998_899 }))
-      RedmineChatTelegram::BotService.new(command, bot).call
+      RedmineChatTelegram::Bot.new(command, bot).call
 
       message = TelegramMessage.last
       assert_equal message.message, 'joined'
@@ -60,7 +60,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     it 'creates invited system message when user was invited' do
       command = Telegrammer::DataTypes::Message
         .new(command_params.merge(new_chat_participant: { id: 7777 }))
-      RedmineChatTelegram::BotService.new(command, bot).call
+      RedmineChatTelegram::Bot.new(command, bot).call
 
       message = TelegramMessage.last
       assert_equal message.message, 'invited'
@@ -72,7 +72,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     it 'creates left_group system message when user left group' do
       command = Telegrammer::DataTypes::Message
                 .new(command_params.merge(left_chat_participant: { id: 998_899 }))
-      RedmineChatTelegram::BotService.new(command, bot).call
+      RedmineChatTelegram::Bot.new(command, bot).call
 
       message = TelegramMessage.last
       assert_equal message.message, 'left_group'
@@ -85,7 +85,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
                                             { id: 8888,
                                               first_name: 'As',
                                               last_name: 'Dfg' }))
-      RedmineChatTelegram::BotService.new(command, bot).call
+      RedmineChatTelegram::Bot.new(command, bot).call
 
       message = TelegramMessage.last
       assert_equal message.message, 'kicked'
@@ -106,7 +106,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
                    [{ chat_id: command.chat.id,
                       text: "#{issue.subject}\nhttp://site.com/issue/1",
                       disable_web_page_preview: true }])
-        RedmineChatTelegram::BotService.new(command, bot).call
+        RedmineChatTelegram::Bot.new(command, bot).call
 
         bot.verify
       end
@@ -117,7 +117,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
       RedmineChatTelegram.stub :issue_url, 'http://site.com/issue/1' do
         command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/link'))
         bot.expect(:send_message, nil, [{ chat_id: command.chat.id, text: 'Access denied.' }])
-        RedmineChatTelegram::BotService.new(command, bot).call
+        RedmineChatTelegram::Bot.new(command, bot).call
         bot.verify
       end
     end
@@ -130,13 +130,13 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
 
     it 'creates comment for issue' do
       User.any_instance.stubs(:allowed_to?).returns(true)
-      RedmineChatTelegram::BotService.new(command, bot).call
+      RedmineChatTelegram::Bot.new(command, bot).call
       assert_equal issue.journals.last.notes, "_from Telegram:_ \n\nQw Ert: this is text"
     end
 
     it 'creates message' do
       User.any_instance.stubs(:allowed_to?).returns(true)
-      RedmineChatTelegram::BotService.new(command, bot).call
+      RedmineChatTelegram::Bot.new(command, bot).call
       message = TelegramMessage.last
       assert_equal message.message, 'this is text'
       assert_equal message.bot_message, false
@@ -146,7 +146,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     it 'sends access denied if user has not access to issue' do
       bot.expect(:send_message, nil, [{ chat_id: command.chat.id, text: 'Access denied.' }])
       User.any_instance.stubs(:allowed_to?).returns(false)
-      RedmineChatTelegram::BotService.new(command, bot).call
+      RedmineChatTelegram::Bot.new(command, bot).call
       bot.verify
     end
   end
@@ -155,7 +155,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     it 'creates message' do
       command = Telegrammer::DataTypes::Message
                 .new(command_params.merge(text: 'message from telegram'))
-      RedmineChatTelegram::BotService.new(command, bot).call
+      RedmineChatTelegram::Bot.new(command, bot).call
       message = TelegramMessage.last
       assert_equal message.message, 'message from telegram'
       assert_equal message.bot_message, false
@@ -172,7 +172,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
 
       RedmineChatTelegram::Commands::NewIssueCommand.any_instance.expects(:execute)
 
-      RedmineChatTelegram::BotService.new(command, bot).call
+      RedmineChatTelegram::Bot.new(command, bot).call
     end
   end
 end
