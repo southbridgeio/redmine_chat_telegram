@@ -31,7 +31,7 @@ Please help us make this plugin better telling us of any [issues](https://github
 
 Since 1.4.5 version plugin need Telegram CLI as system daemon.
 
-You need to run `telgeram-cli` as daemon.
+You need to run `telegram-cli` as daemon.
 
 In `extras` folder you can find:
 * `init.d` script example
@@ -62,6 +62,8 @@ Type `/start` command to your bot from your user account.
 This allows the user to add a Bot to group chats.
 
 ### Bot launch
+
+Run `telegram-cli` using `init` script. See example in folder `extras`.
 
 Execute the following rake task to launch the bot:
 
