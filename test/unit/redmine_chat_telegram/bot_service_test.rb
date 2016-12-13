@@ -116,7 +116,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
       User.any_instance.stubs(:allowed_to?).returns(false)
       RedmineChatTelegram.stub :issue_url, 'http://site.com/issue/1' do
         command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/link'))
-        bot.expect(:send_message, nil, [{ chat_id: command.chat.id, text: "Access denied."}])
+        bot.expect(:send_message, nil, [{ chat_id: command.chat.id, text: 'Access denied.' }])
         RedmineChatTelegram::BotService.new(command, bot).call
         bot.verify
       end
@@ -144,7 +144,7 @@ class RedmineChatTelegram::BotServiceTest < ActiveSupport::TestCase
     end
 
     it 'sends access denied if user has not access to issue' do
-      bot.expect(:send_message, nil, [{ chat_id: command.chat.id, text: "Access denied."}])
+      bot.expect(:send_message, nil, [{ chat_id: command.chat.id, text: 'Access denied.' }])
       User.any_instance.stubs(:allowed_to?).returns(false)
       RedmineChatTelegram::BotService.new(command, bot).call
       bot.verify

@@ -1,6 +1,5 @@
 module RedmineChatTelegram
   class GroupChatCreator
-
     attr_reader :issue, :user
 
     def initialize(issue, user)
@@ -42,10 +41,10 @@ module RedmineChatTelegram
 
       if issue.telegram_group.present?
         issue.telegram_group.update telegram_id: telegram_id,
-                                     shared_url:  telegram_chat_url
+                                    shared_url:  telegram_chat_url
       else
         issue.create_telegram_group telegram_id: telegram_id,
-                                     shared_url:  telegram_chat_url
+                                    shared_url:  telegram_chat_url
       end
 
       journal_text = I18n.t('redmine_chat_telegram.journal.chat_was_created',

@@ -67,7 +67,6 @@ module RedmineChatTelegram
           one_time_keyboard: true,
           resize_keyboard: true)
 
-
         send_message(message_text,
                      reply_markup: keyboard)
       rescue StandardError

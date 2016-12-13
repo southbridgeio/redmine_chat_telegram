@@ -29,9 +29,13 @@ Please help us make this plugin better telling us of any [issues](https://github
 
 ### Telegram CLI configuration
 
-Take the `config/telegram.yml.example` file and use it as a template.
-Copy it to `config/` folder and rename it to `telegram.yml`.
-Put the correct values for the `telegram_cli_path` and `telegram_cli_public_key_path` variables.
+Since 1.4.5 version plugin need Telegram CLI as system daemon.
+
+You need to run `telgeram-cli` as daemon.
+
+In `extras` folder you can find:
+* `init.d` script example
+* `monit` config example
 
 ### First time run
 

@@ -60,9 +60,9 @@ module RedmineChatTelegram
     JSON.parse result
 
   rescue
-     puts $ERROR_INFO
+    puts $ERROR_INFO
   ensure
-     socket.close if socket
+    socket.close if socket
   end
 
   CHAT_HISTORY_PAGE_SIZE = 100
@@ -72,7 +72,7 @@ module RedmineChatTelegram
   def self.create_new_messages(issue_id, chat_name, bot_ids, present_message_ids, page)
     cmd = "history #{chat_name} #{CHAT_HISTORY_PAGE_SIZE} #{CHAT_HISTORY_PAGE_SIZE * page}"
 
-    json_messages = RedmineChatTelegram.run_cli_command(cmd, HISTORY_UPDATE_LOG)
+    json_messages = RedmineChatTelegram.socket_cli_command(cmd, HISTORY_UPDATE_LOG)
 
     if json_messages.present?
 

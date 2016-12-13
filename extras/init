@@ -1,0 +1,95 @@
+#!/bin/bash
+#
+# telegram-cli        Startup script
+#
+# chkconfig: - 85 15
+# processname: telegram-cli
+# pidfile: /opt/redmine/tmp/pids/telegram-cli.pid
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+NAME=telegram-cli
+USER=redmine
+PORT=2391
+LOG=/opt/redmine/log/telegram-cli-daemon.log
+PID=/opt/redmine/tmp/pids/telegram-cli.pid
+
+get_pid() {
+    cat "$PID"
+}
+
+is_running() {
+    [ -f "$PID" ] && ps `get_pid` > /dev/null 2>&1
+}
+
+start() {
+    if is_running; then
+        echo "Already started"
+    else
+        echo -n "Starting $NAME: "
+        echo `telegram-cli -U $USER -d -vvvRDCW --json -P $PORT -L $LOG >> $LOG 2>&1 & echo $!` > $PID
+        touch /var/lock/subsys/$NAME
+        echo "Started"
+    fi
+}
+
+stop() {
+ if is_running; then
+        echo -n "Shutting down $NAME : "
+        kill -9 $(cat $PID)
+        for i in {1..10}
+        do
+            if ! is_running; then
+                break
+            fi
+            echo -n "."
+            sleep 1
+        done
+        echo
+
+        if is_running; then
+            echo "Not stopped; may still be shutting down or shutdown may have failed"
+            exit 1
+        else
+            echo "Stopped"
+            if [ -f "$PID" ]; then
+                rm "$PID"
+                rm -f /var/lock/subsys/$NAME
+            fi
+        fi
+    else
+        echo "Not running"
+    fi
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        if is_running; then
+          echo "Unable to stop, will not attempt to start"
+          exit 1
+        fi
+        start
+        ;;
+    status)
+        if is_running; then
+            echo "Running"
+        else
+            echo "Stopped"
+            exit 1
+        fi
+        ;;
+    *)
+        echo "Usage: telegram-cli {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
+exit $?

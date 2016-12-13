@@ -50,7 +50,7 @@ def chat_telegram_bot_init
   cmd = 'get_self'
 
   begin
-    json = RedmineChatTelegram.run_cli_command(cmd, LOG)
+    json = RedmineChatTelegram.socket_cli_command(cmd, LOG)
     LOG.debug json
     robot_id = json['id']
   rescue NoMethodError => e

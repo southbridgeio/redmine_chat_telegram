@@ -1,0 +1,4 @@
+check process telegram-cli with pidfile /opt/redmine/tmp/pids/telegram-cli.pid
+    start program = "/etc/init.d/telegram-cli start"
+    stop program = "/etc/init.d/telegram-cli stop"
+    if 15 restarts within 30 cycles then exec "/bin/bash -c '/usr/bin/monit unmonitor telegram-cli && /bin/sleep 3600 && /usr/bin/monit monitor telegram-cli'"

@@ -15,7 +15,7 @@ class TelegramGroupCloseWorker
 
     # Reset chat link. Old link will not work after it.
     cmd = "export_chat_link #{chat_name}"
-    RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+    RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
 
     # send notification to chat
     close_message_text = user.anonymous? ?
@@ -27,7 +27,7 @@ class TelegramGroupCloseWorker
     # remove chat users
 
     cmd  = "chat_info #{chat_name}"
-    json = RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+    json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
 
     admin   = json['admin']
     members = json['members']
@@ -38,12 +38,12 @@ class TelegramGroupCloseWorker
       members_without_admin.each do |member|
         telegram_user_id = "user##{member['id']}"
         cmd              = "chat_del_user #{chat_name} #{telegram_user_id}"
-        RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+        RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
       end
 
       telegram_user_id = "user##{admin['id']}"
       cmd              = "chat_del_user #{chat_name} #{telegram_user_id}"
-      RedmineChatTelegram.run_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
+      RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_GROUP_CLOSE_LOG)
     end
 
   rescue ActiveRecord::RecordNotFound => e
