@@ -1,6 +1,9 @@
 module RedmineChatTelegram
   class Bot
     module GroupCommand
+      include IssuesHelper
+      include ActionView::Helpers::TagHelper
+      include ERB::Util
       private
 
       def group_common_commands
@@ -61,8 +64,8 @@ module RedmineChatTelegram
         elsif command.text =~ /\/log/
           log_message
 
-        elsif command.text =~ /\/subject/
-          set_issue_subject
+        elsif command.text =~ /\/subject|\/start_date|\/due_date|\/estimated_hours|\/done_ratio/
+          change_issue
 
         elsif command.text.present?
           save_message
@@ -151,14 +154,21 @@ module RedmineChatTelegram
         message.save!
       end
 
-      def set_issue_subject
+      def change_issue
         return unless can_edit_issue?
-        new_subject = command.text.gsub('/subject ', '')
-        IssueUpdater.new(@issue, redmine_user).call(subject: new_subject)
-        bot.send_message(
-          chat_id: command.chat.id,
-          text: "Текст задачи изменен.",
-          disable_web_page_preview: true)
+        params = command.text.match(/\/(\w+) (.+)/)
+        attr = params[1]
+        value = params[2]
+        journal = IssueUpdater.new(@issue, redmine_user).call(attr => value)
+        if journal.present? && journal.details.any?
+          message = details_to_strings(journal.details).join("\n")
+          bot.send_message(chat_id: command.chat.id, text: message, parse_mode: 'HTML')
+        else
+          bot.send_message(
+            chat_id: command.chat.id,
+            text: "Не удалось изменить.",
+            disable_web_page_preview: true)
+        end
       end
 
       def save_message

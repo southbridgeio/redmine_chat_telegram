@@ -13,7 +13,11 @@ module RedmineChatTelegram
       User.current = user
       issue.init_journal(user)
       issue.safe_attributes = params
-      issue.save
+      if issue.save
+        issue.current_journal
+      else
+        nil
+      end
     end
   end
 end
