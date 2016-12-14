@@ -61,6 +61,9 @@ module RedmineChatTelegram
         elsif command.text =~ /\/log/
           log_message
 
+        elsif command.text =~ /\/subject/
+          set_issue_subject
+
         elsif command.text.present?
           save_message
         end
@@ -148,6 +151,16 @@ module RedmineChatTelegram
         message.save!
       end
 
+      def set_issue_subject
+        return unless can_edit_issue?
+        new_subject = command.text.gsub('/subject ', '')
+        IssueUpdater.new(@issue, redmine_user).call(subject: new_subject)
+        bot.send_message(
+          chat_id: command.chat.id,
+          text: "Текст задачи изменен.",
+          disable_web_page_preview: true)
+      end
+
       def save_message
         message.message = command.text
         message.bot_message = false
@@ -163,6 +176,10 @@ module RedmineChatTelegram
         @redmine_user ||= TelegramCommon::Account.find_by!(telegram_id: command.from.id).try(:user)
       rescue ActiveRecord::RecordNotFound
         nil
+      end
+
+      def can_edit_issue?
+        can_access_issue? && redmine_user.allowed_to?(:edit_issues, issue.project)
       end
 
       def can_access_issue?
