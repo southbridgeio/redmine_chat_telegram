@@ -60,6 +60,5 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
               .new(command_params.merge(text: "/connect #{user.email_address.address}"))
 
     RedmineChatTelegram::Commands::ConnectCommand.new(command, logger).execute
-
   end
 end

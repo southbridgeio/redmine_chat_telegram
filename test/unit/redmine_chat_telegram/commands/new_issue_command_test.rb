@@ -76,7 +76,6 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
             .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
 
-
           text = 'Выберите кому назначить задачу.'
           RedmineChatTelegram::Commands::BaseBotCommand.any_instance
             .expects(:send_message)

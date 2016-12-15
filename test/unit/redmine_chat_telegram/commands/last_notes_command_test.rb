@@ -35,7 +35,6 @@ class RedmineChatTelegram::Commands::LastIssuesNotesCommandTest < ActiveSupport:
       .with(text)
 
     RedmineChatTelegram::Commands::LastIssuesNotesCommand.new(command).execute
-
   end
 
   it 'escapes html tags in journals' do

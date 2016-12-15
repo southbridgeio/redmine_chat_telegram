@@ -32,7 +32,7 @@ module RedmineChatTelegram
         message_params = {
           chat_id: chat_id,
           message: text,
-          bot_token: bot_token,
+          bot_token: bot_token
         }.merge(params)
 
         ::TelegramCommon::Bot::MessageSender.call(message_params)
