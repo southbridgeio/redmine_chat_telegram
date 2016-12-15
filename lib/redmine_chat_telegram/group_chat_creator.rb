@@ -25,6 +25,10 @@ module RedmineChatTelegram
                           subject.tr(' ', '_').tr('#', '_')
                         end
 
+      sleep 1
+      # TODO: 1. replace it by waiting message from bot and getting chat_id from DB
+      # TODO: 2. remove RedmineChatTelegram.mode (telegram_cli_mode)
+
       cmd  = "chat_info #{subject_for_cli}"
       json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
 
@@ -33,6 +37,10 @@ module RedmineChatTelegram
                     else
                       json['peer_id']
                     end
+
+      # get chat_id from DB
+      #
+      # cmd  = "export_chat_link chat##{chat_id.abs}"
 
       cmd  = "export_chat_link #{subject_for_cli}"
       json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
