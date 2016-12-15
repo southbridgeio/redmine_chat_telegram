@@ -26,9 +26,11 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
 
   describe '#execute' do
     it 'sends that account not found if there is no accout' do
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: 'Аккаунт не найден.' }])
-      RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-      bot.verify
+      text = 'Аккаунт не найден.'
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+      RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
     end
 
     describe 'when account is present' do
@@ -46,13 +48,12 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
             .with(keyboard: project_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
 
-          bot.expect(
-            :send_message,
-            nil,
-            [{ chat_id: 123, text: 'Выберите проект.', reply_markup: nil, parse_mode: 'HTML' }])
+          text = 'Выберите проект.'
+          RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+            .expects(:send_message)
+            .with(text, reply_markup: nil)
 
-          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-          bot.verify
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
         end
       end
 
@@ -68,30 +69,29 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           member.save
 
           command = Telegrammer::DataTypes::Message
-                    .new(command_params.merge(text: Project.first.name))
+                      .new(command_params.merge(text: Project.first.name))
 
           users_list = [['Без пользователя', 'Redmine Admin']]
           Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
 
-          bot.expect(
-            :send_message,
-            nil,
-            [{ chat_id: 123, text: 'Выберите кому назначить задачу.', reply_markup: nil, parse_mode: 'HTML' }])
 
-          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-          bot.verify
+          text = 'Выберите кому назначить задачу.'
+          RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+            .expects(:send_message)
+            .with(text, reply_markup: nil)
+
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
         end
 
         it 'sends message that users are not found it there is no project members' do
-          bot.expect(
-            :send_message,
-            nil,
-            [{ chat_id: 123, text: 'Не найдено пользователей для выбранного проекта.', parse_mode: 'HTML' }])
+          text = 'Не найдено пользователей для выбранного проекта.'
+          RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+            .expects(:send_message)
+            .with(text)
 
-          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-          bot.verify
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
         end
       end
 
@@ -103,15 +103,14 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
 
         it 'asks to send issue subject' do
           command = Telegrammer::DataTypes::Message
-                    .new(command_params.merge(text: 'Redmine Admin'))
+                      .new(command_params.merge(text: 'Redmine Admin'))
 
-          bot.expect(
-            :send_message,
-            nil,
-            [{ chat_id: 123, text: 'Введите тему задачи.', parse_mode: 'HTML' }])
+          text = 'Введите тему задачи.'
+          RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+            .expects(:send_message)
+            .with(text)
 
-          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-          bot.verify
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
         end
       end
 
@@ -123,15 +122,14 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
 
         it 'asks to send issue text' do
           command = Telegrammer::DataTypes::Message
-                    .new(command_params.merge(text: 'issue subject'))
+                      .new(command_params.merge(text: 'issue subject'))
 
-          bot.expect(
-            :send_message,
-            nil,
-            [{ chat_id: 123, text: 'Введите текст задачи.', parse_mode: 'HTML' }])
+          text = 'Введите текст задачи.'
+          RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+            .expects(:send_message)
+            .with(text)
 
-          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-          bot.verify
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
         end
       end
 
@@ -158,10 +156,13 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
-          bot.expect(:send_message, nil,
-                     [{ chat_id: 123, text: "Задача создана: <a href=\"http://redmine.com/issues/15\">#15</a>\nСоздать чат?", parse_mode: 'HTML', reply_markup: nil }])
-          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-          bot.verify
+
+          text = "Задача создана: <a href=\"http://redmine.com/issues/15\">#15</a>\nСоздать чат?"
+          RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+            .expects(:send_message)
+            .with(text, reply_markup: nil)
+
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
         end
       end
 
@@ -184,20 +185,26 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           chat # GroupChatCreator creates chat, but here it's stubbed, so do it manually
 
           command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'Да'))
-          bot.expect(:send_message, nil, [{ chat_id: 123,
-                                            text: 'Создаю чат. Пожалуйста, подождите.',
-                                            reply_markup: nil, parse_mode: 'HTML' }])
-          bot.expect(:send_message, nil, [{ chat_id: 123,
-                                            text: 'По ссылке http://telegram.me/chat создан чат.',
-                                            parse_mode: 'HTML' }])
-          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-          bot.verify
+
+          RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+            .expects(:send_message)
+            .with(
+              'Создаю чат. Пожалуйста, подождите.',
+              reply_markup: nil
+            )
+          RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+            .expects(:send_message)
+            .with(
+              'По ссылке http://telegram.me/chat создан чат.'
+            )
+
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
         end
 
         it 'hides keyborad and do nothing when user send "no"' do
           command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'Нет'))
-          RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
-          bot.verify
+          RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
+          # TODO: what we need to test here?
         end
       end
     end

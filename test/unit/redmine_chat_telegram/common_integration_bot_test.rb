@@ -1,13 +1,7 @@
 require File.expand_path('../../../test_helper', __FILE__)
 
 class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
-  # tests RedmineChatTelegram::Bot
   fixtures :users, :email_addresses, :roles
-
-  setup do
-    RedmineChatTelegram.stubs(:bot_token)
-    Telegrammer::Bot.any_instance.stubs(:get_me)
-  end
 
   context '/start' do
     setup do
@@ -28,7 +22,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
       setup do
         RedmineChatTelegram::Bot.any_instance
             .expects(:send_message)
-            .with(123, I18n.t('telegram_common.bot.start.instruction_html'))
+            .with(I18n.t('telegram_common.bot.start.instruction_html'))
       end
 
       should 'create telegram account' do
@@ -90,7 +84,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
 
       should 'send message about group command' do
         RedmineChatTelegram::Bot.any_instance.expects(:send_message)
-          .with(123, I18n.t('telegram_common.bot.private.group_command'))
+          .with(I18n.t('telegram_common.bot.private.group_command'))
         @bot_service.call
       end
     end
@@ -112,7 +106,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
 
       should 'send message about private command' do
         RedmineChatTelegram::Bot.any_instance.expects(:send_message)
-          .with(-123, I18n.t('telegram_common.bot.group.private_command'))
+          .with(I18n.t('telegram_common.bot.group.private_command'))
         @bot_service.call
       end
     end
@@ -150,7 +144,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
           /chat - #{I18n.t('redmine_chat_telegram.bot.private.help.chat')}
         TEXT
 
-        RedmineChatTelegram::Bot.any_instance.expects(:send_message).with(123, text.chomp)
+        RedmineChatTelegram::Bot.any_instance.expects(:send_message).with(text.chomp)
         @bot_service.call
       end
     end
@@ -179,7 +173,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
           /log - #{I18n.t('redmine_chat_telegram.bot.group.help.log')}
         TEXT
 
-        RedmineChatTelegram::Bot.any_instance.expects(:send_message).with(-123, text.chomp)
+        RedmineChatTelegram::Bot.any_instance.expects(:send_message).with(text.chomp)
         @bot_service.call
       end
     end

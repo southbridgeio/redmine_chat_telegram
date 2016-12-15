@@ -26,7 +26,7 @@ module RedmineChatTelegram
 
       def handle_group_command
         if private_commands.include?(command_name) && !group_commands.include?(command_name)
-          send_message(command.chat.id, I18n.t('telegram_common.bot.group.private_command'))
+          send_message(I18n.t('telegram_common.bot.group.private_command'))
         else
           if group_common_command?
             execute_group_command
@@ -92,10 +92,7 @@ module RedmineChatTelegram
 
       def group_chat_created
         issue_url = RedmineChatTelegram.issue_url(issue.id)
-        bot.send_message(
-          chat_id: command.chat.id,
-          text: I18n.t('redmine_chat_telegram.messages.hello', issue_url: issue_url),
-          disable_web_page_preview: true)
+        send_message(I18n.t('redmine_chat_telegram.messages.hello', issue_url: issue_url))
 
         message.message = 'chat_was_created'
         message.save!
@@ -132,10 +129,7 @@ module RedmineChatTelegram
 
         issue_url = RedmineChatTelegram.issue_url(issue.id)
         issue_url_text = "#{issue.subject}\n#{issue_url}"
-        bot.send_message(
-          chat_id: command.chat.id,
-          text: issue_url_text,
-          disable_web_page_preview: true)
+        send_message(issue_url_text)
       end
 
       def log_message
@@ -175,9 +169,7 @@ module RedmineChatTelegram
         if redmine_user.present? && issue.present? && redmine_user.allowed_to?(:view_issues, issue.project)
           true
         else
-          bot.send_message(
-            chat_id: command.chat.id,
-            text: I18n.t('redmine_chat_telegram.bot.access_denied'))
+          send_message(I18n.t('redmine_chat_telegram.bot.access_denied'))
           false
         end
       end

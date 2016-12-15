@@ -142,7 +142,7 @@ namespace :chat_telegram do
     begin
       bot.get_updates(fail_silently: false) do |command|
         next unless command.is_a?(Telegrammer::DataTypes::Message)
-        RedmineChatTelegram::Bot.new(command, bot).call
+        RedmineChatTelegram::Bot.new(command).call
       end
     rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected,
            Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError => e

@@ -2,10 +2,9 @@ class RedmineChatTelegram::Bot < TelegramCommon::Bot
   include PrivateCommand
   include GroupCommand
 
-  attr_reader :bot, :logger, :command, :issue
+  attr_reader :logger, :command, :issue
 
-  def initialize(command, bot = nil)
-    @bot = bot.present? ? bot : Telegrammer::Bot.new(RedmineChatTelegram.bot_token)
+  def initialize(command)
     @logger = Logger.new(Rails.root.join('log/chat_telegram', 'bot.log'))
     @command = initialize_command(command)
   end
@@ -30,5 +29,9 @@ class RedmineChatTelegram::Bot < TelegramCommon::Bot
 
   def group_help_message
     help_command_list(group_commands, namespace: 'redmine_chat_telegram', type: 'group')
+  end
+
+  def bot_token
+    RedmineChatTelegram.bot_token
   end
 end

@@ -27,10 +27,10 @@ module RedmineChatTelegram
           if private_common_command?
             execute_private_command
           else
-            RedmineChatTelegram::Commands::BotCommand.new(command, bot, logger).execute
+            RedmineChatTelegram::Commands::BotCommand.new(command, logger).execute
           end
         else
-          send_message(command.chat.id, I18n.t('telegram_common.bot.private.group_command'))
+          send_message(I18n.t('telegram_common.bot.private.group_command'))
         end
       end
 

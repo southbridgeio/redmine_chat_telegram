@@ -7,12 +7,12 @@ class RedmineChatTelegram::ExecutingCommand < ActiveRecord::Base
 
   before_create -> (model) { model.step_number = 1 }
 
-  def continue(command, bot)
+  def continue(command)
     return unless name == 'new'
-    RedmineChatTelegram::Commands::NewIssueCommand.new(command, bot).execute
+    RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
   end
 
-  def cancel(command, bot)
+  def cancel(command)
     return unless name == 'new'
     destroy
     bot.send_message(

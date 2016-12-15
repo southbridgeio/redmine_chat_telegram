@@ -30,20 +30,21 @@ class RedmineChatTelegram::Commands::LastIssuesNotesCommandTest < ActiveSupport:
   it 'sends last five updated issues with journals' do
     text = "<a href=\"http://redmine.com/issues/1\">#1</a>: Cannot print recipes <pre>Some notes with Redmine links: #2, r2.</pre> <i>#{issue_journal_time}</i>\n\n<a href=\"http://redmine.com/issues/5\">#5</a>: Subproject issue <pre>New issue</pre>\n\n"
 
-    bot.expect(:send_message, nil, [{ chat_id: 123, text: text, parse_mode: 'HTML' }])
+    RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+      .expects(:send_message)
+      .with(text)
 
-    RedmineChatTelegram::Commands::LastIssuesNotesCommand.new(command, bot).execute
+    RedmineChatTelegram::Commands::LastIssuesNotesCommand.new(command).execute
 
-    bot.verify
   end
 
   it 'escapes html tags in journals' do
     Issue.find(1).journals.last.update(notes: '<pre>Note with tags.</pre> Some text.')
     text = "<a href=\"http://redmine.com/issues/1\">#1</a>: Cannot print recipes <pre>Note with tags. Some text.</pre> <i>#{issue_journal_time}</i>\n\n<a href=\"http://redmine.com/issues/5\">#5</a>: Subproject issue <pre>New issue</pre>\n\n"
-    bot.expect(:send_message, nil, [{ chat_id: 123, text: text, parse_mode: 'HTML' }])
+    RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+      .expects(:send_message)
+      .with(text)
 
-    RedmineChatTelegram::Commands::LastIssuesNotesCommand.new(command, bot).execute
-
-    bot.verify
+    RedmineChatTelegram::Commands::LastIssuesNotesCommand.new(command).execute
   end
 end

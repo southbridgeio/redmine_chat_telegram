@@ -15,6 +15,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
   end
 
   let(:bot) { Minitest::Mock.new }
+  let(:bot_token) { 'token' }
   let(:logger) { Logger.new(STDOUT) }
   let(:user) { User.find(1) }
 
@@ -33,9 +34,10 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
         <b>Assigned to you issues with recent activity:</b>
         <a href="http://redmine.com/issues/1">#1</a>: Cannot print recipes
       HTML
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: text, parse_mode: 'HTML' }])
-      RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
-      bot.verify
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+      RedmineChatTelegram::Commands::FindIssuesCommand.new(command).execute
     end
   end
 
@@ -49,9 +51,10 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
         <b>Assigned to you issues:</b>
         <a href="http://redmine.com/issues/2">#2</a>: Add ingredients categories
       HTML
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: text, parse_mode: 'HTML' }])
-      RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
-      bot.verify
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+      RedmineChatTelegram::Commands::FindIssuesCommand.new(command).execute
     end
   end
 
@@ -65,9 +68,10 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
         <b>Assigned to you issues with expired deadline:</b>
         <a href="http://redmine.com/issues/3">#3</a>: Error 281 when updating a recipe
       HTML
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: text, parse_mode: 'HTML' }])
-      RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
-      bot.verify
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+      RedmineChatTelegram::Commands::FindIssuesCommand.new(command).execute
     end
   end
 end
