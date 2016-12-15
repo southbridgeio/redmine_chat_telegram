@@ -12,7 +12,7 @@ addons:
 
 env:
   - REDMINE_VER=3.3-stable
-#  - REDMINE_VER=master
+  - REDMINE_VER=master
 
 install: "echo skip bundle install"
 

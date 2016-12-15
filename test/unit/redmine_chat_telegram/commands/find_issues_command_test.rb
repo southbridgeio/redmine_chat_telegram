@@ -23,6 +23,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
     I18n.locale = 'en'
     Setting['host_name'] = 'redmine.com'
     TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
+    Member.create!(:project_id => 1, :principal => user, :role_ids => [1])
   end
 
   describe '/hot' do
