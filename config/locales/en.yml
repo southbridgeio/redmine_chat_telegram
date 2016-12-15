@@ -27,6 +27,7 @@ en:
           log: save message to the issue
           help: help
 
+      error_editing_issue: Failed to edit the issue. Perhaps you entered the wrong data or you do not have the access.
       hot: Assigned to you issues with recent activity
       me: Assigned to you issues
       deadline: Assigned to you issues with expired deadline

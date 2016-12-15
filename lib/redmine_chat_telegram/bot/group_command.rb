@@ -166,7 +166,7 @@ module RedmineChatTelegram
         else
           bot.send_message(
             chat_id: command.chat.id,
-            text: "Не удалось изменить.",
+            text: I18n.t('redmine_chat_telegram.bot.error_editing_issue'),
             disable_web_page_preview: true)
         end
       end
