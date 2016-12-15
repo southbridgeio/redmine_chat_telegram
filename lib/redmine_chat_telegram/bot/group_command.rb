@@ -64,7 +64,7 @@ module RedmineChatTelegram
         elsif command.text =~ /\/log/
           log_message
 
-        elsif command.text =~ /\/subject|\/start_date|\/due_date|\/estimated_hours|\/done_ratio/
+        elsif command.text =~ %r{/subject|/start_date|/due_date|/estimated_hours|/done_ratio|/project|/tracker|/status|/priority|/assigned_to}
           change_issue
 
         elsif command.text.present?
