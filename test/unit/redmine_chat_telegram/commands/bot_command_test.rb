@@ -1,6 +1,4 @@
 require File.expand_path('../../../../test_helper', __FILE__)
-require 'minitest/mock'
-require 'minitest/autorun'
 
 class RedmineChatTelegram::Commands::BotCommandTest < ActiveSupport::TestCase
   fixtures :projects, :trackers, :issues, :users, :email_addresses

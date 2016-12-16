@@ -1,11 +1,8 @@
 require File.expand_path('../../../../test_helper', __FILE__)
-require 'minitest/mock'
-require 'minitest/autorun'
 
 class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestCase
   fixtures :projects, :trackers, :issues, :users, :issue_statuses, :journals, :email_addresses, :enabled_modules
 
-  let(:bot) { Minitest::Mock.new }
   let(:user) { User.find(1) }
   let(:issue) { Issue.find(1) }
 
@@ -23,7 +20,6 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
   end
 
   before do
-    I18n.locale = 'en'
     TelegramCommon::Account.create(user_id: user.id, telegram_id: 998_899)
   end
 
@@ -49,7 +45,6 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
 
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat info 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
-      bot.verify
     end
 
     it "sends 'access denied' message if user hasn't required rights" do

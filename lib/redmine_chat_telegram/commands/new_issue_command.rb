@@ -26,9 +26,9 @@ module RedmineChatTelegram
       def execute_step_2
         project_name = command.text
         assignables = Project
-                .where(Project.visible_condition(account.user))
-                .find_by(name: project_name)
-                .try(:assignable_users)
+                        .where(Project.visible_condition(account.user))
+                        .find_by(name: project_name)
+                        .try(:assignable_users)
         if assignables.present? && assignables.count > 0
           executing_command.update(step_number: 3, data: { project_name: project_name })
           send_message(I18n.t('redmine_chat_telegram.bot.new_issue.choice_user'),
@@ -82,8 +82,10 @@ module RedmineChatTelegram
         issue_id = executing_command.data[:issue_id]
         issue = Issue.find(issue_id)
 
-        send_message(I18n.t('redmine_chat_telegram.bot.creating_chat'),
-                     reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
+        send_message(
+          I18n.t('redmine_chat_telegram.bot.creating_chat'),
+          reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true)
+        )
 
         RedmineChatTelegram::GroupChatCreator.new(issue, account.user).run
 
@@ -140,11 +142,11 @@ module RedmineChatTelegram
 
       def executing_command
         @executing_command ||= RedmineChatTelegram::ExecutingCommand
-                           .joins(:account)
-                           .find_by!(
-                             name: 'new',
-                             telegram_common_accounts:
-                               { telegram_id: command.from.id })
+                                 .joins(:account)
+                                 .find_by!(
+                                   name: 'new',
+                                   telegram_common_accounts:
+                                     { telegram_id: command.from.id })
       rescue ActiveRecord::RecordNotFound
         @executing_command ||= RedmineChatTelegram::ExecutingCommand.create(name: 'new',
                                                                             account: account)

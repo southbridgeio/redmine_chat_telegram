@@ -1,6 +1,4 @@
 require File.expand_path('../../../../test_helper', __FILE__)
-require 'minitest/mock'
-require 'minitest/autorun'
 
 class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCase
   fixtures :projects, :trackers, :issues, :users, :email_addresses
@@ -15,10 +13,6 @@ class RedmineChatTelegram::Commands::ConnectCommandTest < ActiveSupport::TestCas
       date: Date.today,
       from: { id: 998_899, first_name: 'Qw', last_name: 'Ert', username: 'qwert' }
     }
-  end
-
-  before do
-    I18n.locale = 'en'
   end
 
   it 'sends what user not found if user not found' do
