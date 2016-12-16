@@ -29,6 +29,8 @@ Please help us make this plugin better telling us of any [issues](https://github
 
 ### Telegram CLI configuration
 
+**!!! ATTENTION !!!** 
+
 Since 1.4.5 version plugin need Telegram CLI as system daemon.
 
 You need to run `telegram-cli` as daemon.
