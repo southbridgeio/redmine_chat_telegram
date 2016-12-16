@@ -1,0 +1,10 @@
+# Sample configuration file for Sidekiq.
+# Place this file at config/sidekiq.yml and Sidekiq will
+# pick it up automatically.
+---
+:pidfile: tmp/pids/sidekiq.pid
+:logfile: log/sidekiq.log
+:timeout: 30
+:queues:
+  - default
+  - telegram
