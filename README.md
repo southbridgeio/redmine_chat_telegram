@@ -19,6 +19,7 @@ Please help us make this plugin better telling us of any [issues](https://github
 
 ### Requirements
 
+* **Ruby 2.3+**
 * [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 * [Telegram CLI](https://github.com/vysheng/tg) should be installed
 * You should have Telegram user account

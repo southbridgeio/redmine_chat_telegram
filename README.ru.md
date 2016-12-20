@@ -19,6 +19,7 @@
 
 ### Требования
 
+* **Ruby 2.3+**
 * [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 * [Telegram CLI](https://github.com/vysheng/tg) должен быть установлен
 * У Вас должен быть аккаунт пользователя Telegram
