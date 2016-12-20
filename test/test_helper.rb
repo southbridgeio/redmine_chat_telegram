@@ -3,6 +3,8 @@ $VERBOSE = nil # for hide ruby warnings
 # Load the Redmine helper
 require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
 require 'minitest/spec'
+require 'minitest/mock'
+require 'minitest/autorun'
 
 DatabaseCleaner.strategy = :transaction
 DatabaseCleaner.clean_with(:truncation)

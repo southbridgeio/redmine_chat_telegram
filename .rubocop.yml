@@ -1,7 +1,7 @@
 AllCops:
   DisabledByDefault: true
   TargetRubyVersion: 2.3
-  Excludes:
+  Exclude:
     - lib/pluralization.rb
 
 #################### Lint ################################

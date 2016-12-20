@@ -1,9 +1,7 @@
 require File.expand_path('../../../../test_helper', __FILE__)
-require 'minitest/mock'
-require 'minitest/autorun'
 
 class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::TestCase
-  fixtures :projects, :trackers, :issues, :users, :issue_statuses
+  fixtures :projects, :trackers, :issues, :users, :issue_statuses, :roles
 
   let(:command_params) do
     {
@@ -14,14 +12,15 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
     }
   end
 
-  let(:bot) { Minitest::Mock.new }
+  let(:bot_token) { 'token' }
   let(:logger) { Logger.new(STDOUT) }
   let(:user) { User.find(1) }
 
+  let(:url_base) { "#{Setting.protocol}://#{Setting.host_name}" }
+
   before do
-    I18n.locale = 'en'
-    Setting['host_name'] = 'redmine.com'
     TelegramCommon::Account.create(telegram_id: command.from.id, user_id: user.id)
+    Member.create!(project_id: 1, principal: user, role_ids: [1])
   end
 
   describe '/hot' do
@@ -31,11 +30,12 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
       Issue.find(1).update(assigned_to: user)
       text = <<~HTML
         <b>Assigned to you issues with recent activity:</b>
-        <a href="http://redmine.com/issues/1">#1</a>: Cannot print recipes
+        <a href="#{url_base}/issues/1">#1</a>: Cannot print recipes
       HTML
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: text, parse_mode: 'HTML' }])
-      RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
-      bot.verify
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+      RedmineChatTelegram::Commands::FindIssuesCommand.new(command).execute
     end
   end
 
@@ -47,11 +47,12 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
       Issue.second.update(assigned_to: user)
       text = <<~HTML
         <b>Assigned to you issues:</b>
-        <a href="http://redmine.com/issues/2">#2</a>: Add ingredients categories
+        <a href="#{url_base}/issues/2">#2</a>: Add ingredients categories
       HTML
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: text, parse_mode: 'HTML' }])
-      RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
-      bot.verify
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+      RedmineChatTelegram::Commands::FindIssuesCommand.new(command).execute
     end
   end
 
@@ -63,11 +64,12 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
       Issue.third.update(assigned_to: user, due_date: Date.yesterday)
       text = <<~HTML
         <b>Assigned to you issues with expired deadline:</b>
-        <a href="http://redmine.com/issues/3">#3</a>: Error 281 when updating a recipe
+        <a href="#{url_base}/issues/3">#3</a>: Error 281 when updating a recipe
       HTML
-      bot.expect(:send_message, nil, [{ chat_id: 123, text: text, parse_mode: 'HTML' }])
-      RedmineChatTelegram::Commands::FindIssuesCommand.new(command, bot).execute
-      bot.verify
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+      RedmineChatTelegram::Commands::FindIssuesCommand.new(command).execute
     end
   end
 end

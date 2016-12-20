@@ -1,3 +1,11 @@
+#### [1.5.0]
+
+Deeper integration with `redmine_telegram_common`. Big refactoring and code cleanup.
+
+#### [1.4.5]
+
+* Need to use Telegram CLI as daemon.
+
 #### [1.4.0]
 
 * Add /chat command to manage issues chats

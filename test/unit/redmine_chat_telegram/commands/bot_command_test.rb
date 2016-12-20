@@ -1,12 +1,8 @@
 require File.expand_path('../../../../test_helper', __FILE__)
-require 'minitest/mock'
-require 'minitest/autorun'
 
 class RedmineChatTelegram::Commands::BotCommandTest < ActiveSupport::TestCase
   fixtures :projects, :trackers, :issues, :users, :email_addresses
 
-  let(:bot) { Minitest::Mock.new }
-  let(:logger) { Logger.new(STDOUT) }
   let(:user) { User.find(1) }
 
   let(:command_params) do
@@ -26,7 +22,7 @@ class RedmineChatTelegram::Commands::BotCommandTest < ActiveSupport::TestCase
       executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
       RedmineChatTelegram::ExecutingCommand.any_instance.expects(:cancel)
 
-      RedmineChatTelegram::Commands::BotCommand.new(command, bot).execute
+      RedmineChatTelegram::Commands::BotCommand.new(command).execute
     end
   end
 
@@ -37,6 +33,6 @@ class RedmineChatTelegram::Commands::BotCommandTest < ActiveSupport::TestCase
     executing_command = RedmineChatTelegram::ExecutingCommand.create(name: 'new', account: account)
     RedmineChatTelegram::ExecutingCommand.any_instance.expects(:continue)
 
-    RedmineChatTelegram::Commands::BotCommand.new(command, bot).execute
+    RedmineChatTelegram::Commands::BotCommand.new(command).execute
   end
 end

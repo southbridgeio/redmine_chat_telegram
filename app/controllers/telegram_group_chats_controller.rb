@@ -6,6 +6,11 @@ class TelegramGroupChatsController < ApplicationController
 
     @issue = Issue.visible.find(params[:issue_id])
 
+    if @issue.telegram_group.present? and @issue.telegram_group.shared_url.present?
+      redirect_to issue_path(@issue)
+      return
+    end
+
     RedmineChatTelegram::GroupChatCreator.new(@issue, current_user).run
 
     @project = @issue.project

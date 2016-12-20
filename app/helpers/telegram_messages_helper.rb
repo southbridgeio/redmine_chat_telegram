@@ -4,8 +4,8 @@ module TelegramMessagesHelper
   end
 
   def color_number_for_user(user_id)
-    user = @chat_users.detect do |user|
-      user[:id] == user_id
+    user = @chat_users.detect do |chat_user|
+      chat_user[:id] == user_id
     end
 
     user[:color_number]

@@ -36,7 +36,7 @@ module RedmineChatTelegram
 
       def issue_filters
         assigned_to_me = Issue.joins(:project).open
-                         .where(projects: {status: 1})
+                         .where(projects: { status: 1 })
                          .where(assigned_to: account.user)
         {
           'me' => assigned_to_me,

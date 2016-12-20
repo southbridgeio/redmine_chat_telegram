@@ -29,9 +29,15 @@ Please help us make this plugin better telling us of any [issues](https://github
 
 ### Telegram CLI configuration
 
-Take the `config/telegram.yml.example` file and use it as a template.
-Copy it to `config/` folder and rename it to `telegram.yml`.
-Put the correct values for the `telegram_cli_path` and `telegram_cli_public_key_path` variables.
+**!!! ATTENTION !!!** 
+
+Since 1.4.5 version plugin need Telegram CLI as system daemon.
+
+You need to run `telegram-cli` as daemon.
+
+In `extras` folder you can find:
+* `init.d` script example
+* `monit` config example
 
 ### First time run
 
@@ -59,6 +65,8 @@ This allows the user to add a Bot to group chats.
 
 ### Bot launch
 
+Run `telegram-cli` using `init` script. See example in folder `extras`.
+
 Execute the following rake task to launch the bot:
 
 ```shell
@@ -75,14 +83,36 @@ Open the ticket. You'll see the new link `Create Telegram chat` on the right sid
 
 ### Available commands in bot chat
 
-- `/connect` - connect Telegram account to Redmine account
+- `/connect account@redmine.com` - connect Telegram account to Redmine account
 - `/new` - create new issue
 - `/cancel` - cancel current command
 
 ### Available commands in issue chat
 
 - `/task`, `/link`, `/url` - get link to the issue
-- `/log` - save message to the issue 
+- `/log` - save message to the issue
+
+#### Hints for bot commands
+
+Use command `/setcommands` with [@BotFather](https://telegram.me/botfather). Send this list for setup hints:
+
+```
+start - start work with bot
+connect - connect account to Redmine
+new - create new issue
+hot - assigned to you issues updated today
+me - assigned to you issues
+deadline - assigned to you issues with expired deadline
+spent - number of hours set today
+yspent - number of hours set yesterday
+last - last 5 issues with comments
+help - help
+chat - manage issues chats.
+task - get link to the issue
+link - get link to the issue
+url - get link to the issue
+log - save message to the issue
+```
 
 ## Troubleshooting
 

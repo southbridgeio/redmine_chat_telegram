@@ -1,13 +1,12 @@
 module RedmineChatTelegram
   module Commands
     class BaseBotCommand
-      attr_reader :command, :bot, :logger
+      attr_reader :command, :logger
 
       LOGGER = Logger.new(Rails.root.join('log/chat_telegram', 'bot-command-base.log'))
 
-      def initialize(command, bot, logger = LOGGER)
+      def initialize(command, logger = LOGGER)
         @command = command
-        @bot = bot
         @logger = logger
       end
 
@@ -30,14 +29,19 @@ module RedmineChatTelegram
       end
 
       def send_message(text, params = {})
-        message = {chat_id: command.chat.id, text: text, parse_mode: 'HTML'}
-        bot.send_message(message.merge(params))
+        message_params = {
+          chat_id: chat_id,
+          message: text,
+          bot_token: bot_token
+        }.merge(params)
+
+        ::TelegramCommon::Bot::MessageSender.call(message_params)
       end
 
       def account
         @account ||= ::TelegramCommon::Account.find_by!(telegram_id: command.from.id)
       rescue ActiveRecord::RecordNotFound
-        bot.send_message(chat_id: command.chat.id, text: 'Аккаунт не найден.')
+        send_message(I18n.t('redmine_chat_telegram.bot.account_not_found'))
         nil
       end
 
@@ -46,6 +50,14 @@ module RedmineChatTelegram
           issue,
           host: Setting.host_name,
           protocol: Setting.protocol)
+      end
+
+      def chat_id
+        command.chat.id
+      end
+
+      def bot_token
+        RedmineChatTelegram.bot_token
       end
     end
   end

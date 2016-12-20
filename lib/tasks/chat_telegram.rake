@@ -1,7 +1,3 @@
-def chat_user_full_name(telegram_user)
-  [telegram_user.first_name, telegram_user.last_name].compact.join
-end
-
 def chat_telegram_bot_init
   Process.daemon(true, true) if Rails.env.production?
 
@@ -50,7 +46,7 @@ def chat_telegram_bot_init
   cmd = 'get_self'
 
   begin
-    json = RedmineChatTelegram.run_cli_command(cmd, LOG)
+    json = RedmineChatTelegram.socket_cli_command(cmd, LOG)
     LOG.debug json
     robot_id = json['id']
   rescue NoMethodError => e
@@ -103,7 +99,7 @@ end
 namespace :chat_telegram do
   task history_update: :environment do
     begin
-      I18n.locale = Setting['default_language']
+      RedmineChatTelegram.set_locale
 
       RedmineChatTelegram::TelegramGroup.find_each do |telegram_group|
         issue = telegram_group.issue
@@ -139,14 +135,14 @@ namespace :chat_telegram do
   # bundle exec rake chat_telegram:bot PID_DIR='/tmp'
   desc "Runs telegram bot process (options: PID_DIR='/pid/dir')"
   task bot: :environment do
-    LOG         = Rails.env.production? ? Logger.new(Rails.root.join('log/chat_telegram', 'bot.log')) : Logger.new(STDOUT)
-    I18n.locale = Setting['default_language']
+    LOG = Rails.env.production? ? Logger.new(Rails.root.join('log/chat_telegram', 'bot.log')) : Logger.new(STDOUT)
+    RedmineChatTelegram.set_locale
 
     bot = chat_telegram_bot_init
     begin
       bot.get_updates(fail_silently: false) do |command|
         next unless command.is_a?(Telegrammer::DataTypes::Message)
-        RedmineChatTelegram::BotService.new(command, bot).call
+        RedmineChatTelegram::Bot.new(command).call
       end
     rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected,
            Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError => e

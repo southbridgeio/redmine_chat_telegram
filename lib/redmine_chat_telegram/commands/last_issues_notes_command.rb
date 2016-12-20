@@ -22,7 +22,7 @@ module RedmineChatTelegram
         last_journal = issue.journals.where.not(notes: '').last
         if last_journal.present?
           time = I18n.l(last_journal.created_on, format: :long)
-          "<pre>#{ActionController::Base.helpers.strip_tags last_journal.notes[0,500]}</pre> <i>#{time}</i>"
+          "<pre>#{ActionController::Base.helpers.strip_tags last_journal.notes[0, 500]}</pre> <i>#{time}</i>"
         else
           "<pre>#{I18n.t('redmine_chat_telegram.bot.without_comments')}</pre>"
         end
