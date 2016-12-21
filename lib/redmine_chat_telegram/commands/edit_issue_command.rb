@@ -51,21 +51,75 @@ module RedmineChatTelegram
         executing_command.update(
           step_number: 4,
           data: executing_command.data.merge({ attribute_name: command.text }))
-        send_message("Введите значение.")
+
+        case command.text
+        when 'project'
+          send_projects
+        when 'tracker'
+          send_trackers
+        when 'priority'
+          send_priorities
+        when 'status'
+          send_statuses
+        when 'assigned_to'
+          send_users
+        else
+          send_message("Введите значение.")
+        end
       end
 
       def execute_step_4
-        issue = Issue.find_by_id(executing_command.data[:issue_id])
         user = account.user
         attr = executing_command.data[:attribute_name]
         value = command.text
         journal = IssueUpdater.new(issue, user).call(attr => value)
+        executing_command.destroy
         if journal.present? && journal.details.any?
-          executing_command.destroy
           send_message(details_to_strings(journal.details).join("\n"))
         else
           send_message(I18n.t('redmine_chat_telegram.bot.error_editing_issue'))
         end
+      end
+
+      def send_projects
+        projects = issue.allowed_target_projects.pluck(:name)
+        keyboard = make_keyboard(projects)
+        send_message("Выберите проект", reply_markup: keyboard)
+      end
+
+      def send_trackers
+        priorities = issue.project.trackers.pluck(:name)
+        keyboard = make_keyboard(priorities)
+        send_message("Выберите приоритет", reply_markup: keyboard)
+      end
+
+      def send_statuses
+        statuses = issue.new_statuses_allowed_to(account.user).map(&:name)
+        keyboard = make_keyboard(statuses)
+        send_message("Выберите статус", reply_markup: keyboard)
+      end
+
+      def send_users
+        users = issue.assignable_users.map(&:login)
+        keyboard = make_keyboard(users)
+        send_message("Выберите пользователя", reply_markup: keyboard)
+      end
+
+      def send_priorities
+        priorities = IssuePriority.active.pluck(:name)
+        keyboard = make_keyboard(priorities)
+        send_message("Выберите трекер", reply_markup: keyboard)
+      end
+
+      def make_keyboard(items)
+        Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
+          keyboard: items.each_slice(2).to_a,
+          one_time_keyboard: true,
+          resize_keyboard: true)
+      end
+
+      def issue
+        @issue ||= Issue.find_by_id(executing_command.data[:issue_id])
       end
 
       def executing_command

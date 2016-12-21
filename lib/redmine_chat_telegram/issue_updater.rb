@@ -12,6 +12,7 @@ module RedmineChatTelegram
     def call(params)
       @params = params
       prepare_params
+      puts @params
 
       issue.init_journal(user)
       issue.safe_attributes = @params
@@ -35,22 +36,23 @@ module RedmineChatTelegram
     end
 
     def find_project
-      project = Project.visible.find_by(identifier: @params["project"])
+      project = Project.visible
+        .where("identifier = :project OR name = :project", project: @params["project"]).first
       @params["project_id"] = project&.id
     end
 
     def find_tracker
-      tracker = Tracker.where('lower(name) = ?', @params["tracker"].downcase).try(:first)
-      @params["traker_id"] = tracker&.id
+      tracker = Tracker.where('lower(name) = ?', @params["tracker"].mb_chars.downcase).try(:first)
+      @params["tracker_id"] = tracker&.id
     end
 
     def find_status
-      status = IssueStatus.where('lower(name) = ?', @params["status"].downcase).try(:first)
+      status = IssueStatus.where('lower(name) = ?', @params["status"].mb_chars.downcase).try(:first)
       @params["status_id"] = status&.id
     end
 
     def find_priority
-      priority = IssuePriority.where('lower(name) = ?', @params["priority"].downcase).try(:first)
+      priority = IssuePriority.where('lower(name) = ?', @params["priority"].mb_chars.downcase).try(:first)
       @params["priority_id"] = priority&.id
     end
 
