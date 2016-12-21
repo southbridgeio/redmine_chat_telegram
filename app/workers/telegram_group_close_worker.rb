@@ -6,6 +6,8 @@ class TelegramGroupCloseWorker
 
     find_user(user_id)
 
+    return if telegram_id.nil?
+
     store_chat_name(telegram_id)
 
     reset_chat_link # Old link will not work after it.
