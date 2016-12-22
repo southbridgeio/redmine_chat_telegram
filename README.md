@@ -116,6 +116,7 @@ task - get link to the issue
 link - get link to the issue
 url - get link to the issue
 log - save message to the issue
+issue - change issues
 ```
 
 ## Troubleshooting
