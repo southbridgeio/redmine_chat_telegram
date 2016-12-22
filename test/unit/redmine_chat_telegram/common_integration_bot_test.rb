@@ -142,6 +142,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
           /yspent - #{I18n.t('redmine_chat_telegram.bot.private.help.yspent')}
           /last - #{I18n.t('redmine_chat_telegram.bot.private.help.last')}
           /chat - #{I18n.t('redmine_chat_telegram.bot.private.help.chat')}
+          /issue - #{I18n.t('redmine_chat_telegram.bot.private.help.issue')}
         TEXT
 
         RedmineChatTelegram::Bot.any_instance.expects(:send_message).with(text.chomp)
