@@ -1,6 +1,9 @@
 module RedmineChatTelegram
   class Bot
     module GroupCommand
+      include IssuesHelper
+      include ActionView::Helpers::TagHelper
+      include ERB::Util
       private
 
       def group_common_commands
@@ -60,6 +63,9 @@ module RedmineChatTelegram
 
         elsif command.text =~ /\/log/
           log_message
+
+        elsif command.text =~ %r{/subject|/start_date|/due_date|/estimated_hours|/done_ratio|/project|/tracker|/status|/priority|/assigned_to}
+          change_issue
 
         elsif command.text.present?
           save_message
@@ -148,6 +154,23 @@ module RedmineChatTelegram
         message.save!
       end
 
+      def change_issue
+        return unless can_edit_issue?
+        params = command.text.match(/\/(\w+) (.+)/)
+        attr = params[1]
+        value = params[2]
+        journal = IssueUpdater.new(@issue, redmine_user).call(attr => value)
+        if journal.present? && journal.details.any?
+          message = details_to_strings(journal.details).join("\n")
+          bot.send_message(chat_id: command.chat.id, text: message, parse_mode: 'HTML')
+        else
+          bot.send_message(
+            chat_id: command.chat.id,
+            text: I18n.t('redmine_chat_telegram.bot.error_editing_issue'),
+            disable_web_page_preview: true)
+        end
+      end
+
       def save_message
         message.message = command.text
         message.bot_message = false
@@ -163,6 +186,10 @@ module RedmineChatTelegram
         @redmine_user ||= TelegramCommon::Account.find_by!(telegram_id: command.from.id).try(:user)
       rescue ActiveRecord::RecordNotFound
         nil
+      end
+
+      def can_edit_issue?
+        can_access_issue? && redmine_user.allowed_to?(:edit_issues, issue.project)
       end
 
       def can_access_issue?

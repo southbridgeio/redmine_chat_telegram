@@ -8,16 +8,15 @@ class RedmineChatTelegram::ExecutingCommand < ActiveRecord::Base
   before_create -> (model) { model.step_number = 1 }
 
   def continue(command)
-    return unless name == 'new'
-    RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
+    RedmineChatTelegram::Commands::BotCommand.new(command).send("execute_command_#{name}")
   end
 
   def cancel(command)
-    return unless name == 'new'
     destroy
-    bot.send_message(
+    TelegramCommon::Bot::MessageSender.call(
+      bot_token: RedmineChatTelegram.bot_token,
       chat_id: command.chat.id,
-      text: 'Команда создания задачи отменена.',
+      message: I18n.t('redmine_chat_telegram.bot.command_canceled'),
       reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
   end
 end

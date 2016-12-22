@@ -14,20 +14,6 @@ module RedmineChatTelegram
         end
       end
 
-      private
-
-      def executing_command
-        @executing_command ||= RedmineChatTelegram::ExecutingCommand
-                             .joins(:account)
-                             .find_by(telegram_common_accounts: { telegram_id: command.from.id })
-      end
-
-      def execute_command
-        send("execute_command_#{command_name}")
-      rescue NameError
-        # do nothing
-      end
-
       def execute_command_new
         RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
       end
@@ -63,6 +49,24 @@ module RedmineChatTelegram
 
       def execute_command_chat
         RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
+      end
+
+      def execute_command_issue
+        RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+      end
+
+      private
+
+      def executing_command
+        @executing_command ||= RedmineChatTelegram::ExecutingCommand
+                             .joins(:account)
+                             .find_by(telegram_common_accounts: { telegram_id: command.from.id })
+      end
+
+      def execute_command
+        send("execute_command_#{command_name}")
+      rescue NameError
+        # do nothing
       end
     end
   end
