@@ -16,7 +16,7 @@ class RedmineChatTelegram::ExecutingCommand < ActiveRecord::Base
     TelegramCommon::Bot::MessageSender.call(
       bot_token: RedmineChatTelegram.bot_token,
       chat_id: command.chat.id,
-      message: 'Команда отменена.',
+      message: I18n.t('redmine_chat_telegram.bot.command_canceled'),
       reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
   end
 end

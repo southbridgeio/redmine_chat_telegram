@@ -29,7 +29,7 @@ module RedmineChatTelegram
       end
 
       def execute_step_1
-        send_message("Введите id задачи.")
+        send_message(locale('input_id'))
         executing_command.update(step_number: 2)
       end
 
@@ -41,9 +41,9 @@ module RedmineChatTelegram
             keyboard: EDITABLES.each_slice(2).to_a,
             one_time_keyboard: true,
             resize_keyboard: true)
-          send_message("Выберите какой параметр изменить.", reply_markup: keyboard)
+          send_message(locale('select_param'), reply_markup: keyboard)
         else
-          send_message("Задача с введенным id не найдена.")
+          send_message(locale('not_found'))
         end
       end
 
@@ -64,7 +64,7 @@ module RedmineChatTelegram
         when 'assigned_to'
           send_users
         else
-          send_message("Введите значение.")
+          send_message(locale('input_value'))
         end
       end
 
@@ -84,31 +84,31 @@ module RedmineChatTelegram
       def send_projects
         projects = issue.allowed_target_projects.pluck(:name)
         keyboard = make_keyboard(projects)
-        send_message("Выберите проект", reply_markup: keyboard)
+        send_message(locale('select_project'), reply_markup: keyboard)
       end
 
       def send_trackers
         priorities = issue.project.trackers.pluck(:name)
         keyboard = make_keyboard(priorities)
-        send_message("Выберите приоритет", reply_markup: keyboard)
+        send_message(locale('select_tracker'), reply_markup: keyboard)
       end
 
       def send_statuses
         statuses = issue.new_statuses_allowed_to(account.user).map(&:name)
         keyboard = make_keyboard(statuses)
-        send_message("Выберите статус", reply_markup: keyboard)
+        send_message(locale('select_status'), reply_markup: keyboard)
       end
 
       def send_users
         users = issue.assignable_users.map(&:login)
         keyboard = make_keyboard(users)
-        send_message("Выберите пользователя", reply_markup: keyboard)
+        send_message(locale('select_user'), reply_markup: keyboard)
       end
 
       def send_priorities
         priorities = IssuePriority.active.pluck(:name)
         keyboard = make_keyboard(priorities)
-        send_message("Выберите трекер", reply_markup: keyboard)
+        send_message(locale('select_priority'), reply_markup: keyboard)
       end
 
       def make_keyboard(items)
@@ -120,6 +120,10 @@ module RedmineChatTelegram
 
       def issue
         @issue ||= Issue.find_by_id(executing_command.data[:issue_id])
+      end
+
+      def locale(key)
+        I18n.t("redmine_chat_telegram.bot.edit_issue.#{key}")
       end
 
       def executing_command

@@ -52,6 +52,16 @@ en:
         create_chat_question: Create a chat?
         yes_answer: "Yes"
         no_answer: "No"
+      edit_issue:
+        input_id: Input issue ID.
+        select_param: Select parameter to change. 
+        not_found: Issue with ID not found.
+        input_value: Input value.
+        select_project: Select project.
+        select_tracker: Select tracker.
+        select_status: Select status.
+        select_user: Select user.
+        select_priority: Select priority
       creating_chat: Creating chat. Please wait.
       access_denied: Access denied.
       module_disabled: Telegam chat plugin for current project is disabled.
@@ -111,3 +121,4 @@ en:
       close_chat: Close chat
       create_chat: Create telegram chat
       archive: Archive
+    command_canceled: Command was canceled.

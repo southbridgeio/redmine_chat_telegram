@@ -12,7 +12,6 @@ module RedmineChatTelegram
     def call(params)
       @params = params
       prepare_params
-      puts @params
 
       issue.init_journal(user)
       issue.safe_attributes = @params

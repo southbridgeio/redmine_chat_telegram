@@ -53,6 +53,16 @@ ru:
         create_chat_question: Создать чат?
         yes_answer: Да
         no_answer: Нет
+      edit_issue:
+        input_id: Введите ID задачи.
+        select_param: Выберите, какой параметр изменить.
+        not_found: Задача с введенным ID не найдена.
+        input_value: Введите значение.
+        select_project: Выберите проект.
+        select_tracker: Выберите трекер.
+        select_status: Выберите статус.
+        select_user: Выберите пользователя.
+        select_priority: Выберите приоритет.
       creating_chat: Создаю чат. Пожалуйста, подождите.
       access_denied: У вас нет доступа для выполнения этой команды.
       module_disabled: Плагин не включен для текущего проекта.
@@ -112,4 +122,4 @@ ru:
       close_chat: Закрыть чат
       create_chat: Создать чат Telegram
       archive: Архив
-
+    command_canceled: Команда отменена.
