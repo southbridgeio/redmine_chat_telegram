@@ -1,3 +1,7 @@
+#### [1.5.1]
+
+* Add command /issue.
+
 #### [1.5.0]
 
 Deeper integration with `redmine_telegram_common`. Big refactoring and code cleanup.

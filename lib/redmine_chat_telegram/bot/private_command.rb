@@ -8,7 +8,7 @@ module RedmineChatTelegram
       end
 
       def private_plugin_commands
-        %w(connect new hot me deadline spent yspent last chat help)
+        %w(connect new hot me deadline spent yspent last chat issue help)
       end
 
       def private_ext_commands
@@ -23,7 +23,10 @@ module RedmineChatTelegram
       end
 
       def handle_private_command
-        if private_commands.include?(command_name)
+        executing_command = RedmineChatTelegram::ExecutingCommand
+                            .joins(:account)
+                            .find_by(telegram_common_accounts: { telegram_id: command.from.id })
+        if private_commands.include?(command_name) || executing_command.present?
           if private_common_command?
             execute_private_command
           else
