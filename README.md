@@ -101,22 +101,22 @@ Open the ticket. You'll see the new link `Create Telegram chat` on the right sid
 Use command `/setcommands` with [@BotFather](https://telegram.me/botfather). Send this list for setup hints:
 
 ```
-start - start work with bot
-connect - connect account to Redmine
-new - create new issue
-hot - assigned to you issues updated today
-me - assigned to you issues
-deadline - assigned to you issues with expired deadline
-spent - number of hours set today
-yspent - number of hours set yesterday
-last - last 5 issues with comments
-help - help
-chat - manage issues chats.
-task - get link to the issue
-link - get link to the issue
-url - get link to the issue
-log - save message to the issue
-issue - change issues
+start - Start work with bot.
+connect - Connect account to Redmine.
+new - Create new issue.
+hot - Assigned to you issues updated today.
+me - Assigned to you issues.
+deadline - Assigned to you issues with expired deadline.
+spent - Number of hours set today.
+yspent - Number of hours set yesterday.
+last - Last 5 issues with comments.
+help - Help.
+chat - Manage issues chats.
+task - Get link to the issue.
+link - Get link to the issue.
+url - Get link to the issue.
+log - Save message to the issue.
+issue - Change issues.
 ```
 
 ## Troubleshooting
