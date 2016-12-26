@@ -29,12 +29,18 @@ module RedmineChatTelegram
       end
 
       def execute_step_1
-        send_message(locale('input_id'))
-        executing_command.update(step_number: 2)
+        issue_id = command.text.match(/\/issue #?(\d+)/).try(:[], 1)
+        if issue_id.present?
+          execute_step_2
+        else
+          send_message(locale('input_id'))
+          executing_command.update(step_number: 2)
+        end
       end
 
       def execute_step_2
-        issue = Issue.find_by_id(command.text)
+        issue_id = command.text.gsub('/issue', '').match(/#?(\d+)/).try(:[], 1)
+        issue = Issue.find_by_id(issue_id)
         if issue.present?
           executing_command.update(step_number: 3, data: { issue_id: issue.id })
           keyboard = Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
