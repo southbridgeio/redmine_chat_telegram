@@ -57,7 +57,7 @@ ru:
       edit_issue:
         input_id: Введите ID задачи.
         select_param: Выберите, какой параметр изменить.
-        not_found: Задача с введенным ID не найдена.
+        incorrect_value: Введено неверное значение. Команда завершена.
         input_value: Введите значение.
         select_project: Выберите проект.
         select_tracker: Выберите трекер.

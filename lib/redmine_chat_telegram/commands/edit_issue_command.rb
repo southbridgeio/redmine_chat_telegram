@@ -43,11 +43,12 @@ module RedmineChatTelegram
             resize_keyboard: true)
           send_message(locale('select_param'), reply_markup: keyboard)
         else
-          send_message(locale('not_found'))
+          finish_with_error
         end
       end
 
       def execute_step_3
+        return finish_with_error unless EDITABLES.include? command.text
         executing_command.update(
           step_number: 4,
           data: executing_command.data.merge({ attribute_name: command.text }))
@@ -124,6 +125,13 @@ module RedmineChatTelegram
 
       def locale(key)
         I18n.t("redmine_chat_telegram.bot.edit_issue.#{key}")
+      end
+
+      def finish_with_error
+        executing_command.destroy
+        send_message(
+          locale('incorrect_value'),
+          reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
       end
 
       def executing_command
