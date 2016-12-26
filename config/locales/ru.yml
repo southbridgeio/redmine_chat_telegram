@@ -6,6 +6,7 @@ ru:
   permission_view_telegram_chat_archive: Просмотр архива чата
   redmine_chat_telegram:
     bot:
+      command_canceled: Команда отменена.
       private:
         help:
           start: Начало работы с ботом.
@@ -55,6 +56,7 @@ ru:
         yes_answer: Да
         no_answer: Нет
       edit_issue:
+        cancel_hint: "Для отмены команды используйте /cancel."
         input_id: Введите ID задачи.
         select_param: Выберите, какой параметр изменить.
         incorrect_value: Введено неверное значение. Команда завершена.
@@ -123,4 +125,3 @@ ru:
       close_chat: Закрыть чат
       create_chat: Создать чат Telegram
       archive: Архив
-    command_canceled: Команда отменена.

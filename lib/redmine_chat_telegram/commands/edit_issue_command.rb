@@ -33,7 +33,7 @@ module RedmineChatTelegram
         if issue_id.present?
           execute_step_2
         else
-          send_message(locale('input_id'))
+          send_message(locale('input_id', true))
           executing_command.update(step_number: 2)
         end
       end
@@ -42,12 +42,12 @@ module RedmineChatTelegram
         issue_id = command.text.gsub('/issue', '').match(/#?(\d+)/).try(:[], 1)
         issue = Issue.find_by_id(issue_id)
         if issue.present?
+          if executing_command.step_number == 1
+            send_message(locale('select_param', true), reply_markup: make_keyboard(EDITABLES))
+          else
+            send_message(locale('select_param'), reply_markup: make_keyboard(EDITABLES))
+          end
           executing_command.update(step_number: 3, data: { issue_id: issue.id })
-          keyboard = Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
-            keyboard: EDITABLES.each_slice(2).to_a,
-            one_time_keyboard: true,
-            resize_keyboard: true)
-          send_message(locale('select_param'), reply_markup: keyboard)
         else
           finish_with_error
         end
@@ -119,8 +119,9 @@ module RedmineChatTelegram
       end
 
       def make_keyboard(items)
+        items_with_cancel = items + ['/cancel']
         Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
-          keyboard: items.each_slice(2).to_a,
+          keyboard: items_with_cancel.each_slice(2).to_a,
           one_time_keyboard: true,
           resize_keyboard: true)
       end
@@ -129,8 +130,13 @@ module RedmineChatTelegram
         @issue ||= Issue.find_by_id(executing_command.data[:issue_id])
       end
 
-      def locale(key)
-        I18n.t("redmine_chat_telegram.bot.edit_issue.#{key}")
+      def locale(key, show_cancel = false)
+        message = I18n.t("redmine_chat_telegram.bot.edit_issue.#{key}")
+        if show_cancel
+          [message, I18n.t("redmine_chat_telegram.bot.edit_issue.cancel_hint")].join ' '
+        else
+          message
+        end
       end
 
       def finish_with_error

@@ -6,6 +6,7 @@ en:
   permission_view_telegram_chat_archive: View Chat Archive
   redmine_chat_telegram:
     bot:
+      command_canceled: Command was canceled.
       private:
         help:
           start: Start work with bot.
@@ -54,6 +55,7 @@ en:
         yes_answer: "Yes"
         no_answer: "No"
       edit_issue:
+        cancel_hint: "To cancel command use /cancel."
         input_id: Input issue ID.
         select_param: Select parameter to change. 
         not_found: Issue with ID not found.
@@ -122,4 +124,3 @@ en:
       close_chat: Close chat
       create_chat: Create telegram chat
       archive: Archive
-    command_canceled: Command was canceled.
