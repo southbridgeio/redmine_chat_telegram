@@ -157,6 +157,7 @@ module RedmineChatTelegram
       def change_issue
         return unless can_edit_issue?
         params = command.text.match(/\/(\w+) (.+)/)
+        return send_error unless params.present?
         attr = params[1]
         value = params[2]
         journal = IssueUpdater.new(@issue, redmine_user).call(attr => value)
@@ -164,11 +165,12 @@ module RedmineChatTelegram
           message = details_to_strings(journal.details).join("\n")
           bot.send_message(chat_id: command.chat.id, text: message, parse_mode: 'HTML')
         else
-          bot.send_message(
-            chat_id: command.chat.id,
-            text: I18n.t('redmine_chat_telegram.bot.error_editing_issue'),
-            disable_web_page_preview: true)
+          send_error
         end
+      end
+
+      def send_error
+        send_message(I18n.t('redmine_chat_telegram.bot.error_editing_issue'))
       end
 
       def save_message
