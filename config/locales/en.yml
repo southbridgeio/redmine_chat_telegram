@@ -15,6 +15,7 @@ en:
           hot: Assigned to you issues updated today.
           me:  Assigned to you issues.
           deadline: Assigned to you issues with expired deadline.
+          dl: Alias for /deadline.
           spent: Number of hours set today.
           yspent: Number of hours set yesterday.
           last: Last 5 issues with comments.
@@ -24,8 +25,8 @@ en:
       group:
         help:
           task: Get link to the issue.
-          link: Get link to the issue.
-          url: Get link to the issue.
+          link: Alias for /task.
+          url: Alias for /task.
           log: save message to the issue
           help: help
 
