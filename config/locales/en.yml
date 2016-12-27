@@ -56,6 +56,7 @@ en:
         yes_answer: "Yes"
         no_answer: "No"
       edit_issue:
+        incorrect_value: Value is incorrect. Command was finished.
         cancel_hint: "To cancel command use /cancel."
         input_id: Input issue ID.
         select_param: Select parameter to change. 
