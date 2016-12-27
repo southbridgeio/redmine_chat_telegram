@@ -55,6 +55,8 @@ module RedmineChatTelegram
         RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
       end
 
+      alias execute_command_task execute_command_issue
+
       private
 
       def executing_command

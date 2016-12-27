@@ -21,7 +21,8 @@ en:
           last: Last 5 issues with comments.
           help: Help.
           chat: Manage issues chats.
-          issue: Edit issues.
+          task: Edit issues.
+          issue: Alias for /task.
       group:
         help:
           task: Get link to the issue.
@@ -45,7 +46,7 @@ en:
       new_issue:
         choice_project: "Select project."
         choice_user: "Select user to assing new issue"
-        user_not_found: "There is no users for selected project."
+        user_not_found: "There is no users for selected project. Command is canceled."
         without_user: "Without user"
         input_subject: "Input issue subject."
         input_text: "Input issue text."

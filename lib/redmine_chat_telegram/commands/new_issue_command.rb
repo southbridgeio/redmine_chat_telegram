@@ -34,7 +34,10 @@ module RedmineChatTelegram
           send_message(I18n.t('redmine_chat_telegram.bot.new_issue.choice_user'),
                        reply_markup: assignable_list_markup(assignables))
         else
-          send_message(I18n.t('redmine_chat_telegram.bot.new_issue.user_not_found'))
+          executing_command.destroy
+          send_message(
+            I18n.t('redmine_chat_telegram.bot.new_issue.user_not_found'),
+            reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
         end
       end
 

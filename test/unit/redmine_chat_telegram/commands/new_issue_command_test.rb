@@ -79,9 +79,10 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
 
         it 'sends message that users are not found it there is no project members' do
           text = I18n.t('redmine_chat_telegram.bot.new_issue.user_not_found')
+          Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new).returns(nil)
           RedmineChatTelegram::Commands::BaseBotCommand.any_instance
             .expects(:send_message)
-            .with(text)
+            .with(text, reply_markup: nil)
 
           RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
         end
