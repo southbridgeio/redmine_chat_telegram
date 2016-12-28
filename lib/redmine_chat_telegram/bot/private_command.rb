@@ -8,7 +8,7 @@ module RedmineChatTelegram
       end
 
       def private_plugin_commands
-        %w(new hot me deadline dl spent yspent last chat issue help)
+        %w(new hot me deadline dl spent yspent last chat task issue help)
       end
 
       def private_ext_commands
