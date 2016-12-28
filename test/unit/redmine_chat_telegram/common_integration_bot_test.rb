@@ -132,12 +132,13 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
         RedmineChatTelegram::Bot.any_instance.stubs(:private_ext_commands).returns([])
         text = <<~TEXT
           /start - #{I18n.t('redmine_chat_telegram.bot.private.help.start')}
-          /help - #{I18n.t('redmine_chat_telegram.bot.private.help.help')}
           /connect - #{I18n.t('redmine_chat_telegram.bot.private.help.connect')}
+          /help - #{I18n.t('redmine_chat_telegram.bot.private.help.help')}
           /new - #{I18n.t('redmine_chat_telegram.bot.private.help.new')}
           /hot - #{I18n.t('redmine_chat_telegram.bot.private.help.hot')}
           /me - #{I18n.t('redmine_chat_telegram.bot.private.help.me')}
           /deadline - #{I18n.t('redmine_chat_telegram.bot.private.help.deadline')}
+          /dl - #{I18n.t('redmine_chat_telegram.bot.private.help.dl')}
           /spent - #{I18n.t('redmine_chat_telegram.bot.private.help.spent')}
           /yspent - #{I18n.t('redmine_chat_telegram.bot.private.help.yspent')}
           /last - #{I18n.t('redmine_chat_telegram.bot.private.help.last')}
