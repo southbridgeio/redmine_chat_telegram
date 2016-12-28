@@ -1,3 +1,7 @@
+#### [1.5.5]
+
+* Split project in /new command
+
 #### [1.5.1]
 
 * Add command /issue.
