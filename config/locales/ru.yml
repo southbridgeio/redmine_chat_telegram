@@ -45,7 +45,8 @@ ru:
         already_connected: Ваши аккаунты уже связаны.
         wait_for_email: Мы отправили подтверждение на адрес "%{email}". Пожалуйста, следуйте инструкциям из письма.
       new_issue:
-        choice_project: "Выберите проект."
+        choice_project_with_page: "Выберите или введите название проекта. Страница %{page}."
+        choice_project_without_page: "Выберите или введите название проекта. Показаны все проекты."
         choice_user: "Выберите кому назначить задачу."
         user_not_found: "Не найдено пользователей для выбранного проекта. Команда отменена."
         without_user: "Без пользователя"
@@ -57,6 +58,7 @@ ru:
         create_chat_question: Создать чат?
         yes_answer: Да
         no_answer: Нет
+        next_page: Следующая страница » 
       edit_issue:
         cancel_hint: "Для отмены команды используйте /cancel."
         input_id: Введите ID задачи.

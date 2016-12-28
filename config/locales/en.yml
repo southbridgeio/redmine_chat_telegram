@@ -44,7 +44,8 @@ en:
         already_connected: Your accounts already connected
         wait_for_email: We sent email to address "%{email}". Please follow instructions from it.
       new_issue:
-        choice_project: "Select project."
+        choice_project_with_page: "Choice or input project name. Page %{page}."
+        choice_project_without_page: "Choice or input project name. All projects are shown."
         choice_user: "Select user to assing new issue"
         user_not_found: "There is no users for selected project. Command is canceled."
         without_user: "Without user"
@@ -56,6 +57,7 @@ en:
         create_chat_question: Create a chat?
         yes_answer: "Yes"
         no_answer: "No"
+        next_page: Next page » 
       edit_issue:
         incorrect_value: Value is incorrect. Command was finished.
         cancel_hint: "To cancel command use /cancel."

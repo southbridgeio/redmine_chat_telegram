@@ -1,6 +1,8 @@
 module RedmineChatTelegram
   module Commands
     class NewIssueCommand < BaseBotCommand
+      PROJECTS_PER_PAGE = 10
+
       def execute
         return unless account.present?
         execute_step
@@ -13,24 +15,20 @@ module RedmineChatTelegram
       end
 
       def execute_step_1
-        projects = Project.where(Project.visible_condition(account.user)).sorted
-        if projects.count > 0
-          executing_command.update(step_number: 2)
-          send_message(I18n.t('redmine_chat_telegram.bot.new_issue.choice_project'),
-                       reply_markup: projects_list_markup(projects))
-        else
-          send_message(I18n.t('redmine_chat_telegram.bot.new_issue.projects_not_found'))
-        end
+        executing_command.update(step_number: 2)
+        send_projects
       end
 
       def execute_step_2
+        return send_projects if next_page?
         project_name = command.text
         assignables = Project
                         .where(Project.visible_condition(account.user))
                         .find_by(name: project_name)
                         .try(:assignable_users)
         if assignables.present? && assignables.count > 0
-          executing_command.update(step_number: 3, data: { project_name: project_name })
+          executing_command.update(step_number: 3,
+                                   data: executing_command.data.merge(project_name: project_name))
           send_message(I18n.t('redmine_chat_telegram.bot.new_issue.choice_user'),
                        reply_markup: assignable_list_markup(assignables))
         else
@@ -81,6 +79,10 @@ module RedmineChatTelegram
         create_chat if command.text == I18n.t('redmine_chat_telegram.bot.new_issue.yes_answer')
       end
 
+      def next_page?
+        command.text == I18n.t('redmine_chat_telegram.bot.new_issue.next_page')
+      end
+
       def create_chat
         issue_id = executing_command.data[:issue_id]
         issue = Issue.find(issue_id)
@@ -119,8 +121,35 @@ module RedmineChatTelegram
         issue
       end
 
-      def projects_list_markup(projects)
+      def send_projects
+        projects = Project.where(Project.visible_condition(account.user))
+        if projects.count > 0
+          current_page = executing_command.data[:current_page]
+          next_page = current_page + 1
+          if projects.count <= PROJECTS_PER_PAGE
+            message = I18n.t('redmine_chat_telegram.bot.new_issue.choice_project_without_page')
+          else
+            message = I18n.t('redmine_chat_telegram.bot.new_issue.choice_project_with_page',
+                             page: current_page)
+          end
+          send_message(message, reply_markup: projects_list_markup(projects))
+          executing_command.update(data: executing_command.data.merge(current_page: next_page))
+        else
+          send_message(I18n.t('redmine_chat_telegram.bot.new_issue.projects_not_found'))
+        end
+      end
+
+      def projects_list_markup(all_projects)
+        current_page = executing_command.data[:current_page]
+        limit = PROJECTS_PER_PAGE
+        offset = (current_page - 1) * limit
+        projects = all_projects.sorted.limit(limit).offset(offset)
         project_names = projects.pluck(:name)
+
+        if all_projects.count > limit && (offset + limit) < all_projects.count
+          project_names << I18n.t('redmine_chat_telegram.bot.new_issue.next_page')
+        end
+
         Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
           keyboard: project_names.each_slice(2).to_a,
           one_time_keyboard: true,
@@ -151,8 +180,10 @@ module RedmineChatTelegram
                                    telegram_common_accounts:
                                      { telegram_id: command.from.id })
       rescue ActiveRecord::RecordNotFound
-        @executing_command ||= RedmineChatTelegram::ExecutingCommand.create(name: 'new',
-                                                                            account: account)
+        @executing_command ||= RedmineChatTelegram::ExecutingCommand.create(
+          name: 'new',
+          data: {current_page: 1},
+          account: account)
       end
 
       def save_assignable
