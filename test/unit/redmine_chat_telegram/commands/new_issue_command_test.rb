@@ -41,7 +41,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
             .with(keyboard: project_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
 
-          text = I18n.t('redmine_chat_telegram.bot.new_issue.choice_project')
+          text = I18n.t('redmine_chat_telegram.bot.new_issue.choice_project_without_page')
           RedmineChatTelegram::Commands::BaseBotCommand.any_instance
             .expects(:send_message)
             .with(text, reply_markup: nil)
@@ -52,7 +52,9 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
 
       describe 'step 2' do
         before do
-          RedmineChatTelegram::ExecutingCommand.create(account: @account, name: 'new')
+          RedmineChatTelegram::ExecutingCommand.create(account: @account,
+                                                       name: 'new',
+                                                       data: {current_page: 1})
             .update(step_number: 2)
         end
 
