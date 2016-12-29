@@ -1,5 +1,10 @@
 #### [1.5.5]
 
+* Change help for group commands
+* Add `commmand_not_found` error message
+
+#### [1.5.5]
+
 * Split project in /new command
 
 #### [1.5.1]
