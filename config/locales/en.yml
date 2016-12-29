@@ -7,6 +7,7 @@ en:
   redmine_chat_telegram:
     bot:
       command_canceled: Command was canceled.
+      command_not_found: Command not found.
       private:
         help:
           start: Start work with bot.
@@ -29,6 +30,16 @@ en:
           link: Alias for /task.
           url: Alias for /task.
           log: save message to the issue
+          subject: Change issue subject.
+          start_date: Change issue start date.
+          due_date: Change issue due date.
+          estimated_hours: Change estimated hours for issue.
+          done_ratio: Change done ratio for issue.
+          project: Change issue project.
+          tracker: Change issue tracker.
+          status: Change issue status.
+          priority: Change issue priority.
+          assigned_to: Assign issue to another user.
           help: help
 
       error_editing_issue: Failed to edit the issue. Perhaps you entered the wrong data or you do not have the access.

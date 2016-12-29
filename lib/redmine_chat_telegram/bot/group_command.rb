@@ -11,7 +11,7 @@ module RedmineChatTelegram
       end
 
       def group_plugin_commands
-        %w(task link url log)
+        %w(task link url log subject start_date due_date estimated_hours done_ratio project tracker status priority assigned_to)
       end
 
       def group_ext_commands
@@ -28,8 +28,12 @@ module RedmineChatTelegram
       attr_reader :message
 
       def handle_group_command
-        if private_commands.include?(command_name) && !group_commands.include?(command_name)
-          send_message(I18n.t('telegram_common.bot.group.private_command'))
+        if !group_commands.include?(command_name)
+          if private_commands.include?(command_name)
+            send_message(I18n.t('telegram_common.bot.group.private_command'))
+          else
+            send_message(I18n.t('redmine_chat_telegram.bot.command_not_found'))
+          end
         else
           if group_common_command?
             execute_group_command
@@ -163,7 +167,7 @@ module RedmineChatTelegram
         journal = IssueUpdater.new(@issue, redmine_user).call(attr => value)
         if journal.present? && journal.details.any?
           message = details_to_strings(journal.details).join("\n")
-          bot.send_message(chat_id: command.chat.id, text: message, parse_mode: 'HTML')
+          send_message(message)
         else
           send_error
         end
