@@ -1,3 +1,7 @@
+#### [1.5.6]
+
+* Fix group chat commands
+
 #### [1.5.5]
 
 * Change help for group commands
