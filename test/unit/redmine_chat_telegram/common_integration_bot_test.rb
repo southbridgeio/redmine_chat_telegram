@@ -174,6 +174,16 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
           /link - #{I18n.t('redmine_chat_telegram.bot.group.help.link')}
           /url - #{I18n.t('redmine_chat_telegram.bot.group.help.url')}
           /log - #{I18n.t('redmine_chat_telegram.bot.group.help.log')}
+          /subject - #{I18n.t('redmine_chat_telegram.bot.group.help.subject')}
+          /start_date - #{I18n.t('redmine_chat_telegram.bot.group.help.start_date')}
+          /due_date - #{I18n.t('redmine_chat_telegram.bot.group.help.due_date')}
+          /estimated_hours - #{I18n.t('redmine_chat_telegram.bot.group.help.estimated_hours')}
+          /done_ratio - #{I18n.t('redmine_chat_telegram.bot.group.help.done_ratio')}
+          /project - #{I18n.t('redmine_chat_telegram.bot.group.help.project')}
+          /tracker - #{I18n.t('redmine_chat_telegram.bot.group.help.tracker')}
+          /status - #{I18n.t('redmine_chat_telegram.bot.group.help.status')}
+          /priority - #{I18n.t('redmine_chat_telegram.bot.group.help.priority')}
+          /assigned_to - #{I18n.t('redmine_chat_telegram.bot.group.help.assigned_to')}
         TEXT
 
         RedmineChatTelegram::Bot.any_instance.expects(:send_message).with(text.chomp)
