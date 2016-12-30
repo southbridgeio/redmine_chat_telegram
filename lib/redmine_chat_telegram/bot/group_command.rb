@@ -11,7 +11,7 @@ module RedmineChatTelegram
       end
 
       def group_plugin_commands
-        %w(task link url log subject start_date due_date estimated_hours done_ratio project tracker status priority assigned_to)
+        %w(task link url log subject start_date due_date estimated_hours done_ratio project tracker status priority assigned_to subject_chat)
       end
 
       def group_ext_commands
@@ -164,6 +164,7 @@ module RedmineChatTelegram
         return send_error unless params.present?
         attr = params[1]
         value = params[2]
+        return change_issue_chat_name(value) if attr == 'subject_chat'
         journal = IssueUpdater.new(@issue, redmine_user).call(attr => value)
         if journal.present? && journal.details.any?
           message = details_to_strings(journal.details).join("\n")
@@ -171,6 +172,12 @@ module RedmineChatTelegram
         else
           send_error
         end
+      end
+
+      def change_issue_chat_name(name)
+        chat_name = "chat##{issue.telegram_group.telegram_id.abs}"
+        cmd = "rename_chat #{chat_name} #{name}"
+        RedmineChatTelegram.socket_cli_command(cmd, logger)
       end
 
       def send_error

@@ -15,7 +15,8 @@ module RedmineChatTelegram
         'start_date',
         'due_date',
         'estimated_hours',
-        'done_ratio']
+        'done_ratio',
+        'subject_chat']
 
       def execute
         return unless account.present?
@@ -79,6 +80,7 @@ module RedmineChatTelegram
         user = account.user
         attr = executing_command.data[:attribute_name]
         value = command.text
+        return change_issue_chat_name(value) if attr == 'subject_chat'
         journal = IssueUpdater.new(issue, user).call(attr => value)
         executing_command.destroy
         if journal.present? && journal.details.any?
@@ -116,6 +118,22 @@ module RedmineChatTelegram
         priorities = IssuePriority.active.pluck(:name)
         keyboard = make_keyboard(priorities)
         send_message(locale('select_priority'), reply_markup: keyboard)
+      end
+
+      def change_issue_chat_name(name)
+        if issue.telegram_group.present?
+          if account.user.allowed_to?(:edit_issues, issue.project)
+            chat_name = "chat##{issue.telegram_group.telegram_id.abs}"
+            cmd = "rename_chat #{chat_name} #{name}"
+            RedmineChatTelegram.socket_cli_command(cmd, logger)
+            executing_command.destroy
+            send_message(locale('chat_name_changed'))
+          else
+            send_message(I18n.t('redmine_chat_telegram.bot.access_denied'))
+          end
+        else
+          send_message(locale('chat_for_issue_not_exist'))
+        end
       end
 
       def make_keyboard(items)

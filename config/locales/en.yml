@@ -40,6 +40,7 @@ en:
           status: Change issue status.
           priority: Change issue priority.
           assigned_to: Assign issue to another user.
+          subject_chat: Change issue chat name.
           help: help
 
       error_editing_issue: Failed to edit the issue. Perhaps you entered the wrong data or you do not have the access.
@@ -81,6 +82,8 @@ en:
         select_status: Select status.
         select_user: Select user.
         select_priority: Select priority
+        chat_name_changed: Chat name successfully changed.
+        chat_for_issue_not_exist: Issue does not have chat.
       creating_chat: Creating chat. Please wait.
       access_denied: Access denied.
       module_disabled: Telegam chat plugin for current project is disabled.
