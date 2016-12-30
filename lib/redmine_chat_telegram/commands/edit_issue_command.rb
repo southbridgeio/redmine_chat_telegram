@@ -29,7 +29,7 @@ module RedmineChatTelegram
       end
 
       def execute_step_1
-        issue_id = command.text.match(/\/issue #?(\d+)/).try(:[], 1)
+        issue_id = command.text.match(/\/\w+ #?(\d+)/).try(:[], 1)
         if issue_id.present?
           execute_step_2
         else
@@ -39,7 +39,7 @@ module RedmineChatTelegram
       end
 
       def execute_step_2
-        issue_id = command.text.gsub('/issue', '').match(/#?(\d+)/).try(:[], 1)
+        issue_id = command.text.gsub('/issue', '').gsub('/task', '').match(/#?(\d+)/).try(:[], 1)
         issue = Issue.find_by_id(issue_id)
         if issue.present?
           if executing_command.step_number == 1

@@ -31,7 +31,13 @@ module RedmineChatTelegram
       find_status if @params["status"].present?
       find_priority if @params["priority"].present?
       find_assigned_to if @params["assigned_to"].present?
+      format_date if @params["start_date"].present? || @params["due_date"].present?
       @params.compact!
+    end
+
+    def format_date
+      @params["start_date"] = Date.parse(@params["start_date"], "%d.%m.%Y").to_s rescue nil
+      @params["due_date"] = Date.parse(@params["due_date"], "%d.%m.%Y").to_s rescue nil
     end
 
     def find_project
