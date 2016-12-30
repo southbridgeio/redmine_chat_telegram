@@ -1,3 +1,7 @@
+#### [1.5.9]
+
+* Add command to change chat names
+
 #### [1.5.8]
 
 * Fix /issue command
