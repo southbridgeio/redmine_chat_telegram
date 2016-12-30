@@ -1,3 +1,7 @@
+#### [1.5.8]
+
+* Fix /issue command
+
 #### [1.5.6]
 
 * Fix group chat commands
