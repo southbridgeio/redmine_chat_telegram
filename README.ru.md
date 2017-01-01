@@ -25,12 +25,12 @@
 * У Вас должен быть аккаунт пользователя Telegram
 * У Вас должен быть аккаунт для создания ботов в Telegram
 * Плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) должен быть установлен
-* Sidekiq должен обрабатывать очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_intouch/blob/master/tools/sidekiq.yml) - разместите его в папке `redmine/config`
+* Sidekiq должен обрабатывать очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
 * Не забудьте запустить миграции `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
 
 ### Конфигурация в Telegram CLI
 
-**!!! ВНИМАНИЕ !!!** 
+**!!! ВНИМАНИЕ !!!**
 
 Начиная с версии 1.4.5, в плагине используется обращение к Telegram CLI как к службе.
 
@@ -46,8 +46,8 @@
 
 ### Создание бота в Telegram
 
-Необходимо создать нового бота и получить его токен. 
-Для этого в Telegram используется [@BotFather](https://telegram.me/botfather). 
+Необходимо создать нового бота и получить его токен.
+Для этого в Telegram используется [@BotFather](https://telegram.me/botfather).
 Наберите `start` для получения полного списка предоставляемых им команд.
 
 Наберите `/newbot` для регистрации нового бота. @BotFather спросит у Вас имя нового бота. Имя бота должно оканчиваться на "bot".
@@ -68,13 +68,14 @@
 
 ### Запуск бота
 
-Запустите `telegram-cli` используя скрип `init`. Пример можно посмотреть в папке `extras`.
+Запустите `telegram-cli` используя скрип `init-telegram-cli`. Пример можно посмотреть в папке `extras`.
 
 Для запуска бота выполните следующее rake задание:
 
 ```shell
-bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
+RAILS_ENV=production bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 ```
+Или запустите `init-telegram-bot` скрипт из `extras`.
 
 ### Синхронизация архива
 
@@ -97,7 +98,7 @@ bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 
 #### Подсказки для команд бота
 
-Чтобы добавить подсказки команд для бота, используйте команду `/setcommands` в беседе с [@BotFather](https://telegram.me/botfather). Нужно написать боту список команд с 
+Чтобы добавить подсказки команд для бота, используйте команду `/setcommands` в беседе с [@BotFather](https://telegram.me/botfather). Нужно написать боту список команд с
 описанием:
 
 ```

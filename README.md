@@ -25,12 +25,12 @@ Please help us make this plugin better telling us of any [issues](https://github
 * You should have Telegram user account
 * You should have Telegram bot account
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
-* You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_intouch/blob/master/tools/sidekiq.yml) - place it to `redmine/config` directory
+* You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory
 * Don't forget to run migrations `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
 
 ### Telegram CLI configuration
 
-**!!! ATTENTION !!!** 
+**!!! ATTENTION !!!**
 
 Since 1.4.5 version plugin needs Telegram CLI as system daemon.
 
@@ -46,11 +46,11 @@ Start `telegram-cli` on your Redmine server and login to Telegram with it. You'l
 
 ### Create Telegram Bot
 
-It is necessary to register a bot and get its token. 
-There is a [@BotFather](https://telegram.me/botfather) bot used in Telegram for this purpose. 
+It is necessary to register a bot and get its token.
+There is a [@BotFather](https://telegram.me/botfather) bot used in Telegram for this purpose.
 Type `/start` to get a complete list of available commands.
 
-Type `/newbot` command to register a new bot. 
+Type `/newbot` command to register a new bot.
 [@BotFather](https://telegram.me/botfather) will ask you to name the new bot. The bot's name must end with the "bot" word.
 On success @BotFather will give you a token for your new bot and a link so you could quickly add the bot to the contact list.
 You'll have to come up with a new name if registration fails.
@@ -69,13 +69,14 @@ This allows the user to add a Bot to group chats.
 
 ### Bot launch
 
-Run `telegram-cli` using `init` script. See example in folder `extras`.
+Run `telegram-cli` using `init-telegram-cli` script. See example in folder `extras`.
 
 Execute the following rake task to launch the bot:
 
 ```shell
-bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
+RAILS_ENV=production bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 ```
+Or `init-telegram-bot` script from `extras`.
 
 ### Archive synchronization
 

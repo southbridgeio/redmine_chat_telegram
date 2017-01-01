@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# redmine-sidekiq        Starts redmine-sidekiq
+#
+# chkconfig:   - 85 15
+# description: redmine sidekiq daemon
+
+# Source function library.
+. /etc/init.d/functions
+
+set -e
+# Example init script, this can be used with nginx, too,
+# since nginx and unicorn accept the same signals
+
+# Feel free to change any of the following variables for your app:
+TIMEOUT=${TIMEOUT-60}
+USERNAME=redmine
+APP_ROOT=/opt/redmine
+PID_DIR=$APP_ROOT/tmp/pids
+PID=$PID_DIR/sidekiq.pid
+ENV=production
+CMD="RAILS_ENV=$ENV bundle exec sidekiq -d -c 2 -C config/sidekiq.yml"
+action="$1"
+set -u
+
+cd $APP_ROOT || exit 1
+
+sig () {
+        test -s "$PID" && kill -$1 `cat $PID`
+}
+
+case $action in
+start)
+	sig 0 && echo >&2 "Already running" && exit 0
+	su -l $USERNAME -c "cd $APP_ROOT && $CMD"
+	;;
+stop)
+	sig HUP && exit 0
+	echo >&2 "Not running"
+	;;
+restart|reload)
+	sig HUP && echo reloaded OK && exit 0
+	echo >&2 "Couldn't reload, starting '$CMD' instead"
+	su -l $USERNAME -c "cd $APP_ROOT && $CMD"
+	;;
+*)
+	echo >&2 "Usage: $0 <start|stop|restart>"
+	exit 1
+	;;
+esac
