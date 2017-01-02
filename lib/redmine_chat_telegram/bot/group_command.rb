@@ -145,7 +145,7 @@ module RedmineChatTelegram
       def log_message
         return unless can_access_issue?
 
-        message.message = command.text.gsub('/log ', '')
+        message.message = command.text.gsub(/\/log\s|\s\/log$/, '')
         message.bot_message = false
         message.is_system = false
 
