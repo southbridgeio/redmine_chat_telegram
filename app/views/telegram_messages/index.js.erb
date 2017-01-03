@@ -34,8 +34,8 @@ function scrollTo(container, scrollElement) {
 $('#datetimepicker').datetimepicker({
   validateOnBlur: false,
   format: "<%= current_date_format %> H:i",
-  minDate: "<%= format_date @telegram_messages.first.sent_at %>",
-  maxDate: "<%= format_date @telegram_messages.last.sent_at %>",
+  minDate: "<%= format_date @telegram_messages.last.sent_at %>",
+  maxDate: "<%= format_date @telegram_messages.first.sent_at %>",
   formatDate: "<%= current_date_format %>",
   onSelectTime: function (time) {
     var scrollElement = {};
@@ -46,7 +46,7 @@ $('#datetimepicker').datetimepicker({
     $('.telegram-message').each(function () {
       var messageTime = $(this).data('sent-at');
       scrollElement = $(this);
-      if (messageTime > selectedUnixTime) {
+      if (messageTime < selectedUnixTime) {
         return false
       }
     });
