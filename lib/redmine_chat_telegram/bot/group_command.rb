@@ -138,7 +138,10 @@ module RedmineChatTelegram
         return unless can_access_issue?
 
         issue_url = RedmineChatTelegram.issue_url(issue.id)
-        issue_url_text = "#{issue.subject}\n#{issue_url}"
+        issue_url_text = "<a href='#{issue_url}'>##{issue.id}</a> <b>#{issue.subject}</b>"
+        issue_url_text << "\n#{I18n.t('field_assigned_to')}: #{issue.assigned_to}" if issue.assigned_to.present?
+        issue_url_text << "\n#{I18n.t('field_priority')}: #{issue.priority}"
+        issue_url_text << "\n#{I18n.t('field_status')}: #{issue.status}"
         send_message(issue_url_text)
       end
 
