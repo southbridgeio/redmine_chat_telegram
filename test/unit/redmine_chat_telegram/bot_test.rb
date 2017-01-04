@@ -101,7 +101,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
 
         RedmineChatTelegram::Bot.any_instance
           .expects(:send_message)
-          .with("#{issue.subject}\nhttp://site.com/issue/1")
+          .with("<a href='http://site.com/issue/1'>##{issue.id}</a> <b>Cannot print recipes</b>\nPriority: #{issue.priority}\nStatus: #{issue.status}")
 
         RedmineChatTelegram::Bot.new(command).call
       end
