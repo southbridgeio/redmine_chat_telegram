@@ -8,4 +8,5 @@ group :test do
   gem 'spy'
   gem 'database_cleaner'
   gem 'minitest-around'
+  gem 'minitest-reporters'
 end

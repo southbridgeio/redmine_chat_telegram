@@ -70,7 +70,7 @@ module RedmineChatTelegram
 
         elsif command.text =~ %r{/subject|/start_date|/due_date|/estimated_hours|/done_ratio|/project|/tracker|/status|/priority|/assigned_to}
           if com = command.text.match(%r{^/subject$|^/start_date$|^/due_date$|/^estimated_hours$
-              |^/done_ratio$|^/project$|^/tracker$|^/status$|^/priority&|^/assigned_to$})
+              |^/done_ratio$|^/project$|^/tracker$|^/status$|^/assigned_to$|^/priority$})
             send_current_value(com[0][1..-1])
           else
             change_issue
