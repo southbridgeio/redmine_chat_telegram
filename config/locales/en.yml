@@ -42,6 +42,7 @@ en:
           assigned_to: Assign issue to another user.
           subject_chat: Change issue chat name.
           help: help
+          hint: Command without argument sends the current value.
 
       error_editing_issue: Failed to edit the issue. Perhaps you entered the wrong data or you do not have the access.
       hot: Assigned to you issues with recent activity
@@ -69,12 +70,12 @@ en:
         create_chat_question: Create a chat?
         yes_answer: "Yes"
         no_answer: "No"
-        next_page: Next page » 
+        next_page: Next page »
       edit_issue:
         incorrect_value: Value is incorrect. Command was finished.
         cancel_hint: "To cancel command use /cancel."
         input_id: Input issue ID.
-        select_param: Select parameter to change. 
+        select_param: Select parameter to change.
         not_found: Issue with ID not found.
         input_value: Input value.
         select_project: Select project.

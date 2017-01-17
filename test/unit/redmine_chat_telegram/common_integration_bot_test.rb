@@ -185,6 +185,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
           /priority - #{I18n.t('redmine_chat_telegram.bot.group.help.priority')}
           /assigned_to - #{I18n.t('redmine_chat_telegram.bot.group.help.assigned_to')}
           /subject_chat - #{I18n.t('redmine_chat_telegram.bot.group.help.subject_chat')}
+          #{I18n.t('redmine_chat_telegram.bot.group.help.hint')}
         TEXT
 
         RedmineChatTelegram::Bot.any_instance.expects(:send_message).with(text.chomp)
