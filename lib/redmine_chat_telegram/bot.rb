@@ -28,7 +28,7 @@ class RedmineChatTelegram::Bot < TelegramCommon::Bot
   end
 
   def group_help_message
-    help_command_list(group_commands, namespace: 'redmine_chat_telegram', type: 'group')
+    help_command_list(group_commands, namespace: 'redmine_chat_telegram', type: 'group') + "\n#{I18n.t('redmine_chat_telegram.bot.group.help.hint')}"
   end
 
   def bot_token

@@ -69,7 +69,12 @@ module RedmineChatTelegram
           log_message
 
         elsif command.text =~ %r{/subject|/start_date|/due_date|/estimated_hours|/done_ratio|/project|/tracker|/status|/priority|/assigned_to}
-          change_issue
+          if com = command.text.match(%r{^/subject$|^/start_date$|^/due_date$|/^estimated_hours$
+              |^/done_ratio$|^/project$|^/tracker$|^/status$|^/assigned_to$|^/priority$})
+            send_current_value(com[0][1..-1])
+          else
+            change_issue
+          end
 
         elsif command.text.present?
           save_message
@@ -181,6 +186,10 @@ module RedmineChatTelegram
         chat_name = "chat##{issue.telegram_group.telegram_id.abs}"
         cmd = "rename_chat #{chat_name} #{name}"
         RedmineChatTelegram.socket_cli_command(cmd, logger)
+      end
+
+      def send_current_value(command)
+        send_message("#{command.capitalize}: #{issue.send(command).to_s}")
       end
 
       def send_error

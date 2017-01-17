@@ -92,6 +92,19 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
     end
   end
 
+  describe 'send current value for command without argument' do
+    ['project','subject','status','tracker','priority','assigned_to','start_date','done_ratio'].each do |com|
+      it "command /#{com}" do
+        command = Telegrammer::DataTypes::Message.new(command_params.merge(text: "/#{com}"))
+        text = "#{com.capitalize}: #{issue.send(com).to_s}"
+        RedmineChatTelegram::Bot.any_instance
+          .expects(:send_message)
+          .with(text)
+        RedmineChatTelegram::Bot.new(command).call
+      end
+    end
+  end
+
   describe 'send_issue_link' do
     it 'sends issue link with title if user has required rights' do
       User.any_instance.stubs(:allowed_to?).returns(true)
