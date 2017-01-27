@@ -13,16 +13,24 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
   end
 
   let(:user) { User.find(2) }
+  let(:project) { Project.find(1) }
   let(:account) { TelegramCommon::Account.create(telegram_id: 998_899, user_id: user.id) }
+  let(:url_base) { "#{Setting.protocol}://#{Setting.host_name}" }
 
   before do
     account
+    Member.create!(project_id: 1, principal: user, role_ids: [1])
   end
 
   describe 'step 1' do
-    it 'offers to send issue id if it is not present' do
+    before do
+      RedmineChatTelegram::ExecutingCommand.create(account: account, name: 'issue')
+        .update(step_number: 1)
+    end
+
+    it 'offers to send hepl if not arguments' do
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue'))
-      text = 'Input issue ID. To cancel command use /cancel.'
+      text = I18n.t("redmine_chat_telegram.bot.edit_issue.help")
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
         .with(text)
@@ -38,6 +46,40 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
         .with(text, reply_markup: nil)
       RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
     end
+
+    it 'offers to send list of issues assigned to user and updated today' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue hot'))
+      Issue.find(1).update(assigned_to: user)
+      text = <<~HTML
+        <b>"#{I18n.t('redmine_chat_telegram.bot.hot')}":</b>
+        <a href="#{url_base}/issues/1">#1</a>: Cannot print recipes
+      HTML
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+      RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    end
+    #
+    # it 'offers to select editing param if issue id is present' do
+    #   command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue project'))
+    #   text = 'Select parameter to change. To cancel command use /cancel.'
+    #   Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
+    #   RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+    #     .expects(:send_message)
+    #     .with(text, reply_markup: nil)
+    #   RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    # end
+    #
+    # it 'offers to select editing param if issue id is present' do
+    #   command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue eCookbook'))
+    #   text = 'Select parameter to change. To cancel command use /cancel.'
+    #   Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
+    #   RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+    #     .expects(:send_message)
+    #     .with(text, reply_markup: nil)
+    #   RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    # end
+
   end
 
   describe 'step 2' do

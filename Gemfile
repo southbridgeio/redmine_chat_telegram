@@ -3,6 +3,10 @@ gem 'pidfile', git: 'https://github.com/arturtr/pidfile.git'
 gem 'sidekiq-cron'
 gem 'sidekiq-rate-limiter', require: 'sidekiq-rate-limiter/server'
 
+group :development do
+  gem 'byebug'
+end
+
 group :test do
   gem 'timecop'
   gem 'spy'

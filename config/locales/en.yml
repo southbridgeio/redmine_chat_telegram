@@ -75,16 +75,24 @@ en:
         incorrect_value: Value is incorrect. Command was finished.
         cancel_hint: "To cancel command use /cancel."
         input_id: Input issue ID.
+        project_issues: List issues of project
         select_param: Select parameter to change.
         not_found: Issue with ID not found.
         input_value: Input value.
         select_project: Select project.
+        select_issue: Select issue.
         select_tracker: Select tracker.
         select_status: Select status.
         select_user: Select user.
         select_priority: Select priority
         chat_name_changed: Chat name successfully changed.
         chat_for_issue_not_exist: Issue does not have chat.
+        help: |
+          /issue issue_number - edit issue
+          /issue project_id - select issue of project
+          /issue hot - select issue from hot
+          /issue project - select allowed project
+          To print this help, input /issue without parameters.
       creating_chat: Creating chat. Please wait.
       access_denied: Access denied.
       module_disabled: Telegam chat plugin for current project is disabled.
