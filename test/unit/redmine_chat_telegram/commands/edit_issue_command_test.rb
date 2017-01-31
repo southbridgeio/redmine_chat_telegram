@@ -30,7 +30,7 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
 
     it 'offers to send hepl if not arguments' do
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue'))
-      text = I18n.t("redmine_chat_telegram.bot.edit_issue.help")
+      text = I18n.t('redmine_chat_telegram.bot.edit_issue.help')
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
         .with(text)
@@ -72,15 +72,28 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
 
     it 'offers to send list of issues assigned to user and updated today' do
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue hot'))
-      Issue.find(4).update(assigned_to: user)
-      text = <<~HTML
+
+      issue = Issue.find(5)
+      issue.update(assigned_to: user)
+
+      message = <<~HTML
         <b>Assigned to you issues with recent activity:</b>
-        <a href="#{url_base}/issues/4">#4</a>: Issue on project 2
+        <a href="#{url_base}/issues/#{issue.id}">##{issue.id}</a>: #{issue.subject}
       HTML
-      Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
+
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
-        .with(text, reply_markup: nil)
+        .with(message)
+
+      message_2 = [
+        I18n.t('redmine_chat_telegram.bot.edit_issue.input_id'),
+        I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
+      ].join(' ')
+
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(message_2)
+
       RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
     end
   end
@@ -116,36 +129,36 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
   end
 
   describe 'step 3' do
-  before do
-    RedmineChatTelegram::ExecutingCommand.create(account: account, name: 'issue', data: {})
-      .update(step_number: 3)
-  end
+    before do
+      RedmineChatTelegram::ExecutingCommand.create(account: account, name: 'issue', data: {})
+        .update(step_number: 3)
+    end
 
-  it 'offer to selecte editing params if issue is found' do
-    command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '1'))
-    text = 'Select parameter to change. To cancel command use /cancel.'
-    Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
-    RedmineChatTelegram::Commands::BaseBotCommand.any_instance
-      .expects(:send_message)
-      .with(text, reply_markup: nil)
-    RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
-  end
+    it 'offer to selecte editing params if issue is found' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '1'))
+      text = 'Select parameter to change. To cancel command use /cancel.'
+      Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text, reply_markup: nil)
+      RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    end
 
-  it 'finish command if issue not found' do
-    command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue 999'))
-    text = 'Value is incorrect. Command was finished.'
-    Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new).returns(nil)
-    RedmineChatTelegram::Commands::BaseBotCommand.any_instance
-      .expects(:send_message)
-      .with(text, reply_markup: nil)
-    RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    it 'finish command if issue not found' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue 999'))
+      text = 'Value is incorrect. Command was finished.'
+      Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new).returns(nil)
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text, reply_markup: nil)
+      RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    end
   end
-end
 
   describe 'step 4' do
     before do
       RedmineChatTelegram::ExecutingCommand
-        .create(account: account, name: 'issue', data: {issue_id: 1})
+        .create(account: account, name: 'issue', data: { issue_id: 1 })
         .update(step_number: 4)
     end
 
@@ -173,7 +186,7 @@ end
   describe 'step 5' do
     before do
       RedmineChatTelegram::ExecutingCommand
-        .create(account: account, name: 'issue', data: {issue_id: 1, attribute_name: 'subject' })
+        .create(account: account, name: 'issue', data: { issue_id: 1, attribute_name: 'subject' })
         .update(step_number: 5)
     end
 
