@@ -1,5 +1,6 @@
 #### [1.5.9]
 
+* Replace ruby wrapper for Telegram's Bot API telegrammer to telegram-bot-ruby
 * Add to send current value for group commands
 * Add command to change chat names
 * Add init scripts example

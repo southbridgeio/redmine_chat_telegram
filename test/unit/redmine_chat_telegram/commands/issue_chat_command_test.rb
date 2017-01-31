@@ -29,7 +29,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
         .expects(:send_message)
         .with(I18n.t('redmine_chat_telegram.bot.chat.help'))
 
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat'))
+      command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/chat'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
     end
   end
@@ -43,7 +43,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
         .expects(:send_message)
         .with(text)
 
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat info 1'))
+      command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/chat info 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
     end
 
@@ -54,7 +54,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
         .with(text)
       User.any_instance.stubs(:allowed_to?).returns(false)
       chat
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat info 1'))
+      command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/chat info 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
     end
 
@@ -64,7 +64,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
         .expects(:send_message)
         .with(text)
       User.any_instance.stubs(:allowed_to?).returns(true)
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat info 1'))
+      command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/chat info 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
     end
 
@@ -74,7 +74,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
         .with(text)
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat info 1'))
+      command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/chat info 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
     end
   end
@@ -93,7 +93,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
       RedmineChatTelegram::GroupChatCreator.any_instance.stubs(:run)
       chat # GroupChatCreator creates chat, but here it's stubbed, so do it manually
 
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat create 1'))
+      command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/chat create 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
     end
 
@@ -103,7 +103,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
         .with('Telegam chat plugin for current project is disabled.')
       User.any_instance.stubs(:allowed_to?).returns(true)
 
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat create 1'))
+      command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/chat create 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
     end
   end
@@ -117,7 +117,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
       RedmineChatTelegram::GroupChatDestroyer.any_instance.stubs(:run)
       chat
 
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/chat close 1'))
+      command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/chat close 1'))
       RedmineChatTelegram::Commands::IssueChatCommand.new(command).execute
     end
   end
