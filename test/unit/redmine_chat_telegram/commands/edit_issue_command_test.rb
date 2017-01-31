@@ -58,15 +58,29 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
     end
 
     it 'offers to select issue' do
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue OnlineStore'))
-      text = <<~HTML
+      project = Project.find(2)
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: "/issue #{project.name}"))
+
+      issue = project.issues.first
+
+      message = <<~HTML
         <b>List issues of project:</b>
-        <a href="#{url_base}/issues/4">#4</a>: Issue on project 2
+        <a href="#{url_base}/issues/#{issue.id}">##{issue.id}</a>: #{issue.subject}
       HTML
-      Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
+
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
-        .with(text, reply_markup: nil)
+        .with(message)
+
+      message_2 = [
+        I18n.t('redmine_chat_telegram.bot.edit_issue.input_id'),
+        I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
+      ].join(' ')
+
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(message_2)
+
       RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
     end
 
