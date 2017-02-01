@@ -13,7 +13,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
     {
       chat: { id: 123, type: 'group' },
       message_id: 123_456,
-      date: Date.today,
+      date: Date.today.to_time.to_i,
       from: { id: 998_899, first_name: 'Qw', last_name: 'Ert', username: 'qwert' }
     }
   end
@@ -25,7 +25,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
 
   describe 'new_chat_created' do
     let(:command) do
-      Telegrammer::DataTypes::Message
+      Telegram::Bot::Types::Message
         .new(command_params.merge(group_chat_created: true))
     end
 
@@ -44,10 +44,10 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
     end
   end
 
-  describe 'new_chat_participant' do
+  describe 'new_chat_member' do
     it 'creates joined system message when user joined' do
-      command = Telegrammer::DataTypes::Message
-        .new(command_params.merge(new_chat_participant: { id: 998_899 }))
+      command = Telegram::Bot::Types::Message
+        .new(command_params.merge(new_chat_member: { id: 998_899 }))
       RedmineChatTelegram::Bot.new(command).call
 
       message = TelegramMessage.last
@@ -56,8 +56,8 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
     end
 
     it 'creates invited system message when user was invited' do
-      command = Telegrammer::DataTypes::Message
-        .new(command_params.merge(new_chat_participant: { id: 7777 }))
+      command = Telegram::Bot::Types::Message
+        .new(command_params.merge(new_chat_member: { id: 7777 }))
       RedmineChatTelegram::Bot.new(command).call
 
       message = TelegramMessage.last
@@ -66,10 +66,10 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
     end
   end
 
-  describe 'left_chat_participant' do
+  describe 'left_chat_member' do
     it 'creates left_group system message when user left group' do
-      command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(left_chat_participant: { id: 998_899 }))
+      command = Telegram::Bot::Types::Message
+                .new(command_params.merge(left_chat_member: { id: 998_899 }))
       RedmineChatTelegram::Bot.new(command).call
 
       message = TelegramMessage.last
@@ -78,8 +78,8 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
     end
 
     it 'creates kicked system message when user was kicked' do
-      command = Telegrammer::DataTypes::Message
-                .new(command_params.merge(left_chat_participant:
+      command = Telegram::Bot::Types::Message
+                .new(command_params.merge(left_chat_member:
                                             { id: 8888,
                                               first_name: 'As',
                                               last_name: 'Dfg' }))
@@ -95,7 +95,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
   describe 'send current value for command without argument' do
     ['project','subject','status','tracker','priority','assigned_to','start_date','done_ratio'].each do |com|
       it "command /#{com}" do
-        command = Telegrammer::DataTypes::Message.new(command_params.merge(text: "/#{com}"))
+        command = Telegram::Bot::Types::Message.new(command_params.merge(text: "/#{com}"))
         text = "#{com.capitalize}: #{issue.send(com).to_s}"
         RedmineChatTelegram::Bot.any_instance
           .expects(:send_message)
@@ -109,7 +109,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
     it 'sends issue link with title if user has required rights' do
       User.any_instance.stubs(:allowed_to?).returns(true)
       RedmineChatTelegram.stub :issue_url, 'http://site.com/issue/1' do
-        command = Telegrammer::DataTypes::Message
+        command = Telegram::Bot::Types::Message
                   .new(command_params.merge(text: '/link'))
 
         RedmineChatTelegram::Bot.any_instance
@@ -127,7 +127,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
           .expects(:send_message)
           .with('Access denied.')
 
-        command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/link'))
+        command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/link'))
         RedmineChatTelegram::Bot.new(command).call
       end
     end
@@ -135,7 +135,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
 
   describe 'log_message' do
     let(:command) do
-      Telegrammer::DataTypes::Message.new(command_params.merge(text: '/log this is text'))
+      Telegram::Bot::Types::Message.new(command_params.merge(text: '/log this is text'))
     end
 
     it 'creates comment for issue' do
@@ -164,7 +164,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
 
   describe 'save_message' do
     it 'creates message' do
-      command = Telegrammer::DataTypes::Message
+      command = Telegram::Bot::Types::Message
                 .new(command_params.merge(text: 'message from telegram'))
       RedmineChatTelegram::Bot.new(command).call
       message = TelegramMessage.last
@@ -176,7 +176,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
 
   describe 'new' do
     it 'exucutes new_isssue command' do
-      command = Telegrammer::DataTypes::Message
+      command = Telegram::Bot::Types::Message
                 .new(command_params.merge(
                        text: '/new',
                        chat: { id: 123, type: 'private' }))

@@ -5,7 +5,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
 
   context '/start' do
     setup do
-      @telegram_message = Telegrammer::DataTypes::Message.new(
+      @telegram_message = Telegram::Bot::Types::Message.new(
         from: { id:         123,
                 username:   'dhh',
                 first_name: 'David',
@@ -69,7 +69,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
   context 'wrong command context' do
     context 'private' do
       setup do
-        @telegram_message = Telegrammer::DataTypes::Message.new(
+        @telegram_message = Telegram::Bot::Types::Message.new(
           from: { id:         123,
                   username:   'abc',
                   first_name: 'Antony',
@@ -91,7 +91,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
 
     context 'group' do
       setup do
-        @telegram_message = Telegrammer::DataTypes::Message.new(
+        @telegram_message = Telegram::Bot::Types::Message.new(
           from: { id:         123,
                   username:   'abc',
                   first_name: 'Antony',
@@ -115,7 +115,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
   context '/help' do
     context 'private' do
       setup do
-        @telegram_message = Telegrammer::DataTypes::Message.new(
+        @telegram_message = Telegram::Bot::Types::Message.new(
           from: { id:         123,
                   username:   'abc',
                   first_name: 'Antony',
@@ -154,7 +154,7 @@ class RedmineChatTelegram::CommonIntegrationBotTest < ActiveSupport::TestCase
 
     context 'group' do
       setup do
-        @telegram_message = Telegrammer::DataTypes::Message.new(
+        @telegram_message = Telegram::Bot::Types::Message.new(
           from: { id:         123,
                   username:   'abc',
                   first_name: 'Antony',

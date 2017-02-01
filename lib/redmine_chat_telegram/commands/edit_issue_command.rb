@@ -215,7 +215,7 @@ module RedmineChatTelegram
         executing_command.destroy
         send_message(
           locale('incorrect_value'),
-          reply_markup: Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true))
+          reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(hide_keyboard: true))
       end
 
       def executing_command

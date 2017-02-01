@@ -10,7 +10,7 @@ class RedmineChatTelegram::Commands::IssueChatCommandTest < ActiveSupport::TestC
     {
       chat: { id: 123, type: 'private' },
       message_id: 123_456,
-      date: Date.today,
+      date: Date.today.to_time.to_i,
       from: { id: 998_899, first_name: 'Qw', last_name: 'Ert', username: 'qwert' }
     }
   end

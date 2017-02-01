@@ -10,12 +10,12 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
     {
       chat: { id: 123, type: 'private' },
       message_id: 123_456,
-      date: Date.today,
+      date: Date.today.to_time.to_i,
       from: { id: 998_899, first_name: 'Qw', last_name: 'Ert', username: 'qwert' }
     }
   end
 
-  let(:command) { Telegrammer::DataTypes::Message.new(command_params) }
+  let(:command) { Telegram::Bot::Types::Message.new(command_params) }
 
   describe '#execute' do
     it 'sends that account not found if there is no accout' do
@@ -37,7 +37,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
                           ['Child of private child', 'eCookbook Subproject 1'],
                           ['eCookbook Subproject 2', 'OnlineStore']]
 
-          Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
+          Telegram::Bot::Types::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: project_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
 
@@ -63,11 +63,11 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
           member.roles << Role.first
           member.save
 
-          command = Telegrammer::DataTypes::Message
+          command = Telegram::Bot::Types::Message
                       .new(command_params.merge(text: Project.first.name))
 
           users_list = [[I18n.t('redmine_chat_telegram.bot.new_issue.without_user'), 'Redmine Admin']]
-          Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
+          Telegram::Bot::Types::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
 
@@ -81,7 +81,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
 
         it 'sends message that users are not found it there is no project members' do
           text = I18n.t('redmine_chat_telegram.bot.new_issue.user_not_found')
-          Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new).returns(nil)
+          Telegram::Bot::Types::ReplyKeyboardRemove.expects(:new).returns(nil)
           RedmineChatTelegram::Commands::BaseBotCommand.any_instance
             .expects(:send_message)
             .with(text, reply_markup: nil)
@@ -97,7 +97,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
         end
 
         it 'asks to send issue subject' do
-          command = Telegrammer::DataTypes::Message
+          command = Telegram::Bot::Types::Message
                       .new(command_params.merge(text: 'Redmine Admin'))
 
           text = I18n.t('redmine_chat_telegram.bot.new_issue.input_subject')
@@ -116,7 +116,7 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
         end
 
         it 'asks to send issue text' do
-          command = Telegrammer::DataTypes::Message
+          command = Telegram::Bot::Types::Message
                       .new(command_params.merge(text: 'issue subject'))
 
           text = I18n.t('redmine_chat_telegram.bot.new_issue.input_text')
@@ -141,14 +141,14 @@ class RedmineChatTelegram::Commands::NewIssueCommandTest < ActiveSupport::TestCa
                     subject: 'Issue created from telegram' }).update(step_number: 5)
         end
 
-        let(:command) { Telegrammer::DataTypes::Message.new(command_params.merge(text: 'issue text')) }
+        let(:command) { Telegram::Bot::Types::Message.new(command_params.merge(text: 'issue text')) }
         let(:url_base) { "#{Setting.protocol}://#{Setting.host_name}" }
 
         it 'sends message with link to the created issue and question to create chat' do
           new_issue_id = Issue.last.id + 1
 
           users_list = [%w(Yes No)]
-          Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new)
+          Telegram::Bot::Types::ReplyKeyboardMarkup.expects(:new)
             .with(keyboard: users_list, one_time_keyboard: true, resize_keyboard: true)
             .returns(nil)
 
@@ -179,11 +179,11 @@ HTML
         end
 
         it 'creates chat for issue is user send "yes"' do
-          Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new).returns(nil)
+          Telegram::Bot::Types::ReplyKeyboardRemove.expects(:new).returns(nil)
           RedmineChatTelegram::GroupChatCreator.any_instance.stubs(:run)
           chat # GroupChatCreator creates chat, but here it's stubbed, so do it manually
 
-          command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'Yes'))
+          command = Telegram::Bot::Types::Message.new(command_params.merge(text: 'Yes'))
 
           RedmineChatTelegram::Commands::BaseBotCommand.any_instance
             .expects(:send_message)
@@ -204,7 +204,7 @@ HTML
         end
 
         it 'hides keyborad and do nothing when user send "no"' do
-          command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'No'))
+          command = Telegram::Bot::Types::Message.new(command_params.merge(text: 'No'))
           RedmineChatTelegram::Commands::NewIssueCommand.new(command).execute
           # TODO: what we need to test here?
         end
