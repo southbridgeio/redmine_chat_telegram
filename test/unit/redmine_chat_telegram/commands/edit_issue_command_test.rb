@@ -13,16 +13,24 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
   end
 
   let(:user) { User.find(2) }
+  let(:project) { Project.find(2) }
   let(:account) { TelegramCommon::Account.create(telegram_id: 998_899, user_id: user.id) }
+  let(:url_base) { "#{Setting.protocol}://#{Setting.host_name}" }
 
   before do
     account
+    Member.create!(project_id: 2, principal: user, role_ids: [1])
   end
 
   describe 'step 1' do
-    it 'offers to send issue id if it is not present' do
+    before do
+      RedmineChatTelegram::ExecutingCommand.create(account: account, name: 'issue', data: {})
+        .update(step_number: 1)
+    end
+
+    it 'offers to send hepl if not arguments' do
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue'))
-      text = 'Input issue ID. To cancel command use /cancel.'
+      text = I18n.t('redmine_chat_telegram.bot.edit_issue.help')
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
         .with(text)
@@ -31,34 +39,116 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
 
     it 'offers to select editing param if issue id is present' do
       command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue 1'))
-      text = 'Select parameter to change. To cancel command use /cancel.'
+      text = [
+        I18n.t('redmine_chat_telegram.bot.edit_issue.select_param'),
+        I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
+      ].join(' ')
       Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
         .with(text, reply_markup: nil)
+      RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    end
+
+    it 'offers to select project' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue project'))
+      text = I18n.t('redmine_chat_telegram.bot.edit_issue.select_project')
+      Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text, reply_markup: nil)
+      RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    end
+
+    it 'offers to select issue' do
+      project = Project.find(2)
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: "/issue #{project.name}"))
+
+      issue = project.issues.first
+
+      text = <<~HTML
+        <b>List issues of project:</b>
+        <a href="#{url_base}/issues/#{issue.id}">##{issue.id}</a>: #{issue.subject}
+      HTML
+
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+
+      text_2 = [
+        I18n.t('redmine_chat_telegram.bot.edit_issue.input_id'),
+        I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
+      ].join(' ')
+
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text_2)
+
+      RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    end
+
+    it 'offers to send list of issues assigned to user and updated today' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue hot'))
+
+      issue = Issue.find(5)
+      issue.update(assigned_to: user)
+
+      text = <<~HTML
+        <b>Assigned to you issues with recent activity:</b>
+        <a href="#{url_base}/issues/#{issue.id}">##{issue.id}</a>: #{issue.subject}
+      HTML
+
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text)
+
+      text_2 = [
+        I18n.t('redmine_chat_telegram.bot.edit_issue.input_id'),
+        I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
+      ].join(' ')
+
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text_2)
+
       RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
     end
   end
 
   describe 'step 2' do
     before do
-      RedmineChatTelegram::ExecutingCommand.create(account: account, name: 'issue')
+      RedmineChatTelegram::ExecutingCommand.create(account: account, name: 'issue', data: {})
         .update(step_number: 2)
     end
 
-    it 'offer to selecte editing params if issue is found' do
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue 1'))
-      text = 'Select parameter to change.'
-      Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
+    it 'offer to selecte issue if project is found' do
+      project = Project.find(2)
+      issue = Issue.find(4)
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: project.name))
+      text = <<~HTML
+        <b>List issues of project:</b>
+        <a href="#{url_base}/issues/#{issue.id}">##{issue.id}</a>: #{issue.subject}
+      HTML
+
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
-        .with(text, reply_markup: nil)
+        .with(text)
+
+      text_2 = [
+        I18n.t('redmine_chat_telegram.bot.edit_issue.input_id'),
+        I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
+      ].join(' ')
+
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text_2)
+
       RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
     end
 
-    it 'finish command if issue not found' do
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue 999'))
-      text = 'Value is incorrect. Command was finished.'
+    it 'finish command if project not found' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue incorrect_project_name'))
+      text = I18n.t('redmine_chat_telegram.bot.edit_issue.incorrect_value')
       Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new).returns(nil)
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
@@ -69,14 +159,16 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
 
   describe 'step 3' do
     before do
-      RedmineChatTelegram::ExecutingCommand
-        .create(account: account, name: 'issue', data: {issue_id: 1})
+      RedmineChatTelegram::ExecutingCommand.create(account: account, name: 'issue', data: {})
         .update(step_number: 3)
     end
 
-    it 'offerts to send new value for editing param' do
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'status'))
-      text = 'Select status.'
+    it 'offer to selecte editing params if issue is found' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '1'))
+      text = [
+        I18n.t('redmine_chat_telegram.bot.edit_issue.select_param'),
+        I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
+      ].join(' ')
       Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
@@ -84,9 +176,9 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
       RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
     end
 
-    it 'finish command if params is incorrect' do
-      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'incorrect'))
-      text = 'Value is incorrect. Command was finished.'
+    it 'finish command if issue not found' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: '/issue 999'))
+      text = I18n.t('redmine_chat_telegram.bot.edit_issue.incorrect_value')
       Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new).returns(nil)
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
@@ -98,8 +190,36 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
   describe 'step 4' do
     before do
       RedmineChatTelegram::ExecutingCommand
-        .create(account: account, name: 'issue', data: {issue_id: 1, attribute_name: 'subject' })
+        .create(account: account, name: 'issue', data: { issue_id: 1 })
         .update(step_number: 4)
+    end
+
+    it 'offerts to send new value for editing param' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'status'))
+      text = I18n.t('redmine_chat_telegram.bot.edit_issue.select_status')
+      Telegrammer::DataTypes::ReplyKeyboardMarkup.expects(:new).returns(nil)
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text, reply_markup: nil)
+      RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    end
+
+    it 'finish command if params is incorrect' do
+      command = Telegrammer::DataTypes::Message.new(command_params.merge(text: 'incorrect'))
+      text = I18n.t('redmine_chat_telegram.bot.edit_issue.incorrect_value')
+      Telegrammer::DataTypes::ReplyKeyboardHide.expects(:new).returns(nil)
+      RedmineChatTelegram::Commands::BaseBotCommand.any_instance
+        .expects(:send_message)
+        .with(text, reply_markup: nil)
+      RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
+    end
+  end
+
+  describe 'step 5' do
+    before do
+      RedmineChatTelegram::ExecutingCommand
+        .create(account: account, name: 'issue', data: { issue_id: 1, attribute_name: 'subject' })
+        .update(step_number: 5)
     end
 
     it 'updates issue if value is correct' do
@@ -113,7 +233,7 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
 
     it 'finish command with error if value is incorrect' do
       command =  Telegrammer::DataTypes::Message.new(command_params.merge(text: ''))
-      text = 'Failed to edit the issue. Perhaps you entered the wrong data or you do not have the access.'
+      text = I18n.t('redmine_chat_telegram.bot.error_editing_issue')
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
         .with(text)
