@@ -15,18 +15,18 @@ class TelegramMessageSenderWorker
 
   def perform(telegram_id, message)
     token = Setting.plugin_redmine_chat_telegram['bot_token']
-    bot   = Telegrammer::Bot.new(token)
+    bot   = Telegram::Bot::Client.new(token)
 
     begin
-      # Group telegram_id is negative for Telegrammer::Bot
-      bot.send_message(chat_id: -telegram_id.abs,
+      # Group telegram_id is negative for Telegram::Bot
+      bot.api.send_message(chat_id: -telegram_id.abs,
                        text: message,
                        disable_web_page_preview: true,
                        parse_mode: 'HTML')
 
       TELEGRAM_MESSAGE_SENDER_LOG.info "telegram_id: #{telegram_id}\tmessage: #{message}"
 
-    rescue Telegrammer::Errors::BadRequestError => e
+    rescue Telegram::Bot::Errors::BadRequestError => e
 
       TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.info "MESSAGE: #{message}"
 
@@ -44,15 +44,15 @@ class TelegramMessageSenderWorker
 
       end
 
-    rescue Telegrammer::Errors::ServiceUnavailableError
-
-      TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.error "ServiceUnavailableError. retry to send after 5 seconds\ntelegram_id: #{telegram_id}\tmessage: #{message}"
-      TelegramMessageSenderWorker.perform_in(5.seconds, telegram_id, message)
-
-    rescue Telegrammer::Errors::TimeoutError
-
-      TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.error "TimeoutError. retry to send after 5 seconds\ntelegram_id: #{telegram_id}\tmessage: #{message}"
-      TelegramMessageSenderWorker.perform_in(5.seconds, telegram_id, message)
+    # rescue Telegrammer::Errors::ServiceUnavailableError
+    #
+    #   TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.error "ServiceUnavailableError. retry to send after 5 seconds\ntelegram_id: #{telegram_id}\tmessage: #{message}"
+    #   TelegramMessageSenderWorker.perform_in(5.seconds, telegram_id, message)
+    #
+    # rescue Telegrammer::Errors::TimeoutError
+    #
+    #   TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.error "TimeoutError. retry to send after 5 seconds\ntelegram_id: #{telegram_id}\tmessage: #{message}"
+    #   TelegramMessageSenderWorker.perform_in(5.seconds, telegram_id, message)
 
     end
   end

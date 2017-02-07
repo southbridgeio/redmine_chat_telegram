@@ -12,7 +12,7 @@ class RedmineChatTelegram::Bot < TelegramCommon::Bot
   private
 
   def initialize_command(command)
-    command.is_a?(Telegrammer::DataTypes::Message) ? command : Telegrammer::DataTypes::Message.new(command)
+    command.is_a?(Telegram::Bot::Types::Message) ? command : Telegram::Bot::Types::Message.new(command)
   end
 
   def execute_command

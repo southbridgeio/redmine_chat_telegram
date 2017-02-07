@@ -57,29 +57,29 @@ def chat_telegram_bot_init
   end
 
   LOG.info 'Telegram Bot: Connecting to telegram...'
-  bot      = Telegrammer::Bot.new(token)
-  bot_name = bot.me.username
-
-  plugin_settings = Setting.find_by(name: 'plugin_redmine_chat_telegram')
-
-  plugin_settings_hash             = plugin_settings.value
-  plugin_settings_hash['bot_name'] = "user##{bot.me.id}"
-  plugin_settings_hash['bot_id']   = bot.me.id
-  plugin_settings_hash['robot_id'] = robot_id
-  plugin_settings.value            = plugin_settings_hash
-
-  plugin_settings.save
+  bot      = Telegram::Bot::Client.new(token)
+  bot_info = bot.api.get_me["result"]
+  bot_name = bot_info["username"]
 
   until bot_name.present?
-
     LOG.error 'Telegram Bot Token is invalid or Telegram API is in downtime. I will try again after minute'
     sleep 60
 
     LOG.info 'Telegram Bot: Connecting to telegram...'
-    bot      = Telegrammer::Bot.new(token)
-    bot_name = bot.me.username
-
+    bot      = Telegram::Bot::Client.new(token)
+    bot_info = bot.api.get_me["result"]
+    bot_name = bot_info["username"]
   end
+
+  plugin_settings = Setting.find_by(name: 'plugin_redmine_chat_telegram')
+
+  plugin_settings_hash             = plugin_settings.value
+  plugin_settings_hash['bot_name'] = "user##{bot_info["id"]}"
+  plugin_settings_hash['bot_id']   = bot_info["id"]
+  plugin_settings_hash['robot_id'] = robot_id
+  plugin_settings.value            = plugin_settings_hash
+
+  plugin_settings.save
 
   LOG.info "#{bot_name}: connected"
 
@@ -140,12 +140,11 @@ namespace :chat_telegram do
 
     bot = chat_telegram_bot_init
     begin
-      bot.get_updates(fail_silently: false) do |command|
-        next unless command.is_a?(Telegrammer::DataTypes::Message)
+      bot.listen do |command|
+        next unless command.is_a?(Telegram::Bot::Types::Message)
         RedmineChatTelegram::Bot.new(command).call
       end
-    rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected,
-           Telegrammer::Errors::TimeoutError, Telegrammer::Errors::ServiceUnavailableError => e
+    rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected => e
       LOG.error "GLOBAL ERROR WITH RESTART #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
       LOG.info 'Restarting...'
       retry

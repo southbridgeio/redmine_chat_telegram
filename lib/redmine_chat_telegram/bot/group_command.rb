@@ -56,11 +56,11 @@ module RedmineChatTelegram
         if command.group_chat_created
           group_chat_created
 
-        elsif command.new_chat_participant.present?
-          new_chat_participant
+        elsif command.new_chat_member.present?
+          new_chat_member
 
-        elsif command.left_chat_participant.present?
-          left_chat_participant
+        elsif command.left_chat_member.present?
+          left_chat_member
 
         elsif command.text =~ /\/task|\/link|\/url/
           send_issue_link
@@ -113,27 +113,27 @@ module RedmineChatTelegram
         message.save!
       end
 
-      def new_chat_participant
-        new_chat_participant = command.new_chat_participant
+      def new_chat_member
+        new_chat_member = command.new_chat_member
 
-        if command.from.id == new_chat_participant.id
+        if command.from.id == new_chat_member.id
           message.message = 'joined'
         else
           message.message = 'invited'
-          message.system_data = chat_user_full_name(new_chat_participant)
+          message.system_data = chat_user_full_name(new_chat_member)
         end
 
         message.save!
       end
 
-      def left_chat_participant
-        left_chat_participant = command.left_chat_participant
+      def left_chat_member
+        left_chat_member = command.left_chat_member
 
-        if command.from.id == left_chat_participant.id
+        if command.from.id == left_chat_member.id
           message.message = 'left_group'
         else
           message.message = 'kicked'
-          message.system_data = chat_user_full_name(left_chat_participant)
+          message.system_data = chat_user_full_name(left_chat_member)
         end
 
         message.save!

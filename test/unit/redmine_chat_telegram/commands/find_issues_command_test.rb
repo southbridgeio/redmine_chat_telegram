@@ -7,7 +7,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
     {
       chat: { id: 123, type: 'private' },
       message_id: 123_456,
-      date: Date.today,
+      date: Date.today.to_time.to_i,
       from: { id: 998_899, first_name: 'Qw', last_name: 'Ert', username: 'qwert' }
     }
   end
@@ -24,7 +24,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
   end
 
   describe '/hot' do
-    let(:command) { Telegrammer::DataTypes::Message.new(command_params.merge(text: '/hot')) }
+    let(:command) { Telegram::Bot::Types::Message.new(command_params.merge(text: '/hot')) }
 
     it 'sends list of issues assigned to user and updated today' do
       Issue.find(1).update(assigned_to: user)
@@ -40,7 +40,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
   end
 
   describe '/me' do
-    let(:command) { Telegrammer::DataTypes::Message.new(command_params.merge(text: '/me')) }
+    let(:command) { Telegram::Bot::Types::Message.new(command_params.merge(text: '/me')) }
 
     it 'sends assigned to user issues' do
       Issue.update_all(assigned_to_id: 2)
@@ -57,7 +57,7 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
   end
 
   describe '/deadline' do
-    let(:command) { Telegrammer::DataTypes::Message.new(command_params.merge(text: '/deadline')) }
+    let(:command) { Telegram::Bot::Types::Message.new(command_params.merge(text: '/deadline')) }
 
     it 'sends assigned to user issues with deadline' do
       Issue.update_all(assigned_to_id: 2)

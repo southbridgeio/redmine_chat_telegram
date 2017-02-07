@@ -6,10 +6,10 @@ class RedmineChatTelegram::Commands::LastIssuesNotesCommandTest < ActiveSupport:
   fixtures :projects, :trackers, :issues, :users, :issue_statuses, :journals
 
   let(:command) do
-    Telegrammer::DataTypes::Message.new(
+    Telegram::Bot::Types::Message.new(
       chat: { id: 123, type: 'private' },
       message_id: 123_456,
-      date: Date.today,
+      date: Date.today.to_time.to_i,
       from: { id: 998_899, first_name: 'Qw', last_name: 'Ert', username: 'qwert' },
       text: '/last')
   end

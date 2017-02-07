@@ -187,7 +187,7 @@ module RedmineChatTelegram
 
       def make_keyboard(items)
         items_with_cancel = items + ['/cancel']
-        Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
+        Telegram::Bot::Types::ReplyKeyboardMarkup.new(
           keyboard: items_with_cancel.each_slice(2).to_a,
           one_time_keyboard: true,
           resize_keyboard: true)
@@ -215,7 +215,7 @@ module RedmineChatTelegram
         executing_command.destroy
         send_message(
           locale('incorrect_value'),
-          reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
+          reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(hide_keyboard: true))
       end
 
       def executing_command

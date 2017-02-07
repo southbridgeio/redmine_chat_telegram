@@ -35,7 +35,7 @@ module RedmineChatTelegram
           executing_command.destroy
           send_message(
             I18n.t('redmine_chat_telegram.bot.new_issue.user_not_found'),
-            reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true))
+            reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true))
         end
       end
 
@@ -62,7 +62,7 @@ module RedmineChatTelegram
                        %( <a href="#{issue_url}">##{issue.id}</a>\n) +
                        I18n.t('redmine_chat_telegram.bot.new_issue.create_chat_question')
 
-        keyboard = Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
+        keyboard = Telegram::Bot::Types::ReplyKeyboardMarkup.new(
           keyboard: [[I18n.t('redmine_chat_telegram.bot.new_issue.yes_answer'),
                       I18n.t('redmine_chat_telegram.bot.new_issue.no_answer')]],
           one_time_keyboard: true,
@@ -89,7 +89,7 @@ module RedmineChatTelegram
 
         send_message(
           I18n.t('redmine_chat_telegram.bot.creating_chat'),
-          reply_markup: Telegrammer::DataTypes::ReplyKeyboardHide.new(hide_keyboard: true)
+          reply_markup: Telegram::Bot::Types::ReplyKeyboardRemove.new(remove_keyboard: true)
         )
 
         RedmineChatTelegram::GroupChatCreator.new(issue, account.user).run
@@ -150,7 +150,7 @@ module RedmineChatTelegram
           project_names << I18n.t('redmine_chat_telegram.bot.new_issue.next_page')
         end
 
-        Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
+        Telegram::Bot::Types::ReplyKeyboardMarkup.new(
           keyboard: project_names.each_slice(2).to_a,
           one_time_keyboard: true,
           resize_keyboard: true)
@@ -166,7 +166,7 @@ module RedmineChatTelegram
         end
         assignables_names.prepend I18n.t('redmine_chat_telegram.bot.new_issue.without_user')
 
-        Telegrammer::DataTypes::ReplyKeyboardMarkup.new(
+        Telegram::Bot::Types::ReplyKeyboardMarkup.new(
           keyboard: assignables_names.each_slice(2).to_a,
           one_time_keyboard: true,
           resize_keyboard: true)
