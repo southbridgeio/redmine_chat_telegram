@@ -96,7 +96,7 @@ module RedmineChatTelegram
         @message = TelegramMessage.new(
           issue_id: issue.id,
           telegram_id: command.message_id,
-          sent_at: command.date,
+          sent_at: Time.at(command.date),
           from_id: command.from.id,
           from_first_name: command.from.first_name,
           from_last_name: command.from.last_name,

@@ -144,8 +144,7 @@ namespace :chat_telegram do
         next unless command.is_a?(Telegram::Bot::Types::Message)
         RedmineChatTelegram::Bot.new(command).call
       end
-    rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected,
-      Telegram::Bot::Exception::ResponseError, Faraday::ConnectionFailed => e
+    rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected, Faraday::ConnectionFailed => e
       LOG.error "GLOBAL ERROR WITH RESTART #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
       LOG.info 'Restarting...'
       retry
