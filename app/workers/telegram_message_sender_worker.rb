@@ -26,7 +26,7 @@ class TelegramMessageSenderWorker
 
       TELEGRAM_MESSAGE_SENDER_LOG.info "telegram_id: #{telegram_id}\tmessage: #{message}"
 
-    rescue Telegram::Bot::Errors::BadRequestError => e
+    rescue Telegram::Bot::Exceptions::ResponseError => e
 
       TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.info "MESSAGE: #{message}"
 
@@ -43,17 +43,6 @@ class TelegramMessageSenderWorker
         TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.debug telegram_user.inspect.to_s
 
       end
-
-    # rescue Telegrammer::Errors::ServiceUnavailableError
-    #
-    #   TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.error "ServiceUnavailableError. retry to send after 5 seconds\ntelegram_id: #{telegram_id}\tmessage: #{message}"
-    #   TelegramMessageSenderWorker.perform_in(5.seconds, telegram_id, message)
-    #
-    # rescue Telegrammer::Errors::TimeoutError
-    #
-    #   TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.error "TimeoutError. retry to send after 5 seconds\ntelegram_id: #{telegram_id}\tmessage: #{message}"
-    #   TelegramMessageSenderWorker.perform_in(5.seconds, telegram_id, message)
-
     end
   end
 end
