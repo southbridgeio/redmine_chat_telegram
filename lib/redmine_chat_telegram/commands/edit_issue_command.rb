@@ -4,6 +4,7 @@ module RedmineChatTelegram
       include IssuesHelper
       include ActionView::Helpers::TagHelper
       include ERB::Util
+      PER_PAGE = 10
 
       EDITABLES = [
         'project',
@@ -33,10 +34,11 @@ module RedmineChatTelegram
         issue_id = command.text.match(/\/\w+ #?(\d+)/).try(:[], 1)
         project_name = command_arguments
         if command_arguments == "hot"
+          executing_command.update(step_number: 3)
           send_hot_issues
         elsif command_arguments == "project"
           executing_command.update(step_number: 2)
-          send_all_allowed_projects
+          send_allowed_projects
         elsif issue_id.present?
           execute_step_3
         elsif project_name.present?
@@ -48,6 +50,7 @@ module RedmineChatTelegram
       end
 
       def execute_step_2
+        return send_allowed_projects if next_page?
         project_name = command.text.match(/\/\w+ (.+)/).try(:[], 1)
         project_name = command.text unless project_name.present?
 
@@ -132,11 +135,40 @@ module RedmineChatTelegram
         send_message(locale('input_id', true))
       end
 
-      def send_all_allowed_projects
+      def next_page?
+        command.text == I18n.t('redmine_chat_telegram.bot.new_issue.next_page')
+      end
+
+      def send_allowed_projects
         projects = Project.where(Project.visible_condition(account.user))
+        if projects.count > 0
+          current_page = executing_command.data[:current_page]
+          next_page = current_page + 1
+          if projects.count <= PER_PAGE
+            message = I18n.t('redmine_chat_telegram.bot.new_issue.choice_project_without_page')
+          else
+            message = I18n.t('redmine_chat_telegram.bot.new_issue.choice_project_with_page',
+                             page: current_page)
+          end
+          send_message(message, reply_markup: projects_list_markup(projects))
+          executing_command.update(data: executing_command.data.merge(current_page: next_page))
+        else
+          send_message(I18n.t('redmine_chat_telegram.bot.new_issue.projects_not_found'))
+        end
+      end
+
+      def projects_list_markup(all_projects)
+        current_page = executing_command.data[:current_page]
+        limit = PER_PAGE
+        offset = (current_page - 1) * limit
+        projects = all_projects.sorted.limit(limit).offset(offset)
         project_names = projects.pluck(:name)
-        keyboard = make_keyboard(project_names)
-        send_message(locale('select_project'), reply_markup: keyboard)
+
+        if all_projects.count > limit && (offset + limit) < all_projects.count
+          project_names << I18n.t('redmine_chat_telegram.bot.new_issue.next_page')
+        end
+
+        make_keyboard(project_names)
       end
 
       def send_projects
@@ -226,7 +258,7 @@ module RedmineChatTelegram
                                telegram_common_accounts:
                                  { telegram_id: command.from.id })
       rescue ActiveRecord::RecordNotFound
-        @executing_command ||= RedmineChatTelegram::ExecutingCommand.create(name: 'issue', account: account, data: {})
+        @executing_command ||= RedmineChatTelegram::ExecutingCommand.create(name: 'issue', account: account, data: {current_page: 1})
       end
     end
   end

@@ -24,7 +24,7 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
 
   describe 'step 1' do
     before do
-      RedmineChatTelegram::ExecutingCommand.create(account: account, name: 'issue', data: {})
+      RedmineChatTelegram::ExecutingCommand.create(account: account, name: 'issue', data: {current_page: 1})
         .update(step_number: 1)
     end
 
@@ -52,7 +52,7 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
 
     it 'offers to select project' do
       command = Telegram::Bot::Types::Message.new(command_params.merge(text: '/issue project'))
-      text = I18n.t('redmine_chat_telegram.bot.edit_issue.select_project')
+      text = I18n.t('redmine_chat_telegram.bot.new_issue.choice_project_without_page')
       Telegram::Bot::Types::ReplyKeyboardMarkup.expects(:new).returns(nil)
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
