@@ -45,6 +45,7 @@ en:
           hint: Command without argument sends the current value.
 
       error_editing_issue: Failed to edit the issue. Perhaps you entered the wrong data or you do not have the access.
+      warning_editing_issue: Field %{field} already has the requested value.
       hot: Assigned to you issues with recent activity
       me: Assigned to you issues
       deadline: Assigned to you issues with expired deadline

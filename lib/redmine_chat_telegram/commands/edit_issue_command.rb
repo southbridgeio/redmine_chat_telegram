@@ -16,8 +16,7 @@ module RedmineChatTelegram
         'start_date',
         'due_date',
         'estimated_hours',
-        'done_ratio',
-        'subject_chat']
+        'done_ratio']
 
       def execute
         return unless account.present?
@@ -67,6 +66,7 @@ module RedmineChatTelegram
         issue_id = command.text.gsub('/issue', '').gsub('/task', '').match(/#?(\d+)/).try(:[], 1)
         issue = Issue.find_by_id(issue_id)
         if issue.present?
+          EDITABLES << 'subject_chat' if issue.telegram_group.present?
           executing_command.update(step_number: 4, data: executing_command.data.merge(issue_id: issue.id))
           send_message(locale('select_param', true), reply_markup: make_keyboard(EDITABLES))
         else
@@ -103,8 +103,12 @@ module RedmineChatTelegram
         return change_issue_chat_name(value) if attr == 'subject_chat'
         journal = IssueUpdater.new(issue, user).call(attr => value)
         executing_command.destroy
-        if journal.present? && journal.details.any?
-          send_message(details_to_strings(journal.details).join("\n"))
+        if journal.present?
+          if journal.details.any?
+            send_message(details_to_strings(journal.details).join("\n"))
+          else
+            send_message(I18n.t('redmine_chat_telegram.bot.warning_editing_issue', field: attr))
+          end
         else
           send_message(I18n.t('redmine_chat_telegram.bot.error_editing_issue'))
         end
@@ -202,7 +206,7 @@ module RedmineChatTelegram
       end
 
       def change_issue_chat_name(name)
-        if issue.telegram_group.present?
+        if issue.telegram_group.present? && issue.telegram_group.telegram_id.present?
           if account.user.allowed_to?(:edit_issues, issue.project)
             chat_name = "chat##{issue.telegram_group.telegram_id.abs}"
             cmd = "rename_chat #{chat_name} #{name}"
@@ -214,6 +218,7 @@ module RedmineChatTelegram
           end
         else
           send_message(locale('chat_for_issue_not_exist'))
+          finish_with_error
         end
       end
 
