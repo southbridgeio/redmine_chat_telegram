@@ -48,7 +48,7 @@ def chat_telegram_bot_init
   begin
     json = RedmineChatTelegram.socket_cli_command(cmd, LOG)
     LOG.debug json
-    robot_id = json['id']
+    robot_id = json['peer_id'] || json['id']
   rescue NoMethodError => e
     LOG.error "TELEGRAM get_self #{e.class}: #{e.message} \n#{e.backtrace.join("\n")}"
     LOG.info 'May be problem with Telegram service. I will retry after 15 seconds'
@@ -57,6 +57,9 @@ def chat_telegram_bot_init
   end
 
   LOG.info 'Telegram Bot: Connecting to telegram...'
+
+  require 'telegram/bot'
+
   bot      = Telegram::Bot::Client.new(token)
   bot_info = bot.api.get_me["result"]
   bot_name = bot_info["username"]
