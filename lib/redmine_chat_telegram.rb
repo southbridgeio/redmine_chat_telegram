@@ -21,7 +21,7 @@ module RedmineChatTelegram
   end
 
   def self.cli_base
-    cli_path        = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_path']
+    cli_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_path']
     public_key_path = REDMINE_CHAT_TELEGRAM_CONFIG['telegram_cli_public_key_path']
     "#{cli_path} -WCD -v --json -k  #{public_key_path} -e "
   end
@@ -66,8 +66,8 @@ module RedmineChatTelegram
   end
 
   CHAT_HISTORY_PAGE_SIZE = 100
-  HISTORY_UPDATE_LOG     = Logger.new(Rails.root.join('log/chat_telegram',
-                                                      'telegram-group-history-update.log'))
+  HISTORY_UPDATE_LOG = Logger.new(Rails.root.join('log/chat_telegram',
+    'telegram-group-history-update.log'))
 
   def self.create_new_messages(issue_id, chat_name, bot_ids, present_message_ids, page)
     cmd = "history #{chat_name} #{CHAT_HISTORY_PAGE_SIZE} #{CHAT_HISTORY_PAGE_SIZE * page}"
@@ -79,30 +79,35 @@ module RedmineChatTelegram
       new_json_messages = json_messages.select do |message|
         from = message['from']
 
-        from.present? &&
+        if from.present?
+
+          peer_id = from['peer_id'] || from['id']
+
+
           !present_message_ids.include?(message['id']) &&
-          !bot_ids.include?(from['id'])
+            !bot_ids.include?(peer_id)
+        end
       end
 
       new_json_messages.each do |message|
         message_id = message['id']
-        sent_at    = Time.at message['date']
+        sent_at = Time.at message['date']
 
-        from            = message['from']
-        from_id         = from['id']
+        from = message['from']
+        from_id = from['id']
         from_first_name = from['first_name']
-        from_last_name  = from['last_name']
-        from_username   = from['username']
+        from_last_name = from['last_name']
+        from_username = from['username']
 
         message_text = message['text']
         TelegramMessage.where(telegram_id: message_id)
-            .first_or_create issue_id:        issue_id,
-                             sent_at:         sent_at,
-                             from_id:         from_id,
-                             from_first_name: from_first_name,
-                             from_last_name:  from_last_name,
-                             from_username:   from_username,
-                             message:         message_text
+          .first_or_create issue_id: issue_id,
+            sent_at: sent_at,
+            from_id: from_id,
+            from_first_name: from_first_name,
+            from_last_name: from_last_name,
+            from_username: from_username,
+            message: message_text
       end
       json_messages.size == CHAT_HISTORY_PAGE_SIZE
     else

@@ -21,7 +21,8 @@
 
 * **Ruby 2.3+**
 * [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
-* [Telegram CLI](https://github.com/vysheng/tg) должен быть установлен
+* [Telegram CLI](https://github.com/vysheng/tg) **рекомендуемая версия 1.3.3**<br>
+с версией 1.4.1 не работает синхронизация архивов сообщений 
 * У Вас должен быть аккаунт пользователя Telegram
 * У Вас должен быть аккаунт для создания ботов в Telegram
 * Плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) должен быть установлен
