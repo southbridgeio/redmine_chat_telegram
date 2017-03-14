@@ -21,7 +21,8 @@ Please help us make this plugin better telling us of any [issues](https://github
 
 * **Ruby 2.3+**
 * [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
-* [Telegram CLI](https://github.com/vysheng/tg) should be installed
+* [Telegram CLI](https://github.com/vysheng/tg) **version 1.3.3 recommended**<br>
+version 1.4.1 has problems with archive sync.
 * You should have Telegram user account
 * You should have Telegram bot account
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin

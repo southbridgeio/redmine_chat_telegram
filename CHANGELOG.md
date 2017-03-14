@@ -1,3 +1,8 @@
+#### [1.6.1]
+
+* Fix duplication in message archive
+* Add recommended CLI version to README
+
 #### [1.6.0]
 
 * Replace ruby wrapper for Telegram's Bot API telegrammer to telegram-bot-ruby

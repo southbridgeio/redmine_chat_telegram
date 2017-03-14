@@ -8,11 +8,7 @@ module RedmineChatTelegram
     end
 
     def run
-      subject  = if RedmineChatTelegram.mode.zero?
-                   "#{issue.project.name} ##{issue.id}"
-                 else
-                   "#{issue.project.name} #{issue.id}"
-                 end
+      subject  = "#{issue.project.name} #{issue.id}"
 
       bot_name = Setting.plugin_redmine_chat_telegram['bot_name']
 
@@ -32,11 +28,7 @@ module RedmineChatTelegram
       cmd  = "chat_info #{subject_for_cli}"
       json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
 
-      telegram_id = if RedmineChatTelegram.mode.zero?
-                      json['id']
-                    else
-                      json['peer_id']
-                    end
+      telegram_id = json['peer_id'] || json['id']
 
       # get chat_id from DB
       #

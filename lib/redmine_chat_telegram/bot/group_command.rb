@@ -93,9 +93,8 @@ module RedmineChatTelegram
       end
 
       def init_message
-        @message = TelegramMessage.new(
+        @message = TelegramMessage.where(telegram_id: command.message_id).first_or_initialize(
           issue_id: issue.id,
-          telegram_id: command.message_id,
           sent_at: Time.at(command.date),
           from_id: command.from.id,
           from_first_name: command.from.first_name,
