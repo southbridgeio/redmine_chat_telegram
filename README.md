@@ -4,8 +4,6 @@
 
 [Русская версия](https://github.com/centosadmin/redmine_chat_telegram/blob/master/README.ru.md)
 
-Plugin is developed by [Centos-admin.ru](https://centos-admin.ru)
-
 Redmine plugin is used to create Telegram group chats.
 
 The `redmine_chat_telegram` can be used to create a group chat associated with a ticket and record its logs to the Redmine archive. Associated group chats can be easily created via the `Create Telegram chat` link on the ticket page. You can copy the link and pass it to anyone you want to join this Telegram chat.
@@ -132,3 +130,7 @@ Try to change `telegram_cli_mode` in `telegram.yml` to `1`.
 This is CLI bug. We have [pull request](https://github.com/Rondoozle/tg/pull/4) to fix it.
 
 Temporary solution: place `tg-server.pub` into root of Redmine.  
+
+# Author of the Plugin
+
+The plugin is designed by [Southbridge](https://southbridge.io)

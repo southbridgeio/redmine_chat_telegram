@@ -2,8 +2,6 @@
 
 [English version](https://github.com/centosadmin/redmine_chat_telegram/blob/master/README.md)
 
-Плагин разработан в компании [Centos-admin.ru](https://centos-admin.ru)
-
 [Описание плагина на habrahabr.ru](https://habrahabr.ru/company/centosadmin/blog/281044/)
 
 Плагин для Redmine для создания групповых чатов в Telegram.
@@ -142,3 +140,7 @@ issue - Редактирование задач.
 Это баг в Telegram CLI. Мы направили [pull request](https://github.com/Rondoozle/tg/pull/4) с решением.
 
 Временное решение: расположите файл `tg-server.pub` в корневом каталоге Redmine.  
+
+# Автор плагина
+
+Плагин разработан в компании [Southbridge](https://southbridge.io)
