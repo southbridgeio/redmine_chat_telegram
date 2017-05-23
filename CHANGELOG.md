@@ -1,3 +1,7 @@
+#### [1.6.2]
+
+* Add support sidekiq 5 version
+
 #### [1.6.1]
 
 * Fix duplication in message archive
