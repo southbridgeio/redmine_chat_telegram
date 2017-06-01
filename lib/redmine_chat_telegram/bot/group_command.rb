@@ -56,7 +56,7 @@ module RedmineChatTelegram
         if command.group_chat_created
           group_chat_created
 
-        elsif command.new_chat_member.present?
+        elsif command.new_chat_members.present?
           new_chat_member
 
         elsif command.left_chat_member.present?
