@@ -113,7 +113,7 @@ module RedmineChatTelegram
       end
 
       def new_chat_member
-        new_chat_member = command.new_chat_member
+        new_chat_member = command.new_chat_members
 
         if command.from.id == new_chat_member.id
           message.message = 'joined'
