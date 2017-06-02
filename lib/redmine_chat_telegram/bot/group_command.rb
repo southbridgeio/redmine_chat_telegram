@@ -57,7 +57,7 @@ module RedmineChatTelegram
           group_chat_created
 
         elsif command.new_chat_members.present?
-          new_chat_member
+          # new_chat_members ## Temporary fix
 
         elsif command.left_chat_member.present?
           left_chat_member
@@ -112,10 +112,10 @@ module RedmineChatTelegram
         message.save!
       end
 
-      def new_chat_member
-        new_chat_member = command.new_chat_members
+      def new_chat_members
+        new_chat_members = command.new_chat_members
 
-        if command.from.id == new_chat_member.id
+        if command.from.id == new_chat_members.id
           message.message = 'joined'
         else
           message.message = 'invited'
