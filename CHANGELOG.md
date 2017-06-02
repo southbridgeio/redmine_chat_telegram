@@ -1,3 +1,7 @@
+#### [1.6.3]
+
+* Add version requirement to telegram-bot-ruby
+
 #### [1.6.2]
 
 * Add support sidekiq 5 version
