@@ -58,10 +58,12 @@ class TelegramApiController < ApplicationController
   end
 
   def auth_status
-    telegram.execute( 'IsLogged')
-    redirect_to plugin_settings_path('redmine_chat_telegram'), notice: t('redmine_chat_telegram.authorized')
-  rescue
-    redirect_to plugin_settings_path('redmine_chat_telegram'), alert: t('redmine_chat_telegram.not_authorized')
+    result = telegram.execute( 'IsLogged')
+    if result
+      redirect_to plugin_settings_path('redmine_chat_telegram'), notice: t('redmine_chat_telegram.authorized')
+    else
+      redirect_to plugin_settings_path('redmine_chat_telegram'), alert: t('redmine_chat_telegram.not_authorized')
+    end
   end
 
   def deauthorize
