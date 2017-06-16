@@ -2,6 +2,7 @@ class TelegramApiController < ApplicationController
   unloadable
 
   skip_before_filter :check_if_login_required, only: [:web_hook]
+  skip_before_action :verify_authenticity_token, only: [:web_hook]
 
   layout false
 
