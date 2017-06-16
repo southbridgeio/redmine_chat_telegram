@@ -14,12 +14,12 @@ module RedmineChatTelegram
 
       result = RedmineChatTelegram::Telegram.new.execute('CreateChat', args: [subject, bot_name])
 
-      chat_id = JSON.parse(result[1])['chats'].first['id']
+      chat_id = JSON.parse(result)['chats'].first['id']
 
       result = RedmineChatTelegram::Telegram.new.execute('GetChatLink', args: [chat_id])
 
       telegram_id = chat_id
-      telegram_chat_url = result[1]
+      telegram_chat_url = result
 
       if issue.telegram_group.present?
         issue.telegram_group.update telegram_id: telegram_id,
