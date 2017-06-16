@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Time: Fri Jun 16 2017 17:42:21 GMT+0700 (+07)
+# Time: Fri Jun 16 2017 20:53:54 GMT+0700 (+07)
 
 
 CACHE:
@@ -58,6 +58,7 @@ img/icons/PhotoIcons_2x.png
 img/icons/ProfileIcons.png
 img/icons/ProfileIcons_2x.png
 img/icons/icon.svg
+vendor/closure/long.js
 img/placeholders/DialogListAvatarSystem@2x.png
 img/placeholders/GroupAvatar1@2x.png
 img/placeholders/GroupAvatar2@2x.png
@@ -75,7 +76,6 @@ img/placeholders/UserAvatar7@2x.png
 img/placeholders/UserAvatar8@2x.png
 img/placeholders/VideoThumbConversation.gif
 img/placeholders/VideoThumbModal.gif
-vendor/closure/long.js
 vendor/cryptoJS/crypto.js
 vendor/jsbn/jsbn_combined.js
 vendor/leemon_bigint/bigint.js
