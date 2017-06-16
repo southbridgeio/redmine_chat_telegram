@@ -5,6 +5,8 @@ ru:
   permission_view_telegram_chat_link: Просмотр ссылки на чат Telegram
   permission_view_telegram_chat_archive: Просмотр архива чата
   redmine_chat_telegram:
+    authorized: Клиент к телеграму авторизирован
+    not_authorized: Клиент к телеграму не авторизирован
     bot:
       command_canceled: Команда отменена.
       command_not_found: Команда не найдена.

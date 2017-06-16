@@ -1,5 +1,6 @@
 require 'yaml'
 REDMINE_CHAT_TELEGRAM_CONFIG = YAML.load_file(File.expand_path('../config/telegram.yml', __FILE__))
+REDMINE_CHAT_TELEGRAM_PHANTOMJS_FILE = File.expand_path('../config/phantom-proxy.js', __FILE__)
 
 FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.root.join('log/chat_telegram'))
 TELEGRAM_CLI_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-cli.log'))
@@ -34,7 +35,13 @@ Redmine::Plugin.register :redmine_chat_telegram do
 
   settings(default: {
              'bot_token' => 'bot_token',
-             'daily_report' => '1'
+             'daily_report' => '1',
+             'telegram_phone_number' => '',
+             'telegram_phone_code_hash' => '',
+             'telegram_phone_code' => '',
+             'phantomjs_path' => '',
+             'telegram_auth_step' => '0',
+             'webogram_url' => ''
            },
            partial: 'settings/chat_telegram')
 

@@ -30,6 +30,62 @@
   options_for_select(IssueStatus.sorted.map { |s| [s.name, s.id] }, @settings['close_issue_statuses']), multiple: true %>
 <em class="info"><%= t 'redmine_chat_telegram.settings.close_issue_statuses_hint' %></em>
 </p>
+
+<h4>Telegram</h4>
+
+<p>
+  <label>
+    <%= t 'redmine_chat_telegram.settings.phantomjs_path' %>
+  </label>
+  <%= text_field_tag 'settings[phantomjs_path]', @settings['phantomjs_path'], size: 50 %>
+</p>
+
+<p>
+  <label>
+    <%= t 'redmine_chat_telegram.settings.webogram_url' %>
+  </label>
+  <%= text_field_tag 'settings[webogram_url]', @settings['webogram_url'], size: 50 %>
+</p>
+
+<p>
+  <label>
+    <%= t 'redmine_chat_telegram.settings.telegram_phone_number' %>
+  </label>
+  <%= text_field_tag 'settings[telegram_phone_number]', @settings['telegram_phone_number'], size: 50 %>
+  <em class="info">В формате 78005553535</em>
+</p>
+
+<p>
+  <label>
+    <%= t 'redmine_chat_telegram.settings.telegram_phone_code' %>
+  </label>
+  <% telegram_auth_step = @settings['telegram_auth_step'].to_i %>
+  <%= text_field_tag 'settings[telegram_phone_code]', @settings['telegram_phone_code'], size: 50 %>
+  <% if telegram_auth_step == 1 %>
+    <em class="info">Введите код, который вам пришел из Телеграмма, сохраните настройки и нажмите "Авторизировать"</em>
+  <% end %>
+</p>
+
+<%= link_to chat_telegram_api_authorize_path, method: 'post' do %>
+  <button type="button">
+    <% if telegram_auth_step == 0 %>
+      Получить код авторизации
+    <% else %>
+      Авторизовать
+    <% end %>
+  </button>
+<% end %>
+
+<%= link_to chat_telegram_api_deauthorize_path, method: 'delete' do %>
+  <button type="button">Деавторизовать</button>
+<% end %>
+
+<%= link_to chat_telegram_api_auth_status_path, method: 'post' do %>
+  <button type="button">Проверить</button>
+<% end %>
+
+<%= hidden_field_tag 'settings[telegram_phone_code_hash]', @settings['telegram_phone_code_hash'] %>
+<%= hidden_field_tag 'settings[telegram_auth_step]', @settings['telegram_auth_step'] %>
 <%= hidden_field_tag 'settings[bot_name]', @settings['bot_name'] %>
 <%= hidden_field_tag 'settings[bot_id]',   @settings['bot_id']   %>
 <%= hidden_field_tag 'settings[robot_id]', @settings['robot_id'] %>
