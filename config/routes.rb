@@ -5,6 +5,9 @@ post 'issues/:id/telegram_messages/publish' => 'telegram_messages#publish', as: 
 scope :redmine_chat_telegram do
   scope :api do
     get 'web_hook' => 'telegram_api#web_hook', as: 'chat_telegram_api_webhook'
+    post 'bot_init' => 'telegram_api#bot_init', as: 'chat_telegram_api_bot_init'
+    delete 'bot_dinit' => 'telegram_api#bot_deinit', as: 'chat_telegram_api_bot_deinit'
+
     post 'authorize' => 'telegram_api#authorize', as: 'chat_telegram_api_authorize'
     post 'auth_status' => 'telegram_api#auth_status', as: 'chat_telegram_api_auth_status'
     delete 'deauthorize' => 'telegram_api#deauthorize', as: 'chat_telegram_api_deauthorize'

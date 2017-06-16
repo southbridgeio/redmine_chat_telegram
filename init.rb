@@ -41,7 +41,6 @@ Redmine::Plugin.register :redmine_chat_telegram do
              'telegram_phone_code' => '',
              'phantomjs_path' => '',
              'telegram_auth_step' => '0',
-             'webogram_url' => ''
            },
            partial: 'settings/chat_telegram')
 

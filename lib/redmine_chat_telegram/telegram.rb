@@ -17,8 +17,8 @@ module RedmineChatTelegram
     attr_reader :command, :args, :api_result
 
     def make_request
-      phantom = Setting.plugin_redmine_chat_telegram['phantomjs_path']
-      api_url = Setting.plugin_redmine_chat_telegram['webogram_url']
+      phantom =  Setting.plugin_redmine_chat_telegram['phantomjs_path']
+      api_url = "#{Setting.protocol}://#{Setting.host_name}/plugin_assets/redmine_chat_telegram/webogram/index.html"
       params = {
         command: command,
         args: args.to_json
