@@ -7,22 +7,8 @@ class TelegramApiController < ApplicationController
   layout false
 
   def web_hook
-    logger.tagged('web_hook') { logger.info params.to_json }
-
-    data = params.except(:controller, :action)
-    update = Telegram::Bot::Types::Update.new(data)
-    types = %w(inline_query
-                   chosen_inline_result
-                   callback_query
-                   edited_message
-                   message
-                   channel_post
-                   edited_channel_post)
-    command = types.inject(nil) { |acc, elem| acc || update.send(elem) }
-
-    if command.is_a?(Telegram::Bot::Types::Message)
-      RedmineChatTelegram::Bot.new(command).call
-    end
+    command = Telegram::Bot::Types::Update.new(params).message
+    RedmineChatTelegram::Bot.new(command).call if command.is_a?(Telegram::Bot::Types::Message)
 
     head :ok, content_type: 'text/html'
   end
