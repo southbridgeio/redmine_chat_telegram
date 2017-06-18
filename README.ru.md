@@ -19,29 +19,11 @@
 
 * **Ruby 2.3+**
 * [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
-* [Telegram CLI](https://github.com/vysheng/tg) **рекомендуемая версия 1.3.3**<br>
-с версией 1.4.1 не работает синхронизация архивов сообщений 
 * У Вас должен быть аккаунт пользователя Telegram
 * У Вас должен быть аккаунт для создания ботов в Telegram
 * Плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) должен быть установлен
 * Sidekiq должен обрабатывать очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
 * Не забудьте запустить миграции `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
-
-### Конфигурация в Telegram CLI
-
-**!!! ВНИМАНИЕ !!!**
-
-Начиная с версии 1.4.5, в плагине используется обращение к Telegram CLI как к службе.
-
-В связи с этим `telegram-cli` должен быть запущен как служба.
-
-В каталоге `extras` вы можете найти:
-* пример скрипта `init.d`
-* пример конфига для `monit`
-
-### Первый запуск
-
-Запустите `telegram-cli` на Вашем сервере Redmine и залогиньтесь через него в Telegram. После этого Вы сможете создавать групповые чаты.
 
 ### Создание бота в Telegram
 
@@ -75,10 +57,6 @@
 RAILS_ENV=production bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 ```
 Или запустите `init-telegram-bot` скрипт из `extras`.
-
-### Синхронизация архива
-
-Плагие не записывает сообщения чата в архив когда он остановлен. Во избежание потери сообщений плагин выполяет синхноризацию сообщений из чата в архив при следующем запуске с задержкой в 5 минут.
 
 ## Использование
 
@@ -127,19 +105,7 @@ issue - Редактирование задач.
 За 1 неделю до закрытия каждые 12 часов в чат будет приходить сообщение:
 "Задача по этому чату закрыта. Чат будет автоматически расформирован через XX дней."
 
-По истечении времени все участники чата будут удалены из него.
-
-## Возможные проблемы
-
-### При создании чата ссылка на чат содержит FAILED
-
-Попробуйте сменить `telegram_cli_mode` в `telegram.yml` на `1`.
-
-### Couldn't open public key file: tg-server.pub
-
-Это баг в Telegram CLI. Мы направили [pull request](https://github.com/Rondoozle/tg/pull/4) с решением.
-
-Временное решение: расположите файл `tg-server.pub` в корневом каталоге Redmine.  
+По истечении времени все участники чата будут удалены из него.  
 
 # Автор плагина
 

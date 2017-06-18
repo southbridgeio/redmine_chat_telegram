@@ -19,29 +19,12 @@ Please help us make this plugin better telling us of any [issues](https://github
 
 * **Ruby 2.3+**
 * [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
-* [Telegram CLI](https://github.com/vysheng/tg) **version 1.3.3 recommended**<br>
 version 1.4.1 has problems with archive sync.
 * You should have Telegram user account
 * You should have Telegram bot account
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
 * You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory
 * Don't forget to run migrations `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
-
-### Telegram CLI configuration
-
-**!!! ATTENTION !!!**
-
-Since 1.4.5 version plugin needs Telegram CLI as system daemon.
-
-You need to run `telegram-cli` as daemon.
-
-In `extras` folder you can find:
-* `init.d` script example
-* `monit` config example
-
-### First time run
-
-Start `telegram-cli` on your Redmine server and login to Telegram with it. You'll be able to create group chats after that.
 
 ### Create Telegram Bot
 
@@ -76,10 +59,6 @@ Execute the following rake task to launch the bot:
 RAILS_ENV=production bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
 ```
 Or `init-telegram-bot` script from `extras`.
-
-### Archive synchronization
-
-Plugin can't log chat messages into the archive when stopped. To avoid loss of messages plugin performs chat - archive synchronization on the next run with 5 minute delay from the start.
 
 ## Usage
 
@@ -118,18 +97,6 @@ url - Get link to the issue.
 log - Save message to the issue.
 issue - Change issues.
 ```
-
-## Troubleshooting
-
-### FAILED in the chat link
-
-Try to change `telegram_cli_mode` in `telegram.yml` to `1`.
-
-### Couldn't open public key file: tg-server.pub
-
-This is CLI bug. We have [pull request](https://github.com/Rondoozle/tg/pull/4) to fix it.
-
-Temporary solution: place `tg-server.pub` into root of Redmine.  
 
 # Author of the Plugin
 
