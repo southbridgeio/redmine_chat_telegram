@@ -1,6 +1,5 @@
 #### [2.0.0] (In progress)
 
-* Change license to GPL 3
 * Remove telegram-cli dependency
 * Change telegram bot polling to web hooks
 
