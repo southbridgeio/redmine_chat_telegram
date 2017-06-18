@@ -1,6 +1,6 @@
 require 'yaml'
 REDMINE_CHAT_TELEGRAM_CONFIG = YAML.load_file(File.expand_path('../config/telegram.yml', __FILE__))
-REDMINE_CHAT_TELEGRAM_PHANTOMJS_FILE = File.expand_path('../config/phantom-proxy.js', __FILE__)
+REDMINE_CHAT_TELEGRAM_PHANTOMJS_CONFIG = File.expand_path('../config/phantom-proxy.js', __FILE__)
 
 FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.root.join('log/chat_telegram'))
 TELEGRAM_CLI_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-cli.log'))

@@ -12,11 +12,11 @@ module RedmineChatTelegram
 
       bot_name = Setting.plugin_redmine_chat_telegram['bot_name']
 
-      result = RedmineChatTelegram::Telegram.new.execute('CreateChat', args: [subject, bot_name])
+      result = RedmineChatTelegram.run_cli_command('CreateChat', args: [subject, bot_name], logger: TELEGRAM_CLI_LOG)
 
       chat_id = JSON.parse(result)['chats'].first['id']
 
-      result = RedmineChatTelegram::Telegram.new.execute('GetChatLink', args: [chat_id])
+      result = RedmineChatTelegram.run_cli_command('GetChatLink', args: [chat_id], logger: TELEGRAM_CLI_LOG)
 
       telegram_id = chat_id
       telegram_chat_url = result

@@ -182,9 +182,7 @@ module RedmineChatTelegram
       end
 
       def change_issue_chat_name(name)
-        chat_name = "chat##{issue.telegram_group.telegram_id.abs}"
-        cmd = "rename_chat #{chat_name} #{name}"
-        RedmineChatTelegram.socket_cli_command(cmd, logger)
+        RedmineChatTelegram.run_cli_command('EditChat', args: [issue.telegram_group.telegram_id.abs], logger: TELEGRAM_CLI_LOG)
       end
 
       def send_current_value(command)
