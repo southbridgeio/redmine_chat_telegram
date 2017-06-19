@@ -40,7 +40,7 @@ module RedmineChatTelegram
         command: command,
         args: args.to_json
       }
-      base_api = "#{Setting.protocol}://#{Setting.host_name}/plugin_assets/redmine_chat_telegram/webogram/index.html"
+      base_api = "#{Setting.protocol}://#{Setting.host_name}/plugin_assets/redmine_telegram_common/webogram/index.html"
       "#{base_api}#/api?#{params.to_query}"
     end
 
