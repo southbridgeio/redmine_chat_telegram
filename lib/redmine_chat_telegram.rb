@@ -20,7 +20,7 @@ module RedmineChatTelegram
     end
   end
 
-  def self.run_cli_command(command, args: nil, logger: nil)
-    RedmineChatTelegram::Telegram.new.execute(command, args: args, config_path: REDMINE_CHAT_TELEGRAM_PHANTOMJS_CONFIG, logger: logger)
+  def self.run_cli_command(command, args: nil)
+    RedmineChatTelegram::Telegram.new.execute(command, args: args)
   end
 end
