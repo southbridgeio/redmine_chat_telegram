@@ -32,11 +32,11 @@
 </p>
 
 <%= link_to chat_telegram_api_bot_init_path, method: 'post' do %>
-  <button type="button">Инициализировать бота</button>
+  <button type="button"><%= t 'redmine_chat_telegram.settings.bot_init' %></button>
 <% end %>
 
 <%= link_to chat_telegram_api_bot_deinit_path, method: 'delete' do %>
-  <button type="button">Деинициализировать бота</button>
+  <button type="button"><%= t 'redmine_chat_telegram.settings.bot_deinit' %></button>
 <% end %>
 
 <%= hidden_field_tag 'settings[bot_name]', @settings['bot_name'] %>

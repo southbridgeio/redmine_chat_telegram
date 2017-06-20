@@ -21,6 +21,6 @@ module RedmineChatTelegram
   end
 
   def self.run_cli_command(command, args: nil)
-    RedmineChatTelegram::Telegram.new.execute(command, args: args)
+    TelegramCommon::Telegram.new.execute(command, args: args)
   end
 end

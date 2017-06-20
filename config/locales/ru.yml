@@ -5,9 +5,9 @@ ru:
   permission_view_telegram_chat_link: Просмотр ссылки на чат Telegram
   permission_view_telegram_chat_archive: Просмотр архива чата
   redmine_chat_telegram:
-    authorized: Клиент к телеграму авторизирован
-    not_authorized: Клиент к телеграму не авторизирован
     bot:
+      authorize:
+        success: Бот инициализирован
       command_canceled: Команда отменена.
       command_not_found: Команда не найдена.
       private:
@@ -129,6 +129,8 @@ ru:
       close_issue_statuses: Закрывать чат для задач со статусами
       close_issue_statuses_hint: По умолчанию чат закрывается для закрытых задач
       required: "требуется для работы этого плагина"
+      bot_init: Инициализировать бота
+      bot_deinit: Деинициализировать бота
     messages:
       hello: "Всем привет! Это чат для задачи: %{issue_url}"
       closed_from_issue: Чат закрыт из задачи.
