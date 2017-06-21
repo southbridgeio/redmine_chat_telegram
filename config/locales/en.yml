@@ -6,6 +6,10 @@ en:
   permission_view_telegram_chat_archive: View Chat Archive
   redmine_chat_telegram:
     bot:
+      authorize:
+        success: Bot is initialized
+      deauthorize:
+        success: Bit is deinitialized
       command_canceled: Command was canceled.
       command_not_found: Command not found.
       private:
@@ -127,6 +131,8 @@ en:
       close_issue_statuses: Close chat for issues with statuses
       close_issue_statuses_hint: By default chat will be closed for closed issues
       required: "required for this plugin"
+      bot_init: Initialize bot
+      bot_deinit: Deinitialize bot
     messages:
       hello: "Hello, everybody! This is a chat for issue: %{issue_url}"
       closed_from_issue: chat was closed from issue

@@ -8,6 +8,8 @@ ru:
     bot:
       authorize:
         success: Бот инициализирован
+      deauthorize:
+        success: Бот деинициализирован
       command_canceled: Команда отменена.
       command_not_found: Команда не найдена.
       private:
