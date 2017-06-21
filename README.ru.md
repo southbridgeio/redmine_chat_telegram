@@ -11,7 +11,7 @@
 ![Create telegram chat](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/create-link.png)
 ![Chat links](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/chat-links.png)
 
-Пожалуйста помогите нам сделать этот плагин лучше, сообщая во вкладке [Issues](https://github.com/centosadmin/redmine_chat_telegram/issues) обо всех проблемах, с которыми Вы столкнётесь при его использовании. Мы готовы ответить на Все ваши вопросы, касающиеся этого плагина.
+Пожалуйста, помогите нам сделать этот плагин лучше, сообщая во вкладке [Issues](https://github.com/centosadmin/redmine_chat_telegram/issues) обо всех проблемах, с которыми Вы столкнётесь при его использовании. Мы готовы ответить на Все ваши вопросы, касающиеся этого плагина.
 
 ## Установка
 
@@ -19,7 +19,6 @@
 
 * **Ruby 2.3+**
 * [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
-* У Вас должен быть аккаунт пользователя Telegram
 * У Вас должен быть аккаунт для создания ботов в Telegram
 * Плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) должен быть установлен
 * Sidekiq должен обрабатывать очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
@@ -46,17 +45,6 @@
 
 Наберите `/start` для вашего бота под своим аккаунтом.
 Это позволит пользователю добавить бота в групповой чат.
-
-### Запуск бота
-
-Запустите `telegram-cli` используя скрип `init-telegram-cli`. Пример можно посмотреть в папке `extras`.
-
-Для запуска бота выполните следующее rake задание:
-
-```shell
-RAILS_ENV=production bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
-```
-Или запустите `init-telegram-bot` скрипт из `extras`.
 
 ## Использование
 

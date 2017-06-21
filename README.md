@@ -20,7 +20,6 @@ Please help us make this plugin better telling us of any [issues](https://github
 * **Ruby 2.3+**
 * [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 version 1.4.1 has problems with archive sync.
-* You should have Telegram user account
 * You should have Telegram bot account
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
 * You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory
@@ -48,17 +47,6 @@ To add hints for commands for the bot, use command `/setcommands`. You need to s
 
 Type `/start` command to your bot from your user account.
 This allows the user to add a Bot to group chats.
-
-### Bot launch
-
-Run `telegram-cli` using `init-telegram-cli` script. See example in folder `extras`.
-
-Execute the following rake task to launch the bot:
-
-```shell
-RAILS_ENV=production bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
-```
-Or `init-telegram-bot` script from `extras`.
 
 ## Usage
 
