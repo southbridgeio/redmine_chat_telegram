@@ -208,7 +208,7 @@ module RedmineChatTelegram
       def change_issue_chat_name(name)
         if issue.telegram_group.present? && issue.telegram_group.telegram_id.present?
           if account.user.allowed_to?(:edit_issues, issue.project)
-            RedmineChatTelegram.run_cli_command('RenameChat', args: [issue.telegram_group.telegram_id.abs, name], logger: TELEGRAM_CLI_LOG)
+            RedmineChatTelegram.run_cli_command('RenameChat', args: [issue.telegram_group.telegram_id.abs, name])
             executing_command.destroy
             send_message(locale('chat_name_changed'))
           else
