@@ -182,7 +182,14 @@ module RedmineChatTelegram
       end
 
       def change_issue_chat_name(name)
-        RedmineChatTelegram.run_cli_command('RenameChat', args: [issue.telegram_group.telegram_id.abs, name], logger: TELEGRAM_CLI_LOG)
+        if name.present?
+          RedmineChatTelegram.run_cli_command('RenameChat', args: [issue.telegram_group.telegram_id.abs, name], logger: TELEGRAM_CLI_LOG)
+        else
+          result = RedmineChatTelegram.run_cli_command('BaseInfoChat', args: [issue.telegram_group.telegram_id.abs, name], logger: TELEGRAM_CLI_LOG)
+          chat_info = JSON.parse(result)
+          chat_title = chat_info['chats']&.first['title']
+          send_message(chat_title.to_s)
+        end
       end
 
       def send_current_value(command)
