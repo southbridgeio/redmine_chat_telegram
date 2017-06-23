@@ -46,7 +46,7 @@ def chat_telegram_bot_init
   require 'telegram/bot'
 
   bot = RedmineChatTelegram.bot_initialize
-  bot.api.setWebhook('') # reset webhook
+  bot.api.setWebhook(url: '') # reset webhook
   bot
 end
 
