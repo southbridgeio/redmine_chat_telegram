@@ -62,13 +62,13 @@ module RedmineChatTelegram
         elsif command.left_chat_member.present?
           left_chat_member
 
-        elsif command.text =~ /\/task|\/link|\/url/
+        elsif command.text =~ /^\/(task|link|url)/
           send_issue_link
 
-        elsif command.text =~ /\/log/
+        elsif command.text =~ /^\/log/
           log_message
 
-        elsif command.text =~ %r{/subject|/start_date|/due_date|/estimated_hours|/done_ratio|/project|/tracker|/status|/priority|/assigned_to}
+        elsif command.text =~ %r{^/(subject|start_date|due_date|estimated_hours|done_ratio|project|tracker|status|priority|assigned_to)}
           if com = command.text.match(%r{^/subject$|^/start_date$|^/due_date$|/^estimated_hours$
               |^/done_ratio$|^/project$|^/tracker$|^/status$|^/assigned_to$|^/priority$})
             send_current_value(com[0][1..-1])
