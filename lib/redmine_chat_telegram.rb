@@ -52,7 +52,7 @@ module RedmineChatTelegram
 
     plugin_settings.save
 
-
+    bot
   end
 
   def self.handle_message(message)
