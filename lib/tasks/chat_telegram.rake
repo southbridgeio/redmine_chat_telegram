@@ -63,18 +63,6 @@ namespace :chat_telegram do
         next unless message.is_a?(Telegram::Bot::Types::Message)
         RedmineChatTelegram.handle_message(message)
       end
-    rescue HTTPClient::ConnectTimeoutError, HTTPClient::KeepAliveDisconnected, Faraday::ConnectionFailed => e
-      LOG.error "GLOBAL ERROR WITH RESTART #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
-      LOG.info 'Restarting...'
-      retry
-    rescue Telegram::Bot::Exceptions::ResponseError => e
-      if e.error_code.to_s == '502'
-        LOG.info 'Telegram raised 502 error. Pretty normal, ignore that'
-        LOG.info 'Restarting...'
-        retry
-      end
-      ExceptionNotifier.notify_exception(e) if defined?(ExceptionNotifier)
-      LOG.error "GLOBAL TELEGRAM BOT #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
     rescue => e
       ExceptionNotifier.notify_exception(e) if defined?(ExceptionNotifier)
       LOG.error "GLOBAL #{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
