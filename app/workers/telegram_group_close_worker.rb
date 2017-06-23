@@ -31,7 +31,7 @@ class TelegramGroupCloseWorker
   end
 
   def reset_chat_link
-    RedmineChatTelegram::Telegram.new.execute('GetChatLink', args: [chat_id])
+    RedmineChatTelegram.run_cli_command('GetChatLink', args: [chat_id])
   end
 
   def send_chat_notification(telegram_id)
@@ -45,7 +45,7 @@ class TelegramGroupCloseWorker
   end
 
   def remove_users_from_chat
-    RedmineChatTelegram::Telegram.new.execute('ClearChat', args: [chat_id])
+    RedmineChatTelegram.run_cli_command('ClearChat', args: [chat_id])
   end
 
   def logger
