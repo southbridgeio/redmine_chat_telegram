@@ -122,14 +122,14 @@ module RedmineChatTelegram
           message.system_data = chat_user_full_name(new_chat_member)
         end
 
-        edit_group_admin(new_chat_member) if redmine_admin?(new_chat_member)
+        edit_group_admin(new_chat_member) if can_manage_chat?(new_chat_member)
 
         message.save!
       end
 
-      def redmine_admin?(telegram_user)
+      def can_manage_chat?(telegram_user)
         telegram_account = TelegramCommon::Account.find_by(telegram_id: telegram_user.id)
-        telegram_account.present? && telegram_account.user.present? && telegram_account.user.admin?
+        telegram_account && telegram_account.user && telegram_account.user.allowed_to?(:manage_telegram_chat, issue.project)
       end
 
       def edit_group_admin(telegram_user, is_admin = true)

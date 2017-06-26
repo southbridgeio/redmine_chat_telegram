@@ -4,6 +4,7 @@ ru:
   permission_close_telegram_chat: Закрытие чата Telegram
   permission_view_telegram_chat_link: Просмотр ссылки на чат Telegram
   permission_view_telegram_chat_archive: Просмотр архива чата
+  permission_manage_telegram_chat: Администрирование чата Telegram
   redmine_chat_telegram:
     bot:
       authorize:

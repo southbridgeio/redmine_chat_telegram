@@ -37,9 +37,10 @@ Redmine::Plugin.register :redmine_chat_telegram do
            partial: 'settings/chat_telegram')
 
   project_module :chat_telegram do
-    permission :create_telegram_chat, telegram_group_chats: :create
-    permission :close_telegram_chat, telegram_group_chats: :destroy
-    permission :view_telegram_chat_link, telegram_group_chats: :create
+    permission :create_telegram_chat,       telegram_group_chats: :create
+    permission :close_telegram_chat,        telegram_group_chats: :destroy
+    permission :view_telegram_chat_link,    telegram_group_chats: :create
     permission :view_telegram_chat_archive, telegram_group_chats: :create
+    permission :manage_telegram_chat,       telegram_group_chats: :edit
   end
 end

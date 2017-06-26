@@ -1,6 +1,6 @@
 #### [2.0.0] (In progress)
 
-* Redmine administrator which joined to group will be administrator of the group
+* Redmine user which have proper permissions and joined to group will became administrator of the group
 * Remove telegram-cli dependency
 * Change telegram bot polling to web hooks
 

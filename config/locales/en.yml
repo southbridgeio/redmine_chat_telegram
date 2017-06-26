@@ -4,6 +4,7 @@ en:
   permission_close_telegram_chat: Close Telegram Chat
   permission_view_telegram_chat_link: View Telegram Chat Link
   permission_view_telegram_chat_archive: View Chat Archive
+  permission_manage_telegram_chat: Manage Telegram Chat
   redmine_chat_telegram:
     bot:
       authorize:
