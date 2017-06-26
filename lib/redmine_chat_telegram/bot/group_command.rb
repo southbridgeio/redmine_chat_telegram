@@ -128,7 +128,7 @@ module RedmineChatTelegram
       end
 
       def redmine_admin?(telegram_user)
-        telegram_account = TelegramCommon::Account.find_by(telegram_user: telegram_user.id)
+        telegram_account = TelegramCommon::Account.find_by(telegram_id: telegram_user.id)
         telegram_account.present? && telegram_account.user.present? && telegram_account.user.admin?
       end
 
