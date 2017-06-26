@@ -52,6 +52,8 @@ This allows the user to add a Bot to group chats.
 
 Open the ticket. You'll see the new link `Create Telegram chat` on the right side of the ticket. Click on it and the Telegram group chat associated with this ticket will be created. The link will change to `Enter Telegram chat`. Click on it to join the chat in your Telegram client. You'll be able to copy and pass the link to anyone you want to invite to the Group Chat.
 
+*Note: a new user in group will be became channel administrator if he is redmine administrator too*
+
 ### Available commands in bot chat
 
 - `/connect account@redmine.com` - connect Telegram account to Redmine account
