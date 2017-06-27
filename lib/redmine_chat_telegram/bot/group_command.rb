@@ -31,8 +31,6 @@ module RedmineChatTelegram
         if !group_commands.include?(command_name) && command_name.present?
           if private_commands.include?(command_name)
             send_message(I18n.t('telegram_common.bot.group.private_command'))
-          else
-            send_message(I18n.t('redmine_chat_telegram.bot.command_not_found'))
           end
         else
           if group_common_command?
