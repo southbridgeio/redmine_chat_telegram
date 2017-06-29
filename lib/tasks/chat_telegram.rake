@@ -9,7 +9,7 @@ def chat_telegram_bot_init
       pid_dir = ENV['PID_DIR']
       PidFile.new(piddir: pid_dir, pidfile: 'telegram-chat-bot.pid')
     else
-      PidFile.new(pidfile: 'telegram-chat-bot.pid')
+      PidFile.new(piddir: Rails.root.join('tmp', 'pids'), pidfile: 'telegram-chat-bot.pid')
     end
 
   rescue PidFile::DuplicateProcessError => e
@@ -51,8 +51,8 @@ def chat_telegram_bot_init
 end
 
 namespace :chat_telegram do
-  # bundle exec rake chat_telegram:bot PID_DIR='/tmp'
-  desc "Runs telegram bot process (options: PID_DIR='/pid/dir')"
+  # bundle exec rake chat_telegram:bot PID_DIR='tmp/pids'
+  desc "Runs telegram bot process (options: default PID_DIR='tmp/pids')"
   task bot: :environment do
     LOG = Rails.env.production? ? Logger.new(Rails.root.join('log/chat_telegram', 'bot.log')) : Logger.new(STDOUT)
     RedmineChatTelegram.set_locale
