@@ -25,6 +25,11 @@ version 1.4.1 has problems with archive sync.
 * You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory
 * Don't forget to run migrations `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
 
+### Upgrade to 2.0.0
+ 
+Since version 2.0.0 this plugin uses [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
+0.1.0 version, where removed Telegram CLI dependency. Please, take a look on new requirements.
+
 ### Create Telegram Bot
 
 It is necessary to register a bot and get its token.

@@ -1,7 +1,7 @@
 #### [2.0.0] (In progress)
 
 * Redmine user which have proper permissions and joined to group will became administrator of the group
-* Remove telegram-cli dependency 
+* Upgrade redmine_telegram_common to version 0.1.0 
 * Telegram bot can work via getUpdates or WebHooks
 * Change issue_url method, so plugin will correct work with Redmine host with specific web port.
 * Telegram rake bot will bind default to tmp/pids
