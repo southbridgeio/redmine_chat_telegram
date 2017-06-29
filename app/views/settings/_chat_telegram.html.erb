@@ -31,10 +31,23 @@
 <em class="info"><%= t 'redmine_chat_telegram.settings.close_issue_statuses_hint' %></em>
 </p>
 
-<%= link_to chat_telegram_api_bot_init_path, method: 'post' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_init' %></button><% end %>
+<hr>
 
-<%= link_to chat_telegram_api_bot_deinit_path, method: 'delete' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_deinit' %></button>
-<% end %>
+<div style="display: flex; align-items: center;">
+  <div style="flex: 1; padding: 0.5em;">
+    <h3>WebHooks</h3>
+
+    <%= link_to chat_telegram_api_bot_init_path, method: 'post' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_init' %></button><% end %>
+
+    <%= link_to chat_telegram_api_bot_deinit_path, method: 'delete' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_deinit' %></button><% end %>
+  </div>
+
+  <div style="flex: 1; padding: 0.5em;">
+    <h3>getUpdates</h3>
+
+    <pre><%= t 'redmine_chat_telegram.settings.get_updates_hint' %></pre>
+  </div>
+</div>
 
 <%= hidden_field_tag 'settings[bot_name]', @settings['bot_name'] %>
 <%= hidden_field_tag 'settings[bot_id]',   @settings['bot_id']   %>

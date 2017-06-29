@@ -13,11 +13,8 @@ module RedmineChatTelegram
   end
 
   def self.issue_url(issue_id)
-    if Setting['protocol'] == 'https'
-      URI::HTTPS.build(host: Setting['host_name'], path: "/issues/#{issue_id}").to_s
-    else
-      URI::HTTP.build(host: Setting['host_name'], path: "/issues/#{issue_id}").to_s
-    end
+    url = Addressable::URI.parse("#{Setting['protocol']}://#{Setting['host_name']}/issues/#{issue_id}")
+    url.to_s
   end
 
   def self.run_cli_command(command, args: nil)
@@ -27,6 +24,11 @@ module RedmineChatTelegram
   def self.bot_initialize
     token = Setting.plugin_redmine_chat_telegram['bot_token']
     self_info = self.run_cli_command('GetSelf')
+
+    if self_info.blank?
+      fail 'Please, set correct settings for plugin TelegramCommon'
+    end
+
     json = JSON.parse(self_info)
     robot_id = json['peer_id'] || json['id']
 

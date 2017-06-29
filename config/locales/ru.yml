@@ -134,6 +134,7 @@ ru:
       required: "требуется для работы этого плагина"
       bot_init: Инициализировать бота
       bot_deinit: Деинициализировать бота
+      get_updates_hint: bundle exec rake -D chat_telegram:bot
     messages:
       hello: "Всем привет! Это чат для задачи: %{issue_url}"
       closed_from_issue: Чат закрыт из задачи.
