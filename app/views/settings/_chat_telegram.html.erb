@@ -37,9 +37,13 @@
   <div style="flex: 1; padding: 0.5em;">
     <h3>WebHooks</h3>
 
-    <%= link_to chat_telegram_api_bot_init_path, method: 'post' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_init' %></button><% end %>
+    <% if Setting['protocol'] == 'https' %>
+      <%= link_to chat_telegram_api_bot_init_path, method: 'post' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_init' %></button><% end %>
 
-    <%= link_to chat_telegram_api_bot_deinit_path, method: 'delete' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_deinit' %></button><% end %>
+      <%= link_to chat_telegram_api_bot_deinit_path, method: 'delete' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_deinit' %></button><% end %>
+    <% else %>
+    <strong><%= t 'redmine_chat_telegram.settings.web_hooks_warning' %></strong>
+    <% end %>
   </div>
 
   <div style="flex: 1; padding: 0.5em;">
