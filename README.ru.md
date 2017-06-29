@@ -1,6 +1,6 @@
 # redmine_chat_telegram
 
-[English version](https://github.com/centosadmin/redmine_chat_telegram/blob/master/README.md)
+[English version](README.md)
 
 [Описание плагина на habrahabr.ru](https://habrahabr.ru/company/centosadmin/blog/281044/)
 
@@ -18,7 +18,7 @@
 ### Требования
 
 * **Ruby 2.3+**
-* [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
+* Настроенный [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 * У Вас должен быть аккаунт для создания ботов в Telegram
 * Плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) должен быть установлен
 * Sidekiq должен обрабатывать очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
@@ -40,6 +40,19 @@
 
 Чтобы добавить подсказки команд для бота, используйте команду `/setcommands`. Нужно написать боту список команд с описанием. Этот список вы можете получить из команды `/help`
 
+### Режимы бота
+
+Бот может работать в двух [режимах](https://core.telegram.org/bots/api#getting-updates) — getUpdates или WebHooks.
+ 
+#### getUpdates
+
+Чтобы у вас заработал бот через getUpdates, вам необходимо запустить процесс бота `bundle exec rake chat_telegram:bot`. 
+Эта команда отключит WebHook у бота.
+
+#### WebHooks
+
+Чтобы у вас заработал бот через WebHooks, вам необходимо зайти в настройки плагина и нажать на кнопку "Инициализировать бота" 
+(токен бота уже должен быть записан, а также обратите внимание, что в этом случае необходим https)
 
 ### Добавление бота в список контактов
 
@@ -48,11 +61,13 @@
 
 ## Использование
 
+Убедитесь, что вы включили модуль в соответствующие проекты, а также соединили учётные записи Redmine и Telegram (см. ниже /connect).
+
 Откройте тикет. Справа на странице Вы увидите ссылку `создать чат Telegram`. Щёлкните по ней и Вы создадите групповой чат в Telegram, который будет связан с этим тикетом. Ссылка изменится на `Войти в чат Telegram`. Щёлкните на ней чтобы присоединиться к чату, открыв его в своём клиенте Telegram. Вы сможете скопировать и передать ссылку любому кому захотите для того, чтобы он смог присоединиться к этому групповому чату.
 
-*Замечание: новый пользователь в группе станет администратором канала, если он также администратор в Redmine*
+*Замечание: новый пользователь в группе станет администратором канала, если его Telegram присоединен к Redmine (см. ниже /connect), а также имеет соответствующие права*
 
-### Доступные команды в чате с ботом
+### Доступные команды в отдельном чате с ботом 
 
 - `/connect account@redmine.com` - связать аккаунт Telegram и Redmine
 - `/new` - команда для создания новой задачи

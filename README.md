@@ -18,7 +18,7 @@ Please help us make this plugin better telling us of any [issues](https://github
 ### Requirements
 
 * **Ruby 2.3+**
-* [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
+* Configured [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 version 1.4.1 has problems with archive sync.
 * You should have Telegram bot account
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
@@ -42,6 +42,20 @@ Enter the bot's token on the Plugin Settings page to add the bot to your chat.
 
 To add hints for commands for the bot, use command `/setcommands`. You need to send list of commands with descriptions. You can get this list from command `/help`.
 
+### Bot modes 
+
+Bot can work in several [modes](https://core.telegram.org/bots/api#getting-updates) — getUpdates or WebHooks.
+ 
+#### getUpdates
+
+To work via getUpdates, you should run bot process `bundle exec rake chat_telegram:bot`. 
+This will drop bot WebHook setting.
+
+#### WebHooks
+
+To work via WebHooks, you should go to plugin settings and press button "Initialize bot" 
+(bot token should be saved earlier, and notice redmine should work on https)
+
 
 ### Add bot to user contacts
 
@@ -50,11 +64,13 @@ This allows the user to add a Bot to group chats.
 
 ## Usage
 
+Make sure you turn on module in project, alse connected Redmine and Telegram accounts (see /connect below).
+
 Open the ticket. You'll see the new link `Create Telegram chat` on the right side of the ticket. Click on it and the Telegram group chat associated with this ticket will be created. The link will change to `Enter Telegram chat`. Click on it to join the chat in your Telegram client. You'll be able to copy and pass the link to anyone you want to invite to the Group Chat.
 
-*Note: a new user in group will be became channel administrator if he is redmine administrator too*
+*Note: a new user in group will became group administrator, if his Telegram account connected to Redmine (see /connect below) and have proper permissions*
 
-### Available commands in bot chat
+### Available commands in dedicated bot chat
 
 - `/connect account@redmine.com` - connect Telegram account to Redmine account
 - `/new` - create new issue
