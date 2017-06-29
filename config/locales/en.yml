@@ -136,7 +136,7 @@ en:
       bot_init: Initialize bot
       bot_deinit: Deinitialize bot
       get_updates_hint: bundle exec rake -D chat_telegram:bot
-      web_hooks_warning: Нужен https протокол, чтобы настроить WebHooks
+      web_hooks_warning: Need https to setup WebHooks
     messages:
       hello: "Hello, everybody! This is a chat for issue: %{issue_url}"
       closed_from_issue: chat was closed from issue
