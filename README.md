@@ -44,7 +44,7 @@ To add hints for commands for the bot, use command `/setcommands`. You need to s
 
 ### Bot modes 
 
-Bot can work in several [modes](https://core.telegram.org/bots/api#getting-updates) — getUpdates or WebHooks.
+Bot can work in two [modes](https://core.telegram.org/bots/api#getting-updates) — getUpdates or WebHooks.
  
 #### getUpdates
 
