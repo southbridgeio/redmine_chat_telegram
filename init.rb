@@ -1,8 +1,6 @@
 require 'yaml'
-REDMINE_CHAT_TELEGRAM_CONFIG = YAML.load_file(File.expand_path('../config/telegram.yml', __FILE__))
 
 FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.root.join('log/chat_telegram'))
-TELEGRAM_CLI_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-cli.log'))
 
 require 'pluralization'
 require 'redmine_chat_telegram'
@@ -28,7 +26,7 @@ Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '1.6.2'
+  version '2.0.0'
   author 'Southbridge'
   author_url 'https://github.com/centosadmin'
 
@@ -39,9 +37,10 @@ Redmine::Plugin.register :redmine_chat_telegram do
            partial: 'settings/chat_telegram')
 
   project_module :chat_telegram do
-    permission :create_telegram_chat, telegram_group_chats: :create
-    permission :close_telegram_chat, telegram_group_chats: :destroy
-    permission :view_telegram_chat_link, telegram_group_chats: :create
+    permission :create_telegram_chat,       telegram_group_chats: :create
+    permission :close_telegram_chat,        telegram_group_chats: :destroy
+    permission :view_telegram_chat_link,    telegram_group_chats: :create
     permission :view_telegram_chat_archive, telegram_group_chats: :create
+    permission :manage_telegram_chat,       telegram_group_chats: :edit
   end
 end

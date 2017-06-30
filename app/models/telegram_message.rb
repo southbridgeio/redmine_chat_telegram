@@ -2,6 +2,7 @@ class TelegramMessage < ActiveRecord::Base
   unloadable
 
   default_scope { order(sent_at: :desc) }
+  scope :reverse_scope, -> { unscope(:order).order('sent_at ASC') }
 
   include Redmine::I18n
 

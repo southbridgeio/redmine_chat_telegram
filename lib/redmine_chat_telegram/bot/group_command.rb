@@ -31,8 +31,6 @@ module RedmineChatTelegram
         if !group_commands.include?(command_name) && command_name.present?
           if private_commands.include?(command_name)
             send_message(I18n.t('telegram_common.bot.group.private_command'))
-          else
-            send_message(I18n.t('redmine_chat_telegram.bot.command_not_found'))
           end
         else
           if group_common_command?
@@ -62,13 +60,13 @@ module RedmineChatTelegram
         elsif command.left_chat_member.present?
           left_chat_member
 
-        elsif command.text =~ /\/task|\/link|\/url/
+        elsif command.text =~ /^\/(task|link|url)/
           send_issue_link
 
-        elsif command.text =~ /\/log/
+        elsif command.text =~ /^\/log/
           log_message
 
-        elsif command.text =~ %r{/subject|/start_date|/due_date|/estimated_hours|/done_ratio|/project|/tracker|/status|/priority|/assigned_to}
+        elsif command.text =~ %r{^/(subject|start_date|due_date|estimated_hours|done_ratio|project|tracker|status|priority|assigned_to)}
           if com = command.text.match(%r{^/subject$|^/start_date$|^/due_date$|/^estimated_hours$
               |^/done_ratio$|^/project$|^/tracker$|^/status$|^/assigned_to$|^/priority$})
             send_current_value(com[0][1..-1])
@@ -122,7 +120,18 @@ module RedmineChatTelegram
           message.system_data = chat_user_full_name(new_chat_member)
         end
 
+        edit_group_admin(new_chat_member) if can_manage_chat?(new_chat_member)
+
         message.save!
+      end
+
+      def can_manage_chat?(telegram_user)
+        telegram_account = TelegramCommon::Account.find_by(telegram_id: telegram_user.id)
+        telegram_account && telegram_account.user && telegram_account.user.allowed_to?(:manage_telegram_chat, issue.project)
+      end
+
+      def edit_group_admin(telegram_user, is_admin = true)
+        RedmineChatTelegram.run_cli_command('EditChatAdmin', args: [issue.telegram_group.telegram_id.abs, telegram_user.id, is_admin])
       end
 
       def left_chat_member
@@ -182,9 +191,14 @@ module RedmineChatTelegram
       end
 
       def change_issue_chat_name(name)
-        chat_name = "chat##{issue.telegram_group.telegram_id.abs}"
-        cmd = "rename_chat #{chat_name} #{name}"
-        RedmineChatTelegram.socket_cli_command(cmd, logger)
+        if name.present?
+          RedmineChatTelegram.run_cli_command('RenameChat', args: [issue.telegram_group.telegram_id.abs, name])
+        else
+          result = RedmineChatTelegram.run_cli_command('BaseInfoChat', args: [issue.telegram_group.telegram_id.abs])
+          chat_info = JSON.parse(result)
+          chat_title = chat_info['chats']&.first['title']
+          send_message(chat_title.to_s)
+        end
       end
 
       def send_current_value(command)

@@ -1,6 +1,6 @@
 # redmine_chat_telegram
 
-[English version](https://github.com/centosadmin/redmine_chat_telegram/blob/master/README.md)
+[English version](README.md)
 
 [Описание плагина на habrahabr.ru](https://habrahabr.ru/company/centosadmin/blog/281044/)
 
@@ -11,37 +11,23 @@
 ![Create telegram chat](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/create-link.png)
 ![Chat links](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/chat-links.png)
 
-Пожалуйста помогите нам сделать этот плагин лучше, сообщая во вкладке [Issues](https://github.com/centosadmin/redmine_chat_telegram/issues) обо всех проблемах, с которыми Вы столкнётесь при его использовании. Мы готовы ответить на Все ваши вопросы, касающиеся этого плагина.
+Пожалуйста, помогите нам сделать этот плагин лучше, сообщая во вкладке [Issues](https://github.com/centosadmin/redmine_chat_telegram/issues) обо всех проблемах, с которыми Вы столкнётесь при его использовании. Мы готовы ответить на Все ваши вопросы, касающиеся этого плагина.
 
 ## Установка
 
 ### Требования
 
 * **Ruby 2.3+**
-* [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
-* [Telegram CLI](https://github.com/vysheng/tg) **рекомендуемая версия 1.3.3**<br>
-с версией 1.4.1 не работает синхронизация архивов сообщений 
-* У Вас должен быть аккаунт пользователя Telegram
+* Настроенный [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 * У Вас должен быть аккаунт для создания ботов в Telegram
 * Плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) должен быть установлен
 * Sidekiq должен обрабатывать очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
 * Не забудьте запустить миграции `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
 
-### Конфигурация в Telegram CLI
-
-**!!! ВНИМАНИЕ !!!**
-
-Начиная с версии 1.4.5, в плагине используется обращение к Telegram CLI как к службе.
-
-В связи с этим `telegram-cli` должен быть запущен как служба.
-
-В каталоге `extras` вы можете найти:
-* пример скрипта `init.d`
-* пример конфига для `monit`
-
-### Первый запуск
-
-Запустите `telegram-cli` на Вашем сервере Redmine и залогиньтесь через него в Telegram. После этого Вы сможете создавать групповые чаты.
+### Обновление на 2.0.0
+ 
+Начиная с версии 2.0.0 этот плагин использует [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
+версии 0.1.0, в которой ушли от зависимости от Telegram CLI. Обратите внимание на новые зависимости.
 
 ### Создание бота в Telegram
 
@@ -59,32 +45,34 @@
 
 Чтобы добавить подсказки команд для бота, используйте команду `/setcommands`. Нужно написать боту список команд с описанием. Этот список вы можете получить из команды `/help`
 
+### Режимы бота
+
+Бот может работать в двух [режимах](https://core.telegram.org/bots/api#getting-updates) — getUpdates или WebHooks.
+ 
+#### getUpdates
+
+Чтобы у вас заработал бот через getUpdates, вам необходимо запустить процесс бота `bundle exec rake chat_telegram:bot`. 
+Эта команда отключит WebHook у бота.
+
+#### WebHooks
+
+Чтобы у вас заработал бот через WebHooks, вам необходимо зайти в настройки плагина и нажать на кнопку "Инициализировать бота" 
+(токен бота уже должен быть записан, а также обратите внимание, что в этом случае необходим https)
 
 ### Добавление бота в список контактов
 
 Наберите `/start` для вашего бота под своим аккаунтом.
 Это позволит пользователю добавить бота в групповой чат.
 
-### Запуск бота
-
-Запустите `telegram-cli` используя скрип `init-telegram-cli`. Пример можно посмотреть в папке `extras`.
-
-Для запуска бота выполните следующее rake задание:
-
-```shell
-RAILS_ENV=production bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
-```
-Или запустите `init-telegram-bot` скрипт из `extras`.
-
-### Синхронизация архива
-
-Плагие не записывает сообщения чата в архив когда он остановлен. Во избежание потери сообщений плагин выполяет синхноризацию сообщений из чата в архив при следующем запуске с задержкой в 5 минут.
-
 ## Использование
+
+Убедитесь, что вы включили модуль в соответствующие проекты, а также соединили учётные записи Redmine и Telegram (см. ниже /connect).
 
 Откройте тикет. Справа на странице Вы увидите ссылку `создать чат Telegram`. Щёлкните по ней и Вы создадите групповой чат в Telegram, который будет связан с этим тикетом. Ссылка изменится на `Войти в чат Telegram`. Щёлкните на ней чтобы присоединиться к чату, открыв его в своём клиенте Telegram. Вы сможете скопировать и передать ссылку любому кому захотите для того, чтобы он смог присоединиться к этому групповому чату.
 
-### Доступные команды в чате с ботом
+*Замечание: новый пользователь в группе станет администратором канала, если его Telegram присоединен к Redmine (см. ниже /connect), а также имеет соответствующие права*
+
+### Доступные команды в отдельном чате с ботом 
 
 - `/connect account@redmine.com` - связать аккаунт Telegram и Redmine
 - `/new` - команда для создания новой задачи
@@ -127,19 +115,7 @@ issue - Редактирование задач.
 За 1 неделю до закрытия каждые 12 часов в чат будет приходить сообщение:
 "Задача по этому чату закрыта. Чат будет автоматически расформирован через XX дней."
 
-По истечении времени все участники чата будут удалены из него.
-
-## Возможные проблемы
-
-### При создании чата ссылка на чат содержит FAILED
-
-Попробуйте сменить `telegram_cli_mode` в `telegram.yml` на `1`.
-
-### Couldn't open public key file: tg-server.pub
-
-Это баг в Telegram CLI. Мы направили [pull request](https://github.com/Rondoozle/tg/pull/4) с решением.
-
-Временное решение: расположите файл `tg-server.pub` в корневом каталоге Redmine.  
+По истечении времени все участники чата будут удалены из него.  
 
 # Автор плагина
 

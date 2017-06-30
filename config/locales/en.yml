@@ -4,8 +4,13 @@ en:
   permission_close_telegram_chat: Close Telegram Chat
   permission_view_telegram_chat_link: View Telegram Chat Link
   permission_view_telegram_chat_archive: View Chat Archive
+  permission_manage_telegram_chat: Manage Telegram Chat
   redmine_chat_telegram:
     bot:
+      authorize:
+        success: Bot is initialized
+      deauthorize:
+        success: Bit is deinitialized
       command_canceled: Command was canceled.
       command_not_found: Command not found.
       private:
@@ -22,6 +27,7 @@ en:
           last: Last 5 issues with comments.
           help: Help.
           chat: Manage issues chats.
+          help: Help for commands
           task: Edit issues.
           issue: Alias for /task.
       group:
@@ -73,11 +79,11 @@ en:
         no_answer: "No"
         next_page: Next page »
       edit_issue:
-        incorrect_value: Value is incorrect. Command was finished.
         cancel_hint: "To cancel command use /cancel."
         input_id: Input issue ID.
         project_issues: List issues of project
         select_param: Select parameter to change.
+        incorrect_value: Value is incorrect. Command was finished.
         not_found: Issue with ID not found.
         input_value: Input value.
         select_project: Select project.
@@ -127,6 +133,10 @@ en:
       close_issue_statuses: Close chat for issues with statuses
       close_issue_statuses_hint: By default chat will be closed for closed issues
       required: "required for this plugin"
+      bot_init: Initialize bot
+      bot_deinit: Deinitialize bot
+      get_updates_hint: bundle exec rake -D chat_telegram:bot
+      web_hooks_warning: Need https to setup WebHooks
     messages:
       hello: "Hello, everybody! This is a chat for issue: %{issue_url}"
       closed_from_issue: chat was closed from issue

@@ -19,7 +19,7 @@ class TelegramGroupCloseWorker
 
   private
 
-  attr_reader :user, :chat_name
+  attr_reader :user, :chat_id
 
   def find_user(user_id)
     @user = User.find_by(id: user_id) || User.anonymous
@@ -27,13 +27,11 @@ class TelegramGroupCloseWorker
   end
 
   def store_chat_name(telegram_id)
-    @chat_name = "chat##{telegram_id.abs}"
-    logger.debug chat_name
+    @chat_id = telegram_id.abs
   end
 
   def reset_chat_link
-    cmd = "export_chat_link #{chat_name}"
-    RedmineChatTelegram.socket_cli_command(cmd, logger)
+    RedmineChatTelegram.run_cli_command('GetChatLink', args: [chat_id])
   end
 
   def send_chat_notification(telegram_id)
@@ -47,25 +45,7 @@ class TelegramGroupCloseWorker
   end
 
   def remove_users_from_chat
-    cmd = "chat_info #{chat_name}"
-    json = RedmineChatTelegram.socket_cli_command(cmd, logger)
-
-    admin = json['admin']
-    members = json['members']
-
-    return unless members.present?
-
-    members_without_admin = members.select { |member| member['id'] != admin['id'] }
-
-    members_without_admin.each do |member|
-      telegram_user_id = "user##{member['id']}"
-      cmd = "chat_del_user #{chat_name} #{telegram_user_id}"
-      RedmineChatTelegram.socket_cli_command(cmd, logger)
-    end
-
-    telegram_user_id = "user##{admin['id']}"
-    cmd = "chat_del_user #{chat_name} #{telegram_user_id}"
-    RedmineChatTelegram.socket_cli_command(cmd, logger)
+    RedmineChatTelegram.run_cli_command('ClearChat', args: [chat_id])
   end
 
   def logger

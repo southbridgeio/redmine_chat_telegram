@@ -4,8 +4,13 @@ ru:
   permission_close_telegram_chat: Закрытие чата Telegram
   permission_view_telegram_chat_link: Просмотр ссылки на чат Telegram
   permission_view_telegram_chat_archive: Просмотр архива чата
+  permission_manage_telegram_chat: Администрирование чата Telegram
   redmine_chat_telegram:
     bot:
+      authorize:
+        success: Бот инициализирован
+      deauthorize:
+        success: Бот деинициализирован
       command_canceled: Команда отменена.
       command_not_found: Команда не найдена.
       private:
@@ -45,7 +50,6 @@ ru:
           help: Справка по командам.
           hint: Команда без значения возвращает текущее значение.
 
-
       error_editing_issue: Не удалось отредактировать задачу. Возможно вы ввели неверные данные или у вас нет необходимого доступа.
       warning_editing_issue: Поле %{field} уже имеет запрашиваемое значение.
       hot: Назначенные вам задачи с активностью за последние сутки
@@ -80,12 +84,14 @@ ru:
         project_issues: Список задач проекта
         select_param: Выберите, какой параметр изменить.
         incorrect_value: Введено неверное значение. Команда завершена.
+        not_found: Задача с соответствующим ID не найдена.
         input_value: Введите значение.
         select_project: Выберите проект.
         select_issue: Выберите задачу.
         select_tracker: Выберите трекер.
         select_status: Выберите статус.
         select_user: Выберите пользователя.
+        select_priority: Выберите приоритет
         chat_name_changed: Название чата задачи успешно изменено.
         chat_for_issue_not_exist: У задачи нет чата.
         help: |
@@ -127,6 +133,10 @@ ru:
       close_issue_statuses: Закрывать чат для задач со статусами
       close_issue_statuses_hint: По умолчанию чат закрывается для закрытых задач
       required: "требуется для работы этого плагина"
+      bot_init: Инициализировать бота
+      bot_deinit: Деинициализировать бота
+      get_updates_hint: bundle exec rake -D chat_telegram:bot
+      web_hooks_warning: Нужен https протокол, чтобы настроить WebHooks
     messages:
       hello: "Всем привет! Это чат для задачи: %{issue_url}"
       closed_from_issue: Чат закрыт из задачи.

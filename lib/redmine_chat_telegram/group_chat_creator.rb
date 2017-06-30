@@ -12,32 +12,14 @@ module RedmineChatTelegram
 
       bot_name = Setting.plugin_redmine_chat_telegram['bot_name']
 
-      cmd  = "create_group_chat \"#{subject}\" #{bot_name}"
-      json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
+      result = RedmineChatTelegram.run_cli_command('CreateChat', args: [subject, bot_name])
 
-      subject_for_cli = if RedmineChatTelegram.mode.zero?
-                          subject.tr(' ', '_').tr('#', '@')
-                        else
-                          subject.tr(' ', '_').tr('#', '_')
-                        end
+      chat_id = JSON.parse(result)['chats'].first['id']
 
-      sleep 1
-      # TODO: 1. replace it by waiting message from bot and getting chat_id from DB
-      # TODO: 2. remove RedmineChatTelegram.mode (telegram_cli_mode)
+      result = RedmineChatTelegram.run_cli_command('GetChatLink', args: [chat_id])
 
-      cmd  = "chat_info #{subject_for_cli}"
-      json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
-
-      telegram_id = json['peer_id'] || json['id']
-
-      # get chat_id from DB
-      #
-      # cmd  = "export_chat_link chat##{chat_id.abs}"
-
-      cmd  = "export_chat_link #{subject_for_cli}"
-      json = RedmineChatTelegram.socket_cli_command(cmd, TELEGRAM_CLI_LOG)
-
-      telegram_chat_url = json['result']
+      telegram_id = chat_id
+      telegram_chat_url = result
 
       if issue.telegram_group.present?
         issue.telegram_group.update telegram_id: telegram_id,

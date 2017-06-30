@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/centosadmin/redmine_chat_telegram.svg?branch=master)](https://travis-ci.org/centosadmin/redmine_chat_telegram)
 # redmine_chat_telegram
 
-[Русская версия](https://github.com/centosadmin/redmine_chat_telegram/blob/master/README.ru.md)
+[Русская версия](README.ru.md)
 
 Redmine plugin is used to create Telegram group chats.
 
@@ -18,30 +18,17 @@ Please help us make this plugin better telling us of any [issues](https://github
 ### Requirements
 
 * **Ruby 2.3+**
-* [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
-* [Telegram CLI](https://github.com/vysheng/tg) **version 1.3.3 recommended**<br>
+* Configured [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 version 1.4.1 has problems with archive sync.
-* You should have Telegram user account
 * You should have Telegram bot account
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
 * You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory
 * Don't forget to run migrations `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
 
-### Telegram CLI configuration
-
-**!!! ATTENTION !!!**
-
-Since 1.4.5 version plugin needs Telegram CLI as system daemon.
-
-You need to run `telegram-cli` as daemon.
-
-In `extras` folder you can find:
-* `init.d` script example
-* `monit` config example
-
-### First time run
-
-Start `telegram-cli` on your Redmine server and login to Telegram with it. You'll be able to create group chats after that.
+### Upgrade to 2.0.0
+ 
+Since version 2.0.0 this plugin uses [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
+0.1.0 version, where removed Telegram CLI dependency. Please, take a look on new requirements.
 
 ### Create Telegram Bot
 
@@ -60,32 +47,35 @@ Enter the bot's token on the Plugin Settings page to add the bot to your chat.
 
 To add hints for commands for the bot, use command `/setcommands`. You need to send list of commands with descriptions. You can get this list from command `/help`.
 
+### Bot modes 
+
+Bot can work in two [modes](https://core.telegram.org/bots/api#getting-updates) — getUpdates or WebHooks.
+ 
+#### getUpdates
+
+To work via getUpdates, you should run bot process `bundle exec rake chat_telegram:bot`. 
+This will drop bot WebHook setting.
+
+#### WebHooks
+
+To work via WebHooks, you should go to plugin settings and press button "Initialize bot" 
+(bot token should be saved earlier, and notice redmine should work on https)
+
 
 ### Add bot to user contacts
 
 Type `/start` command to your bot from your user account.
 This allows the user to add a Bot to group chats.
 
-### Bot launch
-
-Run `telegram-cli` using `init-telegram-cli` script. See example in folder `extras`.
-
-Execute the following rake task to launch the bot:
-
-```shell
-RAILS_ENV=production bundle exec rake chat_telegram:bot PID_DIR='/pid/dir'
-```
-Or `init-telegram-bot` script from `extras`.
-
-### Archive synchronization
-
-Plugin can't log chat messages into the archive when stopped. To avoid loss of messages plugin performs chat - archive synchronization on the next run with 5 minute delay from the start.
-
 ## Usage
+
+Make sure you turn on module in project, alse connected Redmine and Telegram accounts (see /connect below).
 
 Open the ticket. You'll see the new link `Create Telegram chat` on the right side of the ticket. Click on it and the Telegram group chat associated with this ticket will be created. The link will change to `Enter Telegram chat`. Click on it to join the chat in your Telegram client. You'll be able to copy and pass the link to anyone you want to invite to the Group Chat.
 
-### Available commands in bot chat
+*Note: a new user in group will became group administrator, if his Telegram account connected to Redmine (see /connect below) and have proper permissions*
+
+### Available commands in dedicated bot chat
 
 - `/connect account@redmine.com` - connect Telegram account to Redmine account
 - `/new` - create new issue
@@ -118,18 +108,6 @@ url - Get link to the issue.
 log - Save message to the issue.
 issue - Change issues.
 ```
-
-## Troubleshooting
-
-### FAILED in the chat link
-
-Try to change `telegram_cli_mode` in `telegram.yml` to `1`.
-
-### Couldn't open public key file: tg-server.pub
-
-This is CLI bug. We have [pull request](https://github.com/Rondoozle/tg/pull/4) to fix it.
-
-Temporary solution: place `tg-server.pub` into root of Redmine.  
 
 # Author of the Plugin
 
