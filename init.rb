@@ -26,7 +26,7 @@ Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '2.0.0-dev'
+  version '2.0.0'
   author 'Southbridge'
   author_url 'https://github.com/centosadmin'
 

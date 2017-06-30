@@ -1,4 +1,4 @@
-#### [2.0.0] (In progress)
+#### [2.0.0]
 
 * Redmine user which have proper permissions and joined to group will became administrator of the group
 * Upgrade redmine_telegram_common to version 0.1.0 
