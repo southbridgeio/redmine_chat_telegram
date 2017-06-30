@@ -8,7 +8,7 @@ gem 'byebug'
 group :test do
   gem 'timecop'
   gem 'spy'
-  gem 'database_cleaner'
+  gem 'database_cleaner', '1.5.1'
   gem 'minitest-around'
   gem 'minitest-reporters'
 end
