@@ -1,3 +1,7 @@
+#### [2.0.1] (In progress)
+
+* Now edited messages correctly replacing in chat archive
+
 #### [2.0.0]
 
 * Redmine user which have proper permissions and joined to group will became administrator of the group
