@@ -1,6 +1,7 @@
 #### [2.0.1] (In progress)
 
 * Now edited messages correctly replacing in chat archive
+* Add message about access denied when not connected user try to create new issue
 
 #### [2.0.0]
 
