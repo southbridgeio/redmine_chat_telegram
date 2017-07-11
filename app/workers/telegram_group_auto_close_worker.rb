@@ -17,7 +17,7 @@ class TelegramGroupAutoCloseWorker
 
   def need_to_notify_issues
     issues = Issue.joins(:telegram_group)
-                  .where('redmine_chat_telegram_telegram_groups.last_notification_at <= ?', 12.hours.ago.change(min: 59, sec: 59))
+                  .where('redmine_chat_telegram_telegram_groups.last_notification_at <= ?', 24.hours.ago.change(min: 59, sec: 59))
 
     if close_issue_status_ids.present?
       issues = issues.where(status_id: close_issue_status_ids)
