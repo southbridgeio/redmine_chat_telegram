@@ -2,6 +2,7 @@ require 'yaml'
 
 FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.root.join('log/chat_telegram'))
 
+require 'pluralization'
 require 'redmine_chat_telegram'
 
 ActionDispatch::Callbacks.to_prepare do

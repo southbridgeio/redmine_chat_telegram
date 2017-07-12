@@ -39,11 +39,35 @@ class TelegramGroupCloseNotificationWorker
   end
 
   def hours_string
-    l('datetime.distance_in_words.x_hours', hours_count)
+    l_key = 'datetime.distance_in_words.x_hours'
+
+    if current_language == :ru
+      Pluralization.pluralize(hours_count,
+                              l("#{l_key}.one",  count: hours_count),
+                              l("#{l_key}.few",  count: hours_count),
+                              l("#{l_key}.many", count: hours_count),
+                              l("#{l_key}.other",count: hours_count))
+    else
+      Pluralization.en_pluralize(hours_count,
+                                 l("#{l_key}.one"),
+                                 l("#{l_key}.other", count: hours_count))
+    end
   end
 
   def days_string
-    l('datetime.distance_in_words.x_days', days_count)
+    l_key = 'datetime.distance_in_words.x_days'
+
+    if current_language == :ru
+      Pluralization.pluralize(days_count,
+                              l("#{l_key}.one",  count: days_count),
+                              l("#{l_key}.few",  count: days_count),
+                              l("#{l_key}.many", count: days_count),
+                              l("#{l_key}.other",count: days_count))
+    else
+      Pluralization.en_pluralize(days_count,
+                              l("#{l_key}.one"),
+                              l("#{l_key}.other", count: days_count))
+    end
   end
 
   def hours_count
