@@ -43,8 +43,8 @@ class TelegramGroupDailyReportWorker
                                                     "#{user_names.count} messages")
       end
 
-      users_text    = [user_names.count, users_count].join ' '
-      messages_text = [telegram_messages.count, messages_count].join ' '
+      users_text    = users_count
+      messages_text = messages_count
       journal_text  =
         "_#{I18n.t 'redmine_chat_telegram.journal.from_telegram'}:_ \n\n" +
         I18n.t('redmine_chat_telegram.journal.daily_report',
