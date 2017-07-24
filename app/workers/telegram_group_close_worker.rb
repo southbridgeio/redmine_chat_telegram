@@ -45,7 +45,8 @@ class TelegramGroupCloseWorker
   end
 
   def remove_users_from_chat
-    RedmineChatTelegram.run_cli_command('ClearChat', args: [chat_id])
+    robot_id = Setting.plugin_redmine_chat_telegram['robot_id']
+    RedmineChatTelegram.run_cli_command('ClearChat', args: [chat_id, robot_id])
   end
 
   def logger

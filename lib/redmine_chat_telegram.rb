@@ -30,7 +30,7 @@ module RedmineChatTelegram
     end
 
     json = JSON.parse(self_info)
-    robot_id = json['peer_id'] || json['id']
+    robot_id = json['user']['id']
 
     bot      = Telegram::Bot::Client.new(token)
     bot_info = bot.api.get_me['result']
