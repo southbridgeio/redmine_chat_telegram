@@ -23,7 +23,7 @@ version 1.4.1 has problems with archive sync.
 * You should have Telegram bot account
 * Install [Redis](https://redis.io) 2.8 or higher. Run Redis and add it to autorun.
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
-* You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory. (Or copy from plugins/redmine_chat_telegram/extras/sidekiq.yml to config/sidekiq.yml)
+* You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory (Or copy from plugins/redmine_chat_telegram/extras/sidekiq.yml to config/sidekiq.yml).
 * Standard install plugin:
 
 ```

@@ -20,10 +20,10 @@
 * **Ruby 2.3+**
 * Настроенный [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 * У Вас должен быть аккаунт для создания ботов в Telegram
-* Установите [Redis](https://redis.io) 2.8 или выше требуется. Запустите Redis и добавьте его запуск в автозагрузку.
+* Установите [Redis](https://redis.io) 2.8 или выше. Запустите Redis и добавьте его запуск в автозагрузку.
 * Установите плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq). 
 * Настройте Sidekiq на обработку очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_intouch/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
-(Можно скопировать из plugins/redmine_chat_telegram/extras/sidekiq.yml в config/sidekiq.yml)
+(Можно скопировать из plugins/redmine_chat_telegram/extras/sidekiq.yml в config/sidekiq.yml).
 * Плагин устанавливается стандартно:
 
 ```
@@ -32,6 +32,7 @@ git clone https://github.com/centosadmin/redmine_intouch.git plugins/redmine_int
 bundle install RAILS_ENV=production
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
+* После необходимо запустить 
 
 ### Обновление на 2.0.0
  
