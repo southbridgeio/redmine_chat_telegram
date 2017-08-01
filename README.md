@@ -21,10 +21,17 @@ Please help us make this plugin better telling us of any [issues](https://github
 * Configured [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 version 1.4.1 has problems with archive sync.
 * You should have Telegram bot account
+* Install [Redis](https://redis.io) 2.8 or higher. Run Redis and add it to autorun.
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
-* You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory
-* Don't forget to run migrations `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
+* You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory (Or copy from plugins/redmine_chat_telegram/extras/sidekiq.yml to config/sidekiq.yml).
+* Standard install plugin:
 
+```
+cd {REDMINE_ROOT}
+git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmine_chat_telegram
+bundle install RAILS_ENV=production
+bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+```
 ### Upgrade to 2.0.0
  
 Since version 2.0.0 this plugin uses [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
