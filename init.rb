@@ -4,6 +4,7 @@ FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.
 
 require 'pluralization'
 require 'redmine_chat_telegram'
+require 'telegram/bot'
 
 ActionDispatch::Callbacks.to_prepare do
   paths = '/lib/redmine_chat_telegram/{patches/*_patch,hooks/*_hook}.rb'
