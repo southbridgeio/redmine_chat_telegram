@@ -22,19 +22,29 @@ class TelegramGroupDailyReportWorker
       date_string       = format_date(yesterday)
       user_names        = telegram_messages.map(&:author_name).uniq
       joined_user_names = user_names.join(', ').strip
-      users_count       = Pluralization.pluralize(user_names.count,
-                                                  'человек',
-                                                  'человекa',
-                                                  'человек',
-                                                  'человек')
-      messages_count = Pluralization.pluralize(telegram_messages.count,
-                                               'сообщение',
-                                               'сообщения',
-                                               'сообщений',
-                                               'сообщений')
 
-      users_text    = [user_names.count, users_count].join ' '
-      messages_text = [telegram_messages.count, messages_count].join ' '
+      if current_language == :ru
+        users_count       = Pluralization.pluralize(user_names.count,
+                                                    "#{user_names.count} человек",
+                                                    "#{user_names.count} человекa",
+                                                    "#{user_names.count} человек",
+                                                    "#{user_names.count} человек")
+        messages_count = Pluralization.pluralize(telegram_messages.count,
+                                                 "#{telegram_messages.count} сообщение",
+                                                 "#{telegram_messages.count} сообщения",
+                                                 "#{telegram_messages.count} сообщений",
+                                                 "#{telegram_messages.count} сообщений")
+      else
+        users_count    = Pluralization.en_pluralize(user_names.count,
+                                                    '1 person',
+                                                    "#{user_names.count} people")
+        messages_count = Pluralization.en_pluralize(telegram_messages.count,
+                                                    '1 message',
+                                                    "#{user_names.count} messages")
+      end
+
+      users_text    = users_count
+      messages_text = messages_count
       journal_text  =
         "_#{I18n.t 'redmine_chat_telegram.journal.from_telegram'}:_ \n\n" +
         I18n.t('redmine_chat_telegram.journal.daily_report',

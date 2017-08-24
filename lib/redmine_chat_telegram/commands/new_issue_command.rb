@@ -21,6 +21,9 @@ module RedmineChatTelegram
 
       def execute_step_2
         return send_projects if next_page?
+
+        return send_message(I18n.t('redmine_chat_telegram.bot.access_denied')) unless account.user
+
         project_name = command.text
         assignables = Project
                         .where(Project.visible_condition(account.user))

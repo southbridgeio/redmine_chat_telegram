@@ -26,4 +26,8 @@ module Pluralization
       other
     end
   end
+
+  def self.en_pluralize(n, one, other)
+    return n == 1 ? one : other
+  end
 end

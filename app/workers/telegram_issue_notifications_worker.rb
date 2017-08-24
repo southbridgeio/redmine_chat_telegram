@@ -1,6 +1,7 @@
 class TelegramIssueNotificationsWorker
   include Sidekiq::Worker
   include IssuesHelper
+  include CustomFieldsHelper
 
   TELEGRAM_ISSUE_NOTIFICATIONS_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-issue-notifications.log'))
 
