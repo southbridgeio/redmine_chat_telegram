@@ -69,7 +69,7 @@ This allows the user to add a Bot to group chats.
 
 ## Usage
 
-Make sure you turn on module in project, alse connected Redmine and Telegram accounts (see /connect below).
+Make sure you have running sidekiq, turn on module in project, also connected Redmine and Telegram accounts (see /connect below).
 
 Open the ticket. You'll see the new link `Create Telegram chat` on the right side of the ticket. Click on it and the Telegram group chat associated with this ticket will be created. The link will change to `Enter Telegram chat`. Click on it to join the chat in your Telegram client. You'll be able to copy and pass the link to anyone you want to invite to the Group Chat.
 
