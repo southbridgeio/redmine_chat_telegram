@@ -1,3 +1,4 @@
+[![Rate at redmine.org](http://img.shields.io/badge/rate%20at-redmine.org-blue.svg?style=flat)](http://www.redmine.org/plugins/redmine_chat_telegram)
 # redmine_chat_telegram
 
 [English version](README.md)
@@ -21,7 +22,7 @@
 * Настроенный [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 * У Вас должен быть аккаунт для создания ботов в Telegram
 * Установите [Redis](https://redis.io) 2.8 или выше. Запустите Redis и добавьте его запуск в автозагрузку.
-* Установите плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq). 
+* Установите плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq).
 * Настройте Sidekiq на обработку очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
 (Можно скопировать из plugins/redmine_chat_telegram/extras/sidekiq.yml в config/sidekiq.yml).
 * Плагин устанавливается стандартно:
@@ -32,10 +33,10 @@ git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmi
 bundle install RAILS_ENV=production
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
-* После необходимо запустить 
+* После необходимо запустить
 
 ### Обновление на 2.0.0
- 
+
 Начиная с версии 2.0.0 этот плагин использует [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 версии 0.1.0, в которой ушли от зависимости от Telegram CLI. Обратите внимание на новые зависимости.
 
@@ -58,15 +59,15 @@ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ### Режимы бота
 
 Бот может работать в двух [режимах](https://core.telegram.org/bots/api#getting-updates) — getUpdates или WebHooks.
- 
+
 #### getUpdates
 
-Чтобы у вас заработал бот через getUpdates, вам необходимо запустить процесс бота `bundle exec rake chat_telegram:bot`. 
+Чтобы у вас заработал бот через getUpdates, вам необходимо запустить процесс бота `bundle exec rake chat_telegram:bot`.
 Эта команда отключит WebHook у бота.
 
 #### WebHooks
 
-Чтобы у вас заработал бот через WebHooks, вам необходимо зайти в настройки плагина и нажать на кнопку "Инициализировать бота" 
+Чтобы у вас заработал бот через WebHooks, вам необходимо зайти в настройки плагина и нажать на кнопку "Инициализировать бота"
 (токен бота уже должен быть записан, а также обратите внимание, что в этом случае необходим https)
 
 ### Добавление бота в список контактов
@@ -82,7 +83,7 @@ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 
 *Замечание: новый пользователь в группе станет администратором канала, если его Telegram присоединен к Redmine (см. ниже /connect), а также имеет соответствующие права*
 
-### Доступные команды в отдельном чате с ботом 
+### Доступные команды в отдельном чате с ботом
 
 - `/connect account@redmine.com` - связать аккаунт Telegram и Redmine
 - `/new` - команда для создания новой задачи
