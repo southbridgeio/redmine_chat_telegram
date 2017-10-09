@@ -61,7 +61,8 @@ class RedmineChatTelegram::Commands::FindIssuesCommandTest < ActiveSupport::Test
 
     it 'sends assigned to user issues with deadline' do
       Issue.update_all(assigned_to_id: 2)
-      Issue.third.update(assigned_to: user, due_date: Date.yesterday)
+      Issue.third.update_columns(assigned_to_id: user.id, due_date: Date.yesterday)
+
       text = <<~HTML
         <b>Assigned to you issues with expired deadline:</b>
         <a href="#{url_base}/issues/3">#3</a>: Error 281 when updating a recipe

@@ -1,8 +1,9 @@
-#### [2.0.1] (In progress)
+#### [2.0.1]
 
 * Now edited messages correctly replacing in chat archive
 * Add message about access denied when not connected user try to create new issue
 * Fix pluralization for en and ru close notification messages
+* Fix various small bugs
 
 #### [2.0.0]
 
