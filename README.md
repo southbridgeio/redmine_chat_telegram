@@ -1,5 +1,6 @@
 [![Code Climate](https://codeclimate.com/github/centosadmin/redmine_chat_telegram/badges/gpa.svg)](https://codeclimate.com/github/centosadmin/redmine_chat_telegram)
 [![Build Status](https://travis-ci.org/centosadmin/redmine_chat_telegram.svg?branch=master)](https://travis-ci.org/centosadmin/redmine_chat_telegram)
+[![Rate at redmine.org](http://img.shields.io/badge/rate%20at-redmine.org-blue.svg?style=flat)](http://www.redmine.org/plugins/redmine_chat_telegram)
 # redmine_chat_telegram
 
 [Русская версия](README.ru.md)
@@ -33,7 +34,7 @@ bundle install RAILS_ENV=production
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
 ### Upgrade to 2.0.0
- 
+
 Since version 2.0.0 this plugin uses [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 0.1.0 version, where removed Telegram CLI dependency. Please, take a look on new requirements.
 
@@ -54,18 +55,18 @@ Enter the bot's token on the Plugin Settings page to add the bot to your chat.
 
 To add hints for commands for the bot, use command `/setcommands`. You need to send list of commands with descriptions. You can get this list from command `/help`.
 
-### Bot modes 
+### Bot modes
 
 Bot can work in two [modes](https://core.telegram.org/bots/api#getting-updates) — getUpdates or WebHooks.
- 
+
 #### getUpdates
 
-To work via getUpdates, you should run bot process `bundle exec rake chat_telegram:bot`. 
+To work via getUpdates, you should run bot process `bundle exec rake chat_telegram:bot`.
 This will drop bot WebHook setting.
 
 #### WebHooks
 
-To work via WebHooks, you should go to plugin settings and press button "Initialize bot" 
+To work via WebHooks, you should go to plugin settings and press button "Initialize bot"
 (bot token should be saved earlier, and notice redmine should work on https)
 
 
