@@ -4,6 +4,9 @@ module RedmineChatTelegram
       include IssuesHelper
       include ActionView::Helpers::TagHelper
       include ERB::Util
+      include TelegramCommon::Tdlib::DependencyProviders::RenameChat
+      include TelegramCommon::Tdlib::DependencyProviders::GetChat
+
       PER_PAGE = 10
 
       EDITABLES = [
@@ -209,17 +212,15 @@ module RedmineChatTelegram
         if issue.telegram_group.present? && issue.telegram_group.telegram_id.present?
           if name.present?
             if account.user.allowed_to?(:edit_issues, issue.project)
-              RedmineChatTelegram.run_cli_command('RenameChat', args: [issue.telegram_group.telegram_id.abs, name])
+              rename_chat.(issue.telegram_group.telegram_id, name)
               executing_command.destroy
               send_message(locale('chat_name_changed'))
             else
               send_message(I18n.t('redmine_chat_telegram.bot.access_denied'))
             end
           else
-            result = RedmineChatTelegram.run_cli_command('BaseInfoChat', args: [issue.telegram_group.telegram_id.abs])
-            chat_info = JSON.parse(result)
-            chat_title = chat_info['chats']&.first['title']
-            send_message(chat_title.to_s)
+            chat_info = get_chat.(issue.telegram_group.telegram_id)
+            send_message(chat_info['title'].to_s)
           end
         else
           send_message(locale('chat_for_issue_not_exist'))

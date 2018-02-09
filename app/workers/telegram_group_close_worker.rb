@@ -1,5 +1,7 @@
 class TelegramGroupCloseWorker
   include Sidekiq::Worker
+  include TelegramCommon::Tdlib::DependencyProviders::GetChatLink
+  include TelegramCommon::Tdlib::DependencyProviders::CloseChat
 
   def perform(telegram_id, user_id = nil)
     RedmineChatTelegram.set_locale
@@ -31,7 +33,7 @@ class TelegramGroupCloseWorker
   end
 
   def reset_chat_link
-    RedmineChatTelegram.run_cli_command('GetChatLink', args: [chat_id])
+    get_chat_link.(chat_id)
   end
 
   def send_chat_notification(telegram_id)
@@ -45,8 +47,7 @@ class TelegramGroupCloseWorker
   end
 
   def remove_users_from_chat
-    robot_id = Setting.plugin_redmine_chat_telegram['robot_id']
-    RedmineChatTelegram.run_cli_command('ClearChat', args: [chat_id, robot_id])
+    close_chat.(chat_id)
   end
 
   def logger

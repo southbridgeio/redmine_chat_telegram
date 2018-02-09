@@ -2,6 +2,8 @@ require 'yaml'
 
 FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.root.join('log/chat_telegram'))
 
+Rails.application.config.eager_load_paths += Dir.glob("#{Rails.application.config.root}/plugins/redmine_chat_telegram/{lib,app/workers}")
+
 require 'pluralization'
 require 'redmine_chat_telegram'
 require 'telegram/bot'

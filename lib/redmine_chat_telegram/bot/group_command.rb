@@ -4,6 +4,10 @@ module RedmineChatTelegram
       include IssuesHelper
       include ActionView::Helpers::TagHelper
       include ERB::Util
+      include TelegramCommon::Tdlib::DependencyProviders::RenameChat
+      include TelegramCommon::Tdlib::DependencyProviders::GetChat
+      include TelegramCommon::Tdlib::DependencyProviders::ToggleChatAdmin
+
       private
 
       def group_common_commands
@@ -131,7 +135,7 @@ module RedmineChatTelegram
       end
 
       def edit_group_admin(telegram_user, is_admin = true)
-        RedmineChatTelegram.run_cli_command('EditChatAdmin', args: [issue.telegram_group.telegram_id.abs, telegram_user.id, is_admin])
+        toggle_chat_admin.(issue.telegram_group.telegram_id, telegram_user.id, is_admin)
       end
 
       def left_chat_member
@@ -192,12 +196,10 @@ module RedmineChatTelegram
 
       def change_issue_chat_name(name)
         if name.present?
-          RedmineChatTelegram.run_cli_command('RenameChat', args: [issue.telegram_group.telegram_id.abs, name])
+          rename_chat.(issue.telegram_group.telegram_id, name)
         else
-          result = RedmineChatTelegram.run_cli_command('BaseInfoChat', args: [issue.telegram_group.telegram_id.abs])
-          chat_info = JSON.parse(result)
-          chat_title = chat_info['chats']&.first['title']
-          send_message(chat_title.to_s)
+          chat_info = get_chat.(issue.telegram_group.telegram_id)
+          send_message(chat_info['title'].to_s)
         end
       end
 
