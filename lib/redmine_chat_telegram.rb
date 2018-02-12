@@ -18,7 +18,7 @@ module RedmineChatTelegram
   end
 
   def self.bot_initialize
-    include TelegramCommon::Tdlib::DependencyProviders::GetMe
+    extend TelegramCommon::Tdlib::DependencyProviders::GetMe
   
     token = Setting.plugin_redmine_chat_telegram['bot_token']
     self_info = get_me.call
