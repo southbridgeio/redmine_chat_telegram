@@ -1,3 +1,7 @@
+#### [2.1.0]
+
+* Switch to TDlib
+
 #### [2.0.1]
 
 * Now edited messages correctly replacing in chat archive

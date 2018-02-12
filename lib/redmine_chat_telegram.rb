@@ -17,20 +17,17 @@ module RedmineChatTelegram
     url.to_s
   end
 
-  def self.run_cli_command(command, args: nil)
-    TelegramCommon::Telegram.new.execute(command, args: args)
-  end
-
   def self.bot_initialize
+    extend TelegramCommon::Tdlib::DependencyProviders::GetMe
+  
     token = Setting.plugin_redmine_chat_telegram['bot_token']
-    self_info = self.run_cli_command('GetSelf')
+    self_info = get_me.call
 
-    if self_info.blank?
+    unless self_info['@type'] == 'user'
       fail 'Please, set correct settings for plugin TelegramCommon'
     end
 
-    json = JSON.parse(self_info)
-    robot_id = json['user']['id']
+    robot_id = self_info['id']
 
     bot      = Telegram::Bot::Client.new(token)
     bot_info = bot.api.get_me['result']
