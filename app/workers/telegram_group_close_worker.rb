@@ -29,7 +29,7 @@ class TelegramGroupCloseWorker
   end
 
   def store_chat_name(telegram_id)
-    @chat_id = telegram_id.abs
+    @chat_id = telegram_id
   end
 
   def reset_chat_link
