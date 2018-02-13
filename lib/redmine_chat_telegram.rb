@@ -60,7 +60,7 @@ module RedmineChatTelegram
   def self.handle_message(message)
     RedmineChatTelegram::Bot.new(message).call if message.is_a?(Telegram::Bot::Types::Message)
 
-    group = RedmineChatTelegram::TelegramGroup.find_by(telegram_id: message.chat.id.abs)
+    group = RedmineChatTelegram::TelegramGroup.find_by(telegram_id: message.chat.id)
 
     if group.present?
       telegram_message = TelegramMessage.find_or_initialize_by(telegram_id: message.message_id)
