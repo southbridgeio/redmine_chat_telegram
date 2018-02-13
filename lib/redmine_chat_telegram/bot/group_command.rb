@@ -88,7 +88,7 @@ module RedmineChatTelegram
 
         begin
           Issue.joins(:telegram_group)
-            .find_by!(redmine_chat_telegram_telegram_groups: { telegram_id: chat_id.abs })
+            .find_by!(redmine_chat_telegram_telegram_groups: { telegram_id: chat_id })
         rescue ActiveRecord::RecordNotFound => e
           nil
         end
