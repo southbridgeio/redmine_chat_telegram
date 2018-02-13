@@ -71,7 +71,18 @@ module RedmineChatTelegram
       from_first_name = from.first_name
       from_last_name = from.last_name
       from_username = from.username
-      message_text = message.text
+      message_text =
+        if message.text
+          message.text
+        elsif message.new_chat_member
+          'joined'
+        elsif message.left_chat_member
+          'left_chat'
+        elsif message.group_chat_created
+          'chat_was_created'
+        else
+          'Unknown action'
+        end
 
       telegram_message.issue_id = group.issue.id
       telegram_message.sent_at = sent_at
