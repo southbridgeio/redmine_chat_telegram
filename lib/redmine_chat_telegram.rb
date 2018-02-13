@@ -19,6 +19,7 @@ module RedmineChatTelegram
 
   def self.bot_initialize
     extend TelegramCommon::Tdlib::DependencyProviders::GetMe
+    extend TelegramCommon::Tdlib::DependencyProviders::AddBot
   
     token = Setting.plugin_redmine_chat_telegram['bot_token']
     self_info = get_me.call
@@ -40,6 +41,8 @@ module RedmineChatTelegram
       bot_info = bot.api.get_me['result']
       bot_name = bot_info['username']
     end
+
+    add_bot.(bot_info['id'])
 
     plugin_settings = Setting.find_by(name: 'plugin_redmine_chat_telegram')
 
