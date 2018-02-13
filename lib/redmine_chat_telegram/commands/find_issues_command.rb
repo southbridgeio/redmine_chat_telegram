@@ -49,7 +49,7 @@ module RedmineChatTelegram
         message_title = "<b>#{message}:</b>\n"
         issues.inject(message_title) do |message_text, issue|
           url = issue_url(issue)
-          message_text << %(<a href="#{url}">##{issue.id}</a>: #{issue.subject}\n)
+          message_text << %(<a href="#{url}">##{issue.id}</a>: #{CGI::escapeHTML(issue.subject)}\n)
         end
       end
     end
