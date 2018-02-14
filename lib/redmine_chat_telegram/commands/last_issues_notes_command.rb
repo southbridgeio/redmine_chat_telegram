@@ -32,7 +32,7 @@ module RedmineChatTelegram
         issues.inject('') do |message, issue|
           url = issue_url(issue)
           journal = last_issue_journal(issue)
-          message << %(<a href="#{url}">##{issue.id}</a>: #{CGI::escapeHTML(issue.subject)} #{CGI::escapeHTML(journal)}\n\n)
+          message << %(<a href="#{url}">##{issue.id}</a>: #{CGI::escapeHTML(issue.subject)} #{Nokogiri::HTML::DocumentFragment.parse(journal).to_html}\n\n)
         end
       end
     end
