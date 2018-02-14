@@ -29,7 +29,7 @@ class TelegramMessageSenderWorker
 
     TELEGRAM_MESSAGE_SENDER_ERRORS_LOG.info "MESSAGE: #{message}"
 
-    telegram_user = RedmineChatTelegram::TelegramGroup.find_by(telegram_id: telegram_id.abs)
+    telegram_user = RedmineChatTelegram::TelegramGroup.find_by(telegram_id: telegram_id)
 
     if e.message.include?('429') || e.message.include?('retry later')
 

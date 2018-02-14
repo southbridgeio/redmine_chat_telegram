@@ -1,3 +1,11 @@
+#### [2.1.0]
+
+* Switch to TDlib
+
+  telegram_id column in telegram_groups table is now should be negative. To fix values for old chats run rake redmine:plugins:migrate NAME=redmine_chat_telegram
+
+* Fix service messages in chat history
+
 #### [2.0.1]
 
 * Now edited messages correctly replacing in chat archive

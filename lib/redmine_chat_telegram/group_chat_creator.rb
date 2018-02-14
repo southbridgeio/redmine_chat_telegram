@@ -1,5 +1,8 @@
 module RedmineChatTelegram
   class GroupChatCreator
+    include TelegramCommon::Tdlib::DependencyProviders::CreateChat
+    include TelegramCommon::Tdlib::DependencyProviders::GetChatLink
+
     attr_reader :issue, :user
 
     def initialize(issue, user)
@@ -10,16 +13,16 @@ module RedmineChatTelegram
     def run
       subject  = "#{issue.project.name} #{issue.id}"
 
-      bot_name = Setting.plugin_redmine_chat_telegram['bot_name']
+      bot_id = Setting.plugin_redmine_chat_telegram['bot_id']
 
-      result = RedmineChatTelegram.run_cli_command('CreateChat', args: [subject, bot_name])
+      result = create_chat.(subject, [bot_id])
 
-      chat_id = JSON.parse(result)['chats'].first['id']
+      chat_id = result['id']
 
-      result = RedmineChatTelegram.run_cli_command('GetChatLink', args: [chat_id])
+      result = get_chat_link.(chat_id)
 
       telegram_id = chat_id
-      telegram_chat_url = result
+      telegram_chat_url = result['invite_link']
 
       if issue.telegram_group.present?
         issue.telegram_group.update telegram_id: telegram_id,

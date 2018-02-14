@@ -17,20 +17,18 @@ module RedmineChatTelegram
     url.to_s
   end
 
-  def self.run_cli_command(command, args: nil)
-    TelegramCommon::Telegram.new.execute(command, args: args)
-  end
-
   def self.bot_initialize
+    extend TelegramCommon::Tdlib::DependencyProviders::GetMe
+    extend TelegramCommon::Tdlib::DependencyProviders::AddBot
+  
     token = Setting.plugin_redmine_chat_telegram['bot_token']
-    self_info = self.run_cli_command('GetSelf')
+    self_info = get_me.call
 
-    if self_info.blank?
+    unless self_info['@type'] == 'user'
       fail 'Please, set correct settings for plugin TelegramCommon'
     end
 
-    json = JSON.parse(self_info)
-    robot_id = json['user']['id']
+    robot_id = self_info['id']
 
     bot      = Telegram::Bot::Client.new(token)
     bot_info = bot.api.get_me['result']
@@ -43,6 +41,8 @@ module RedmineChatTelegram
       bot_info = bot.api.get_me['result']
       bot_name = bot_info['username']
     end
+
+    add_bot.(bot_info['id'])
 
     plugin_settings = Setting.find_by(name: 'plugin_redmine_chat_telegram')
 
@@ -60,7 +60,7 @@ module RedmineChatTelegram
   def self.handle_message(message)
     RedmineChatTelegram::Bot.new(message).call if message.is_a?(Telegram::Bot::Types::Message)
 
-    group = RedmineChatTelegram::TelegramGroup.find_by(telegram_id: message.chat.id.abs)
+    group = RedmineChatTelegram::TelegramGroup.find_by(telegram_id: message.chat.id)
 
     if group.present?
       telegram_message = TelegramMessage.find_or_initialize_by(telegram_id: message.message_id)
@@ -71,7 +71,18 @@ module RedmineChatTelegram
       from_first_name = from.first_name
       from_last_name = from.last_name
       from_username = from.username
-      message_text = message.text
+      message_text =
+        if message.text
+          message.text
+        elsif message.new_chat_member
+          'joined'
+        elsif message.left_chat_member
+          'left_chat'
+        elsif message.group_chat_created
+          'chat_was_created'
+        else
+          'Unknown action'
+        end
 
       telegram_message.issue_id = group.issue.id
       telegram_message.sent_at = sent_at
