@@ -1,5 +1,7 @@
-class RedmineChatTelegram::TelegramGroup < ActiveRecord::Base
-  unloadable
+module RedmineChatTelegram
+  class TelegramGroup < ActiveRecord::Base
+    unloadable
 
-  belongs_to :issue
+    belongs_to :issue
+  end
 end
