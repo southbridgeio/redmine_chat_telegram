@@ -24,6 +24,8 @@
 * Sidekiq должен обрабатывать очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
 * Не забудьте запустить миграции `bundle exec rake redmine:plugins:migrate RAILS_ENV=production`
 
+*Примечание: каждый из наших плагинов требует наличие отдельного бота.*
+
 ### Обновление на 2.0.0
  
 Начиная с версии 2.0.0 этот плагин использует [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
