@@ -15,6 +15,15 @@
 <p>
   <label for="settings_telegram_bot_token">Bot Token</label>
   <%= text_field_tag 'settings[bot_token]', @settings['bot_token'], size: 50 %>
+  <% if (bot_collisions = TelegramCommon.bot_collisions).present? %>
+    <br>
+    <strong style="color: red"><%= t 'telegram_common.settings.bot_collision' %></strong>
+    <% bot_collisions.each do |collision| %>
+      <p>
+        <strong><%= collision.join(', ') %><strong>
+      </p>
+    <% end %>
+  <% end %>
 </p>
 <p>
   <label>

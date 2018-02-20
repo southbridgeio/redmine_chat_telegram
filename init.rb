@@ -2,7 +2,7 @@ require 'yaml'
 
 FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.root.join('log/chat_telegram'))
 
-Rails.application.config.eager_load_paths += Dir.glob("#{Rails.application.config.root}/plugins/redmine_chat_telegram/{lib,app/workers}")
+Rails.application.config.eager_load_paths += Dir.glob("#{Rails.application.config.root}/plugins/redmine_chat_telegram/{lib,app/workers,app/models,app/controllers}")
 
 require 'pluralization'
 require 'redmine_chat_telegram'
@@ -29,7 +29,7 @@ Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '2.0.1'
+  version '2.1.0'
   author 'Southbridge'
   author_url 'https://github.com/centosadmin'
 

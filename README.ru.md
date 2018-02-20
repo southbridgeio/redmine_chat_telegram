@@ -35,6 +35,8 @@ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
 * После необходимо запустить
 
+*Примечание: каждый из наших плагинов требует наличие отдельного бота.*
+
 ### Обновление на 2.0.0
 
 Начиная с версии 2.0.0 этот плагин использует [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)

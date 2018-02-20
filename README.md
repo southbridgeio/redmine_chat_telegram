@@ -33,6 +33,9 @@ git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmi
 bundle install RAILS_ENV=production
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
+
+*Note: each of our plugins requires separate bot. It won't work if you use the same bot for several plugins.*
+
 ### Upgrade to 2.0.0
 
 Since version 2.0.0 this plugin uses [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)

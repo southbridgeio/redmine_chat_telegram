@@ -134,3 +134,9 @@ $("#telegram-search-input").keyup(function (event) {
     clearSearch()
   }
 });
+
+$(document).keypress(function(e) { 
+    if (e.keyCode == 27) { 
+        $('#ajax-modal').dialog('close');
+    } 
+});
