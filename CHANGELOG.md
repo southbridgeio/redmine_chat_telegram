@@ -5,6 +5,7 @@
   telegram_id column in telegram_groups table is now should be negative. To fix values for old chats run rake redmine:plugins:migrate NAME=redmine_chat_telegram
 
 * Fix service messages in chat history
+* Add bot collision check
 
 #### [2.0.1]
 
