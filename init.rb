@@ -8,7 +8,10 @@ require 'pluralization'
 require 'redmine_chat_telegram'
 require 'telegram/bot'
 
-ActionDispatch::Callbacks.to_prepare do
+# Rails 5.1/Rails 4
+reloader = defined?(ActiveSupport::Reloader) ? ActiveSupport::Reloader : ActionDispatch::Reloader
+
+reloader.to_prepare do
   paths = '/lib/redmine_chat_telegram/{patches/*_patch,hooks/*_hook}.rb'
   Dir.glob(File.dirname(__FILE__) + paths).each do |file|
     require_dependency file
