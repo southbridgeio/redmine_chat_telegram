@@ -58,8 +58,8 @@ module RedmineChatTelegram
         if command.group_chat_created
           group_chat_created
 
-        elsif command.new_chat_member.present?
-          new_chat_member
+        elsif command.new_chat_members.present?
+          new_chat_members
 
         elsif command.left_chat_member.present?
           left_chat_member
@@ -114,17 +114,19 @@ module RedmineChatTelegram
         message.save!
       end
 
-      def new_chat_member
-        new_chat_member = command.new_chat_member
+      def new_chat_members
+        new_chat_members = command.new_chat_members
 
-        if command.from.id == new_chat_member.id
+        if command.from.id == new_chat_members.first.id
           message.message = 'joined'
         else
           message.message = 'invited'
-          message.system_data = chat_user_full_name(new_chat_member)
         end
 
-        edit_group_admin(new_chat_member) if can_manage_chat?(new_chat_member)
+        new_chat_members.each do |new_chat_member|
+          edit_group_admin(new_chat_member) if can_manage_chat?(new_chat_member)
+        end
+        message.system_data = new_chat_members.map { |new_chat_member| chat_user_full_name(new_chat_member) }.join(', ')
 
         message.save!
       end
