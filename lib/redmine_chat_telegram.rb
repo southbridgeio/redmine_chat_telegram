@@ -74,7 +74,7 @@ module RedmineChatTelegram
       message_text =
         if message.text
           message.text
-        elsif message.new_chat_member
+        elsif message.new_chat_members
           'joined'
         elsif message.left_chat_member
           'left_chat'
