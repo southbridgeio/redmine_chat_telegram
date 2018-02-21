@@ -1,4 +1,3 @@
-gem 'telegram-bot-ruby', '~> 0.8.6'
 gem 'pidfile', git: 'https://github.com/arturtr/pidfile.git'
 gem 'sidekiq-cron'
 gem 'sidekiq-rate-limiter', git: 'https://github.com/centosadmin/sidekiq-rate-limiter', branch: 'master',
