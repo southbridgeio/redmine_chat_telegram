@@ -47,7 +47,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
   describe 'new_chat_member' do
     it 'creates joined system message when user joined' do
       command = Telegram::Bot::Types::Message
-        .new(command_params.merge(new_chat_member: { id: 998_899 }))
+        .new(command_params.merge(new_chat_members: [{ id: 998_899 }]))
       RedmineChatTelegram::Bot.new(command).call
 
       message = TelegramMessage.last
@@ -57,7 +57,7 @@ class RedmineChatTelegram::BotTest < ActiveSupport::TestCase
 
     it 'creates invited system message when user was invited' do
       command = Telegram::Bot::Types::Message
-        .new(command_params.merge(new_chat_member: { id: 7777 }))
+        .new(command_params.merge(new_chat_members: [{ id: 7777 }]))
       RedmineChatTelegram::Bot.new(command).call
 
       message = TelegramMessage.last
