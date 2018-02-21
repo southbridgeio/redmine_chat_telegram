@@ -39,7 +39,11 @@ module RedmineChatTelegram
       end
 
       def account
-        @account ||= ::TelegramCommon::Account.find_by!(telegram_id: command.from.id)
+        @account ||=
+          begin
+            account = ::TelegramCommon::Account.find_by!(telegram_id: command.from.id)
+            account.user ? account : nil
+          end
       rescue ActiveRecord::RecordNotFound
         send_message(I18n.t('redmine_chat_telegram.bot.account_not_found'))
         nil
