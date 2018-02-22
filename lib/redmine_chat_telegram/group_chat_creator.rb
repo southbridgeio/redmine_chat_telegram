@@ -13,7 +13,7 @@ module RedmineChatTelegram
     def run
       subject  = "#{issue.project.name} #{issue.id}"
 
-      bot_id = Setting.plugin_redmine_chat_telegram['bot_id']
+      bot_id = Setting.plugin_redmine_telegram_common['bot_id']
 
       result = create_chat.(subject, [bot_id])
 

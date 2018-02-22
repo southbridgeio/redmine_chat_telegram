@@ -7,7 +7,7 @@ module RedmineChatTelegram
   end
 
   def self.bot_token
-    Setting.plugin_redmine_chat_telegram['bot_token']
+    Setting.plugin_redmine_telegram_common['bot_token']
   end
 
   def self.set_locale
