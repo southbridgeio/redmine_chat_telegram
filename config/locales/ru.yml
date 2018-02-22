@@ -133,10 +133,6 @@ ru:
       close_issue_statuses: Закрывать чат для задач со статусами
       close_issue_statuses_hint: По умолчанию чат закрывается для закрытых задач
       required: "требуется для работы этого плагина"
-      bot_init: Инициализировать бота
-      bot_deinit: Деинициализировать бота
-      get_updates_hint: bundle exec rake -D chat_telegram:bot
-      web_hooks_warning: Нужен https протокол, чтобы настроить WebHooks
     messages:
       hello: "Всем привет! Это чат для задачи: %{issue_url}"
       closed_from_issue: Чат закрыт из задачи.

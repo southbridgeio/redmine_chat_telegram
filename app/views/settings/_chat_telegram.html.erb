@@ -13,19 +13,6 @@
 <% end %>
 
 <p>
-  <label for="settings_telegram_bot_token">Bot Token</label>
-  <%= text_field_tag 'settings[bot_token]', @settings['bot_token'], size: 50 %>
-  <% if (bot_collisions = TelegramCommon.bot_collisions).present? %>
-    <br>
-    <strong style="color: red"><%= t 'telegram_common.settings.bot_collision' %></strong>
-    <% bot_collisions.each do |collision| %>
-      <p>
-        <strong><%= collision.join(', ') %><strong>
-      </p>
-    <% end %>
-  <% end %>
-</p>
-<p>
   <label>
     <%= t 'redmine_chat_telegram.settings.daily_report' %>
   </label>
@@ -39,29 +26,3 @@
   options_for_select(IssueStatus.sorted.map { |s| [s.name, s.id] }, @settings['close_issue_statuses']), multiple: true %>
 <em class="info"><%= t 'redmine_chat_telegram.settings.close_issue_statuses_hint' %></em>
 </p>
-
-<hr>
-
-<div style="display: flex; align-items: center;">
-  <div style="flex: 1; padding: 0.5em;">
-    <h3>WebHooks</h3>
-
-    <% if Setting['protocol'] == 'https' %>
-      <%= link_to chat_telegram_api_bot_init_path, method: 'post' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_init' %></button><% end %>
-
-      <%= link_to chat_telegram_api_bot_deinit_path, method: 'delete' do %><button type="button"><%= t 'redmine_chat_telegram.settings.bot_deinit' %></button><% end %>
-    <% else %>
-    <strong><%= t 'redmine_chat_telegram.settings.web_hooks_warning' %></strong>
-    <% end %>
-  </div>
-
-  <div style="flex: 1; padding: 0.5em;">
-    <h3>getUpdates</h3>
-
-    <pre><%= t 'redmine_chat_telegram.settings.get_updates_hint' %></pre>
-  </div>
-</div>
-
-<%= hidden_field_tag 'settings[bot_name]', @settings['bot_name'] %>
-<%= hidden_field_tag 'settings[bot_id]',   @settings['bot_id']   %>
-<%= hidden_field_tag 'settings[robot_id]', @settings['robot_id'] %>
