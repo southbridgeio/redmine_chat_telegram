@@ -4,7 +4,7 @@ module RedmineChatTelegram
       private
 
       def private_common_commands
-        %w(start connect help)
+        ['help']
       end
 
       def private_plugin_commands

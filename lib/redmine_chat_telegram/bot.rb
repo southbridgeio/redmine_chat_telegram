@@ -24,11 +24,11 @@ class RedmineChatTelegram::Bot < TelegramCommon::Bot
   end
 
   def private_help_message
-    help_command_list(private_commands, namespace: 'redmine_chat_telegram', type: 'private')
+    ['Redmine Chat Telegram:', help_command_list(private_commands, namespace: 'redmine_chat_telegram', type: 'private')].join("\n")
   end
 
   def group_help_message
-    help_command_list(group_commands, namespace: 'redmine_chat_telegram', type: 'group') + "\n#{I18n.t('redmine_chat_telegram.bot.group.help.hint')}"
+    ['Redmine Chat Telegram:', help_command_list(group_commands, namespace: 'redmine_chat_telegram', type: 'group') + "\n#{I18n.t('redmine_chat_telegram.bot.group.help.hint')}"].join("\n")
   end
 
   def bot_token
