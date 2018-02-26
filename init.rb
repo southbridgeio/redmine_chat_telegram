@@ -16,6 +16,9 @@ reloader.to_prepare do
   Dir.glob(File.dirname(__FILE__) + paths).each do |file|
     require_dependency file
   end
+
+  require_dependency 'telegram_common'
+  TelegramCommon.update_manager.add_handler(->(message) { RedmineChatTelegram.handle_message(message) } )
 end
 
 Sidekiq::Logging.logger = Logger.new(Rails.root.join('log', 'sidekiq.log'))
