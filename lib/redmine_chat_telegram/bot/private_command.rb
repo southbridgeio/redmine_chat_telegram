@@ -32,12 +32,8 @@ module RedmineChatTelegram
           else
             RedmineChatTelegram::Commands::BotCommand.new(command, logger).execute
           end
-        else
-          if group_commands.include?(command_name)
-            send_message(I18n.t('telegram_common.bot.private.group_command'))
-          else
-            send_message(I18n.t('redmine_chat_telegram.bot.command_not_found'))
-          end
+        elsif group_commands.include?(command_name)
+          send_message(I18n.t('telegram_common.bot.private.group_command'))
         end
       end
 
