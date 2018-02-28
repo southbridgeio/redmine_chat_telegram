@@ -37,7 +37,7 @@ class TelegramGroupCloseWorker
   end
 
   def send_chat_notification(telegram_id)
-    TelegramMessageSenderWorker.perform(telegram_id, close_message_text)
+    TelegramMessageSenderWorker.perform_async(telegram_id, close_message_text)
   end
 
   def close_message_text
