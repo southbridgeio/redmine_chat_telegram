@@ -1,3 +1,11 @@
+#### [2.2.0]
+
+* Update telegram-bot-ruby
+* Fix Rails 5.1 inconsistency
+* Fix responses for non-associated accounts
+* Use bot from redmine_telegram_common
+* Fix "bot kicked" error
+
 #### [2.1.0]
 
 * Switch to TDlib
@@ -17,7 +25,7 @@
 #### [2.0.0]
 
 * Redmine user which have proper permissions and joined to group will became administrator of the group
-* Upgrade redmine_telegram_common to version 0.1.0 
+* Upgrade redmine_telegram_common to version 0.1.0
 * Telegram bot can work via getUpdates or WebHooks
 * Change issue_url method, so plugin will correct work with Redmine host with specific web port.
 * Telegram rake bot will bind default to tmp/pids
