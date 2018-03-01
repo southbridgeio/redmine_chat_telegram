@@ -26,6 +26,17 @@ version 1.4.1 has problems with archive sync.
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
 * You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory (Or copy from plugins/redmine_chat_telegram/extras/sidekiq.yml to config/sidekiq.yml).
 
+* Standard install plugin:
+
+```
+cd {REDMINE_ROOT}
+git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmine_chat_telegram
+bundle install RAILS_ENV=production
+bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+```
+
+*Note: each of our plugins requires separate bot. It won't work if you use the same bot for several plugins.*
+
 ### Upgrade from 2.1.0 to 2.2.0+
 
 From 2.2.0 redmine_chat_telegram (as well as other Southbridge telegram plugins) is using bot from redmine_telegram_common.
@@ -37,17 +48,6 @@ Bot token will be taken from one of installed Southbridge plugins in the followi
 * redmine_2fa
 
 Also you should re-initialize bot on redmine_telegram_common settings page.
-
-* Standard install plugin:
-
-```
-cd {REDMINE_ROOT}
-git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmine_chat_telegram
-bundle install RAILS_ENV=production
-bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-```
-
-*Note: each of our plugins requires separate bot. It won't work if you use the same bot for several plugins.*
 
 ### Upgrade to 2.0.0
 

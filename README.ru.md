@@ -26,6 +26,16 @@
 * Настройте Sidekiq на обработку очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
 (Можно скопировать из plugins/redmine_chat_telegram/extras/sidekiq.yml в config/sidekiq.yml).
 
+* Плагин устанавливается стандартно:
+
+```
+cd {REDMINE_ROOT}
+git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmine_chat_telegram
+bundle install RAILS_ENV=production
+bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+```
+* После необходимо запустить
+
 ### Обновление с 2.1.0 до 2.2.0+
 
 Начиная с версии 2.2.0 redmine_chat_telegram (так же, как и другие telegram-плагины от Southbridge) использует бота из redmine_telegram_common.
@@ -37,16 +47,6 @@ Token бота будет взят из одного из установленн
 * redmine_2fa
 
 Также потребуется переинициализировать бота на странице настроек redmine_telegram_common.
-
-* Плагин устанавливается стандартно:
-
-```
-cd {REDMINE_ROOT}
-git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmine_chat_telegram
-bundle install RAILS_ENV=production
-bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-```
-* После необходимо запустить
 
 ### Обновление на 2.0.0
 
