@@ -26,6 +26,17 @@ version 1.4.1 has problems with archive sync.
 * Install the [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq) plugin
 * You need to configure Sidekiq queues `default` and `telegram`. [Config example](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - place it to `redmine/config` directory (Or copy from plugins/redmine_chat_telegram/extras/sidekiq.yml to config/sidekiq.yml).
 
+* Standard install plugin:
+
+```
+cd {REDMINE_ROOT}
+git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmine_chat_telegram
+bundle install RAILS_ENV=production
+bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+```
+
+*Note: each of our plugins requires separate bot. It won't work if you use the same bot for several plugins.*
+
 ### Upgrade from 2.1.0 to 2.2.0+
 
 From 2.2.0 redmine_chat_telegram (as well as other Southbridge telegram plugins) is using bot from redmine_telegram_common.
@@ -38,58 +49,10 @@ Bot token will be taken from one of installed Southbridge plugins in the followi
 
 Also you should re-initialize bot on redmine_telegram_common settings page.
 
-* Standard install plugin:
-
-```
-cd {REDMINE_ROOT}
-git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmine_chat_telegram
-bundle install RAILS_ENV=production
-bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-```
-
-*Note: each of our plugins requires separate bot. It won't work if you use the same bot for several plugins.*
-
 ### Upgrade to 2.0.0
 
 Since version 2.0.0 this plugin uses [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
 0.1.0 version, where removed Telegram CLI dependency. Please, take a look on new requirements.
-
-### Create Telegram Bot
-
-It is necessary to register a bot and get its token.
-There is a [@BotFather](https://telegram.me/botfather) bot used in Telegram for this purpose.
-Type `/start` to get a complete list of available commands.
-
-Type `/newbot` command to register a new bot.
-[@BotFather](https://telegram.me/botfather) will ask you to name the new bot. The bot's name must end with the "bot" word.
-On success @BotFather will give you a token for your new bot and a link so you could quickly add the bot to the contact list.
-You'll have to come up with a new name if registration fails.
-
-Set the Privacy mode to disabled with `/setprivacy`. This will let the bot listen to all group chats and write its logs to Redmine chat archive.
-
-Enter the bot's token on the Plugin Settings page to add the bot to your chat.
-
-To add hints for commands for the bot, use command `/setcommands`. You need to send list of commands with descriptions. You can get this list from command `/help`.
-
-### Bot modes
-
-Bot can work in two [modes](https://core.telegram.org/bots/api#getting-updates) — getUpdates or WebHooks.
-
-#### getUpdates
-
-To work via getUpdates, you should run bot process `bundle exec rake chat_telegram:bot`.
-This will drop bot WebHook setting.
-
-#### WebHooks
-
-To work via WebHooks, you should go to plugin settings and press button "Initialize bot"
-(bot token should be saved earlier, and notice redmine should work on https)
-
-
-### Add bot to user contacts
-
-Type `/start` command to your bot from your user account.
-This allows the user to add a Bot to group chats.
 
 ## Usage
 
