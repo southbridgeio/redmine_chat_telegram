@@ -60,6 +60,7 @@ en:
       yspent: "Number of hours set yesterday: %{hours}"
       without_comments: New issue
       account_not_found: Account not found.
+      account_not_connected: Account is not connected to Redmine. Please, use /connect command.
       connect:
         already_connected: Your accounts already connected
         wait_for_email: We sent email to address "%{email}". Please follow instructions from it.

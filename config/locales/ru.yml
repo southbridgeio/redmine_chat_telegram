@@ -60,6 +60,7 @@ ru:
       yspent: "Количество проставленного времени за вчерашние сутки: %{hours}"
       without_comments: Новая задача
       account_not_found: Аккаунт не найден.
+      account_not_connected: Аккаунт не привязан к Redmine. Используйте команду /connect
       connect:
         already_connected: Ваши аккаунты уже связаны.
         wait_for_email: Мы отправили подтверждение на адрес "%{email}". Пожалуйста, следуйте инструкциям из письма.
