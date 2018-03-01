@@ -8,11 +8,17 @@ require 'pluralization'
 require 'redmine_chat_telegram'
 require 'telegram/bot'
 
-ActionDispatch::Callbacks.to_prepare do
+# Rails 5.1/Rails 4
+reloader = defined?(ActiveSupport::Reloader) ? ActiveSupport::Reloader : ActionDispatch::Reloader
+
+reloader.to_prepare do
   paths = '/lib/redmine_chat_telegram/{patches/*_patch,hooks/*_hook}.rb'
   Dir.glob(File.dirname(__FILE__) + paths).each do |file|
     require_dependency file
   end
+
+  require_dependency 'telegram_common'
+  TelegramCommon.update_manager.add_handler(->(message) { RedmineChatTelegram.handle_message(message) } )
 end
 
 Sidekiq::Logging.logger = Logger.new(Rails.root.join('log', 'sidekiq.log'))
@@ -29,7 +35,7 @@ Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '2.1.0'
+  version '2.2.0'
   author 'Southbridge'
   author_url 'https://github.com/centosadmin'
 

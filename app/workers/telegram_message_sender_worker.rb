@@ -14,7 +14,7 @@ class TelegramMessageSenderWorker
   TELEGRAM_MESSAGE_SENDER_ERRORS_LOG = Logger.new(Rails.root.join('log/chat_telegram', 'telegram-message-sender-errors.log'))
 
   def perform(telegram_id, message)
-    token = Setting.plugin_redmine_chat_telegram['bot_token']
+    token = Setting.plugin_redmine_telegram_common['bot_token']
     bot   = Telegram::Bot::Client.new(token)
 
     # Group telegram_id is negative for Telegram::Bot

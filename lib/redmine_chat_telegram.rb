@@ -1,11 +1,13 @@
 require 'timeout'
+
 module RedmineChatTelegram
+
   def self.table_name_prefix
     'redmine_chat_telegram_'
   end
 
   def self.bot_token
-    Setting.plugin_redmine_chat_telegram['bot_token']
+    Setting.plugin_redmine_telegram_common['bot_token']
   end
 
   def self.set_locale
@@ -15,46 +17,6 @@ module RedmineChatTelegram
   def self.issue_url(issue_id)
     url = Addressable::URI.parse("#{Setting['protocol']}://#{Setting['host_name']}/issues/#{issue_id}")
     url.to_s
-  end
-
-  def self.bot_initialize
-    extend TelegramCommon::Tdlib::DependencyProviders::GetMe
-    extend TelegramCommon::Tdlib::DependencyProviders::AddBot
-  
-    token = Setting.plugin_redmine_chat_telegram['bot_token']
-    self_info = get_me.call
-
-    unless self_info['@type'] == 'user'
-      fail 'Please, set correct settings for plugin TelegramCommon'
-    end
-
-    robot_id = self_info['id']
-
-    bot      = Telegram::Bot::Client.new(token)
-    bot_info = bot.api.get_me['result']
-    bot_name = bot_info['username']
-
-    until bot_name.present?
-      sleep 60
-
-      bot      = Telegram::Bot::Client.new(token)
-      bot_info = bot.api.get_me['result']
-      bot_name = bot_info['username']
-    end
-
-    add_bot.(bot_info['id'])
-
-    plugin_settings = Setting.find_by(name: 'plugin_redmine_chat_telegram')
-
-    plugin_settings_hash             = plugin_settings.value
-    plugin_settings_hash['bot_name'] = bot_name
-    plugin_settings_hash['bot_id']   = bot_info['id']
-    plugin_settings_hash['robot_id'] = robot_id
-    plugin_settings.value            = plugin_settings_hash
-
-    plugin_settings.save
-
-    bot
   end
 
   def self.handle_message(message)
@@ -74,7 +36,7 @@ module RedmineChatTelegram
       message_text =
         if message.text
           message.text
-        elsif message.new_chat_member
+        elsif message.new_chat_members
           'joined'
         elsif message.left_chat_member
           'left_chat'
