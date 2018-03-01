@@ -25,6 +25,19 @@
 * Установите плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq).
 * Настройте Sidekiq на обработку очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
 (Можно скопировать из plugins/redmine_chat_telegram/extras/sidekiq.yml в config/sidekiq.yml).
+
+### Обновление с 2.1.0 до 2.2.0+
+
+Начиная с версии 2.2.0 redmine_chat_telegram (так же, как и другие telegram-плагины от Southbridge) использует бота из redmine_telegram_common.
+Чтобы произвести миграцию для использования единого бота, нужно выполнить команду `bundle exec rake telegram_common:migrate_to_single_bot`.
+Token бота будет взят из одного из установленных плагинов от Southbridge в следующем приоритете:
+
+* redmine_chat_telegram
+* redmine_intouch
+* redmine_2fa
+
+Также потребуется переинициализировать бота на странице настроек redmine_telegram_common.
+
 * Плагин устанавливается стандартно:
 
 ```
@@ -34,8 +47,6 @@ bundle install RAILS_ENV=production
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
 * После необходимо запустить
-
-*Примечание: каждый из наших плагинов требует наличие отдельного бота.*
 
 ### Обновление на 2.0.0
 
@@ -128,7 +139,7 @@ issue - Редактирование задач.
 За 1 неделю до закрытия каждые 12 часов в чат будет приходить сообщение:
 "Задача по этому чату закрыта. Чат будет автоматически расформирован через XX дней."
 
-По истечении времени все участники чата будут удалены из него.  
+По истечении времени все участники чата будут удалены из него.
 
 # Автор плагина
 
