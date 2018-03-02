@@ -23,7 +23,10 @@
     <% end %>
 
     <% if User.current.allowed_to?(:view_telegram_chat_archive, @issue.project) and @issue.telegram_messages.present? %>
-      | <%= link_to t('redmine_chat_telegram.link.archive'), issue_telegram_messages_path(@issue.id), remote: true %>
+      <% unless @issue.closed? %>
+        |
+      <% end %>
+      <%= link_to t('redmine_chat_telegram.link.archive'), issue_telegram_messages_path(@issue.id), remote: true %>
     <% end %>
 
   </div>
