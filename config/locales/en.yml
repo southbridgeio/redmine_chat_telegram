@@ -128,7 +128,7 @@ en:
         help: Help.
         chat: Manage issues chats.
     tab_title: Chat Telegram
-    archive_title: Archive
+    archive_title: Chat archive
     settings:
       daily_report: Post a comment with chat summary once a day
       close_issue_statuses: Close chat for issues with statuses
