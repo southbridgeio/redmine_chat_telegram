@@ -1,6 +1,7 @@
 .telegram-archive-modal{
   background: #fff;
   position: fixed;
+  top: 50px;
 }
 
 .archive-form{
@@ -8,16 +9,13 @@
   overflow: auto;
 }
 
-.archive-top{
-  height: 40px;
-}
-
 .archive-datetimepicker{
   float:left;
+  margin-right: 10px;
 }
 
 .archive-search{
-  float:right;
+  float:left;
 }
 
 .archive-submit-button{
