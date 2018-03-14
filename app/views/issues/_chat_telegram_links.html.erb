@@ -1,6 +1,6 @@
 <% if @project.module_enabled?(:chat_telegram) %>
   <div id="telegram-links" style="float: right;">
-    <% if @issue.telegram_group.present? and @issue.telegram_group.shared_url.present? %>
+    <% if @issue.telegram_group.present? && @issue.telegram_group.shared_url.present? %>
       <% if User.current.allowed_to?(:view_telegram_chat_link, @issue.project) %>
         <%= link_to @issue.telegram_group.shared_url, target: '_blank' do %>
           <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-icon.png' %>
@@ -14,7 +14,7 @@
       <% end %>
 
     <% else %>
-      <% if User.current.allowed_to?(:create_telegram_chat, @project) and !@issue.closed? %>
+      <% if User.current.allowed_to?(:create_telegram_chat, @project) && !@issue.closed? %>
         <%= link_to telegram_group_chats_path(issue_id: @issue.id), method: :post, remote: true do %>
           <%= image_tag '/plugin_assets/redmine_chat_telegram/images/telegram-inactive-icon.png' %>
           <%= t 'redmine_chat_telegram.link.create_chat' %>
@@ -22,8 +22,8 @@
       <% end %>
     <% end %>
 
-    <% if User.current.allowed_to?(:view_telegram_chat_archive, @issue.project) and @issue.telegram_messages.present? %>
-      <% unless @issue.closed? %>
+    <% if User.current.allowed_to?(:view_telegram_chat_archive, @issue.project) && @issue.telegram_messages.present? %>
+      <% if !@issue.closed? || User.current.allowed_to?(:close_telegram_chat, @issue.project) %>
         |
       <% end %>
       <%= link_to t('redmine_chat_telegram.link.archive'), issue_telegram_messages_path(@issue.id), remote: true %>
