@@ -29,6 +29,7 @@ module RedmineChatTelegram
       end
 
       def message_text
+        return I18n.t('redmine_chat_telegram.bot.issues_not_found') if issues.blank?
         issues.inject('') do |message, issue|
           url = issue_url(issue)
           journal = last_issue_journal(issue)
