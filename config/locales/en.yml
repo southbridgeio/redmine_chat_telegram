@@ -60,6 +60,7 @@ en:
       yspent: "Number of hours set yesterday: %{hours}"
       without_comments: New issue
       account_not_found: Account not found.
+      account_not_connected: Account is not connected to Redmine. Please, use /connect command.
       connect:
         already_connected: Your accounts already connected
         wait_for_email: We sent email to address "%{email}". Please follow instructions from it.
@@ -127,7 +128,7 @@ en:
         help: Help.
         chat: Manage issues chats.
     tab_title: Chat Telegram
-    archive_title: Archive
+    archive_title: Chat archive
     settings:
       daily_report: Post a comment with chat summary once a day
       close_issue_statuses: Close chat for issues with statuses
@@ -158,4 +159,4 @@ en:
       enter_chat: Enter telegram chat
       close_chat: Close chat
       create_chat: Create telegram chat
-      archive: Archive
+      archive: Chat archive

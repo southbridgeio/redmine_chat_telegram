@@ -60,6 +60,7 @@ ru:
       yspent: "Количество проставленного времени за вчерашние сутки: %{hours}"
       without_comments: Новая задача
       account_not_found: Аккаунт не найден.
+      account_not_connected: Аккаунт не привязан к Redmine. Используйте команду /connect
       connect:
         already_connected: Ваши аккаунты уже связаны.
         wait_for_email: Мы отправили подтверждение на адрес "%{email}". Пожалуйста, следуйте инструкциям из письма.
@@ -127,7 +128,7 @@ ru:
         help: Помощь по командам.
         chat: Управления чатами задач.
     tab_title: Chat Telegram
-    archive_title: Архив
+    archive_title: Архив чата
     settings:
       daily_report: Публиковать комментарий со сводкой по чату раз в сутки
       close_issue_statuses: Закрывать чат для задач со статусами
@@ -158,4 +159,4 @@ ru:
       enter_chat: Войти в чат Telegram
       close_chat: Закрыть чат
       create_chat: Создать чат Telegram
-      archive: Архив
+      archive: Архив чата

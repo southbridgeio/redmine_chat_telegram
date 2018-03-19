@@ -14,6 +14,16 @@ $('#ajax-modal').dialog({
   title: '<%= t 'redmine_chat_telegram.archive_title' %>',
   open: function () {
     $("#datetimepicker").blur()
+    if($( window ).width() < 900) {
+      $(this).parent().css({ top: '60px'});
+      var heightOffset = 230
+    } else {
+      var heightOffset = 75
+    }
+    var formHeight = $('#ajax-modal').css('height').match(/\d+/)[0] - heightOffset;
+    $('.archive-form').css({
+      height: formHeight
+    });
   },
   close: function () {
     $('#datetimepicker').datetimepicker('destroy')
@@ -55,10 +65,10 @@ $('#datetimepicker').datetimepicker({
   }
 });
 
-var formHeight = $('#ajax-modal').css('height').match(/\d+/)[0] - 75;
-$('.archive-form').css({
-  height: formHeight
-});
+// var formHeight = $('#ajax-modal').css('height').match(/\d+/)[0] - 75;
+// $('.archive-form').css({
+//   height: formHeight
+// });
 
 $(".telegram-message").click(function () {
   // Go to message from search
@@ -135,8 +145,8 @@ $("#telegram-search-input").keyup(function (event) {
   }
 });
 
-$(document).keypress(function(e) { 
-    if (e.keyCode == 27) { 
+$(document).keypress(function(e) {
+    if (e.keyCode == 27) {
         $('#ajax-modal').dialog('close');
-    } 
+    }
 });
