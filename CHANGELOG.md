@@ -1,3 +1,10 @@
+#### [2.2.1]
+
+* Archive > Chat archive in locales
+* Remove "|" for closed issues in chat archive section
+* Fix chat archive on mobile devices
+* Fix last command output when no issues found
+
 #### [2.2.0]
 
 * Update telegram-bot-ruby
