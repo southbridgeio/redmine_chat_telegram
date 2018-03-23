@@ -134,6 +134,7 @@ en:
       close_issue_statuses: Close chat for issues with statuses
       close_issue_statuses_hint: By default chat will be closed for closed issues
       required: "required for this plugin"
+      kick_locked: Kick locked users from chats (performs daily)
     messages:
       hello: "Hello, everybody! This is a chat for issue: %{issue_url}"
       closed_from_issue: chat was closed from issue
