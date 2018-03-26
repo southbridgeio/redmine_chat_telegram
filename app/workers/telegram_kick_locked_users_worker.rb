@@ -7,7 +7,7 @@ class TelegramKickLockedUsersWorker
   end
 
   def perform
-    return unless Setting.plugin_redmine_chat_telegram['kick_locked']
+    return unless Setting.find_by_name(:plugin_redmine_chat_telegram).value['kick_locked']
     client.on_ready(&method(:kick_locked_users))
   end
 
