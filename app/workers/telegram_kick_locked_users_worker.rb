@@ -26,7 +26,7 @@ class TelegramKickLockedUsersWorker
 
       TelegramCommon::Account.preload(:user).where(telegram_id: telegram_user_ids).each do |account|
         user = account.user
-        next unless user.locked?
+        next unless user&.locked?
         result = client.broadcast_and_receive('@type' => 'setChatMemberStatus',
                                     'chat_id' => group.telegram_id,
                                     'user_id' => account.telegram_id,
@@ -35,6 +35,10 @@ class TelegramKickLockedUsersWorker
         @logger.error("Failed to kick user ##{user.id} from chat ##{group.telegram_id}: #{result.inspect}") if result['@type'] == 'error'
       end
     end
+  rescue Timeout::Error
+    tries ||= 3
+    sleep 2
+    retry unless (tries -= 1).zero?
   ensure
     client.close
   end
