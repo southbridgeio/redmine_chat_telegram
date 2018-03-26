@@ -18,6 +18,14 @@
   </label>
   <%= check_box_tag 'settings[daily_report]', '1', @settings['daily_report'] %>
 </p>
+
+<p>
+  <label>
+    <%= t 'redmine_chat_telegram.settings.kick_locked' %>
+  </label>
+  <%= check_box_tag 'settings[kick_locked]', '1', @settings['kick_locked'] %>
+</p>
+
 <p>
   <label>
     <%= t 'redmine_chat_telegram.settings.close_issue_statuses' %>
