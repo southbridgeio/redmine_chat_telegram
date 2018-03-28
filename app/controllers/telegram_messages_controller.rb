@@ -3,7 +3,21 @@ class TelegramMessagesController < ApplicationController
 
   def index
     @issue = Issue.visible.find(params[:id])
-    @telegram_messages = @issue.telegram_messages
+
+    @message_count = @issue.telegram_messages.count
+    @pages = Paginator.new(@message_count, per_page_option, params['page'])
+
+    @telegram_messages =
+      if params[:search].present?
+        telegram_messages = Redmine::Search::Fetcher.new(params[:search], User.current, ['telegram_messages'], [@issue.project], issue_id: @issue.id, to_date: params[:to_date]).results(@pages.offset, @pages.per_page).to_a
+      else
+        relation = @issue.telegram_messages.limit(@pages.per_page).offset(@pages.offset)
+        relation = relation.where("cast(#{TelegramMessage.table_name}.sent_at as date) <= ?", DateTime.parse(params[:to_date])) if params[:to_date].present?
+        relation.to_a
+      end
+
+    @min_date = @telegram_messages.map(&:sent_at).min
+
     @chat_users = colored_chat_users
 
     respond_to do |format|
@@ -23,7 +37,7 @@ class TelegramMessagesController < ApplicationController
   private
 
   def colored_chat_users
-    chat_user_ids = @telegram_messages.pluck(:from_id).uniq
+    chat_user_ids = @telegram_messages.map(&:from_id).uniq
     colored_users = []
     current_color = 1
 

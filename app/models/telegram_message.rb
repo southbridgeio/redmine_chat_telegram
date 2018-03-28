@@ -1,10 +1,20 @@
 class TelegramMessage < ActiveRecord::Base
+  include Redmine::I18n
+
   unloadable
 
-  default_scope { order(sent_at: :desc) }
+  default_scope { joins(issue: :project).order(sent_at: :desc) }
   scope :reverse_scope, -> { unscope(:order).order('sent_at ASC') }
 
-  include Redmine::I18n
+  belongs_to :issue
+
+  acts_as_searchable columns: %w[message from_first_name from_last_name from_username],
+                     project_key: "#{Project.table_name}.id",
+                     scope: ->(options) do
+                       relation = where(issue_id: options.fetch(:issue_id)).order(sent_at: :desc)
+                       relation = relation.where("cast(#{table_name}.sent_at as date) <= ?", DateTime.parse(options[:to_date])) if options[:to_date].present?
+                       relation
+                     end
 
   COLORS_NUMBER = 8
 
