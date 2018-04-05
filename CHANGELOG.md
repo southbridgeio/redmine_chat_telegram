@@ -1,3 +1,9 @@
+#### [2.2.2]
+
+* Skip private notes while sending issue notifications to chat
+* Kick locked users daily
+* Infinite scroll in chat archive
+
 #### [2.2.1]
 
 * Archive > Chat archive in locales
