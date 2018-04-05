@@ -30,6 +30,8 @@ en:
           help: Help for commands
           task: Edit issues.
           issue: Alias for /task.
+          ih: Alias for /issue hot.
+          th: Alias for /task hot.
       group:
         help:
           task: Get link to the issue.
