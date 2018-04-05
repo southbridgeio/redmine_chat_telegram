@@ -4,7 +4,9 @@
                class: 'archive-submit-button'%>
 
 <% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'style', :plugin => 'redmine_chat_telegram' %>
-  <%= stylesheet_link_tag 'jquery.datetimepicker', :plugin => 'redmine_chat_telegram' %>
-  <%= javascript_include_tag 'jquery.datetimepicker.full.min', :plugin => 'redmine_chat_telegram' %>
+  <%= stylesheet_link_tag 'style', plugin: 'redmine_chat_telegram' %>
+  <%= stylesheet_link_tag 'jquery.datetimepicker', plugin: 'redmine_chat_telegram' %>
+  <%= javascript_include_tag 'jquery.datetimepicker.full.min', plugin: 'redmine_chat_telegram' %>
+  <%= javascript_include_tag 'infinite-scroll.pkgd.min', plugin: 'redmine_chat_telegram' %>
+  <%= javascript_include_tag 'jquery.debounce', plugin: 'redmine_chat_telegram' %>
 <% end %>

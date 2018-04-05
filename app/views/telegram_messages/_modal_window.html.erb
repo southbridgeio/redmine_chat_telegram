@@ -1,7 +1,7 @@
 <div class="archive-top">
   <div class="archive-datetimepicker">
     <span><%= t 'redmine_chat_telegram.archive.goto_date' %>:</span>
-    <input id="datetimepicker" type="text" placeholder="<%= t 'redmine_chat_telegram.archive.select_date' %>">
+    <input id="datetimepicker" type="text" placeholder="<%= t 'redmine_chat_telegram.archive.select_date' %>" value="<%= params[:to_date] %>">
   </div>
   <div class="archive-search">
     <span><%= t 'redmine_chat_telegram.archive.search' %>:</span>
@@ -9,13 +9,17 @@
       size="33"
       id="telegram-search-input"
       type="text"
-      data-messages="<%= @telegram_messages.to_json %>"
+      value="<%= params[:search] %>"
       placeholder="<%= t 'redmine_chat_telegram.archive.input_search_query' %>">
   </div>
   <div style="clear: both;"></div>
   <hr>
 </div>
-<%= render partial: 'archive_form'%>
+
+<div class='telegram-message-list'>
+  <%= render partial: 'archive_form' %>
+</div>
+
 <hr>
 <%= submit_tag t('redmine_chat_telegram.archive.copy_to_issue'),
   onclick: "$('.archive-form').submit()",

@@ -31,17 +31,22 @@ Sidekiq::Cron::Job.create(name:  'Telegram Group Daily Report - every day',
                           cron:  '7 0 * * *',
                           class: 'TelegramGroupDailyReportCronWorker')
 
+Sidekiq::Cron::Job.create(name:  'Telegram Kick locked users - every day',
+                          cron:  '7 0 * * *',
+                          class: 'TelegramKickLockedUsersWorker')
+
 Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '2.2.1'
+  version '2.2.2'
   author 'Southbridge'
   author_url 'https://github.com/centosadmin'
 
   settings(default: {
              'bot_token' => 'bot_token',
-             'daily_report' => '1'
+             'daily_report' => '1',
+             'kick_locked' => '1'
            },
            partial: 'settings/chat_telegram')
 
