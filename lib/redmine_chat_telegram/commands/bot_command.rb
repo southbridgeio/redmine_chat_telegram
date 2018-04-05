@@ -57,6 +57,13 @@ module RedmineChatTelegram
 
       alias execute_command_task execute_command_issue
 
+      def execute_command_ih
+        command.text = '/issue hot'
+        execute_command_issue
+      end
+
+      alias execute_command_th execute_command_ih
+
       private
 
       def executing_command
