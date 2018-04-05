@@ -56,7 +56,7 @@ module RedmineChatTelegram
         project_name = command.text.match(/\/\w+ (.+)/).try(:[], 1)
         project_name = command.text unless project_name.present?
 
-        project = Project.where(Project.visible_condition(account.user)).find_by_name(project_name)
+        project = Project.where(Project.visible_condition(account.user)).like(project_name).first
         if project.present?
           executing_command.update(step_number: 3, data: executing_command.data.merge(project_id: project.id))
           send_all_issues_for_project(project)
