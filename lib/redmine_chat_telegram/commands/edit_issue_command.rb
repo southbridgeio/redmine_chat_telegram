@@ -139,7 +139,7 @@ module RedmineChatTelegram
           message_text << %(<a href="#{url}">##{issue.id}</a>: #{issue.subject}\n)
         end
         send_message(message_text)
-        send_message(locale('input_id', true))
+        send_message(locale('input_id', true), reply_markup: make_keyboard(issues.pluck(:id).map(&:to_s)))
       end
 
       def next_page?
