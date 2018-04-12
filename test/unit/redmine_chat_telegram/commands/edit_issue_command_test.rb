@@ -80,9 +80,11 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
         I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
       ].join(' ')
 
+      Telegram::Bot::Types::ReplyKeyboardMarkup.expects(:new).returns('markup')
+
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
-        .with(text_2)
+        .with(text_2, reply_markup: 'markup')
 
       RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
     end
@@ -107,9 +109,11 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
         I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
       ].join(' ')
 
+      Telegram::Bot::Types::ReplyKeyboardMarkup.expects(:new).returns('markup')
+
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
-        .with(text_2)
+        .with(text_2, reply_markup: 'markup')
 
       RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
     end
@@ -139,9 +143,11 @@ class RedmineChatTelegram::Commands::EditIssueCommandTest < ActiveSupport::TestC
         I18n.t('redmine_chat_telegram.bot.edit_issue.cancel_hint')
       ].join(' ')
 
+      Telegram::Bot::Types::ReplyKeyboardMarkup.expects(:new).returns('markup')
+
       RedmineChatTelegram::Commands::BaseBotCommand.any_instance
         .expects(:send_message)
-        .with(text_2)
+        .with(text_2, reply_markup: 'markup')
 
       RedmineChatTelegram::Commands::EditIssueCommand.new(command).execute
     end

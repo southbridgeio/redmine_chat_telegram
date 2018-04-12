@@ -30,6 +30,8 @@ ru:
           help: Справка по командам.
           task: Редактирование задач.
           issue: Алиас для /task.
+          ih: Алиас для /issue hot.
+          th: Алиас для /task hot.
       group:
         help:
           task: Получить ссылку на задачу.
