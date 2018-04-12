@@ -1,3 +1,7 @@
+#### [2.2.3]
+
+* Add redmine_telegram_common dependency to init.rb
+
 #### [2.2.2]
 
 * Skip private notes while sending issue notifications to chat

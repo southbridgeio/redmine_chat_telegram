@@ -1,3 +1,5 @@
+require_dependency Rails.root.join('plugins','redmine_telegram_common', 'init')
+
 require 'yaml'
 
 FileUtils.mkdir_p(Rails.root.join('log/chat_telegram')) unless Dir.exist?(Rails.root.join('log/chat_telegram'))
@@ -39,9 +41,11 @@ Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
   url 'https://github.com/centosadmin/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
-  version '2.2.2'
+  version '2.2.3'
   author 'Southbridge'
   author_url 'https://github.com/centosadmin'
+
+  requires_redmine_plugin :redmine_telegram_common, '0.7.0'
 
   settings(default: {
              'bot_token' => 'bot_token',
