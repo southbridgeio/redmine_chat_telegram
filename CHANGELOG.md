@@ -1,6 +1,9 @@
 #### [2.2.3]
 
 * Add redmine_telegram_common dependency to init.rb
+* Send issue ids as a keyboard
+* Add /ih and /th aliases
+* Search projects by partial match in /issue project_name command
 
 #### [2.2.2]
 
