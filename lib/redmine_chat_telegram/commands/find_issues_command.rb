@@ -2,11 +2,14 @@ module RedmineChatTelegram
   module Commands
     class FindIssuesCommand < BaseBotCommand
       LOGGER = Logger.new(Rails.root.join('log/chat_telegram', 'bot-command-find-issues.log'))
+      ISSUES_PER_MESSAGE = 20
 
       def execute
         return unless account.present?
         if issues.count > 0
-          send_message(issues_list)
+          issues.each_slice(ISSUES_PER_MESSAGE).with_index do |issues_chunk, index|
+            send_message(issues_list(issues_chunk, with_title: index.zero?))
+          end
         else
           issues_not_found = I18n.t('redmine_chat_telegram.bot.issues_not_found')
           send_message(issues_not_found)
@@ -45,8 +48,8 @@ module RedmineChatTelegram
         }
       end
 
-      def issues_list
-        message_title = "<b>#{message}:</b>\n"
+      def issues_list(issues, with_title: false)
+        message_title = with_title ? "<b>#{message}:</b>\n" : ''
         issues.inject(message_title) do |message_text, issue|
           url = issue_url(issue)
           message_text << %(<a href="#{url}">##{issue.id}</a>: #{CGI::escapeHTML(issue.subject)}\n)
