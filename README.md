@@ -1,6 +1,5 @@
-[![Code Climate](https://codeclimate.com/github/centosadmin/redmine_chat_telegram/badges/gpa.svg)](https://codeclimate.com/github/centosadmin/redmine_chat_telegram)
-[![Build Status](https://travis-ci.org/centosadmin/redmine_chat_telegram.svg?branch=master)](https://travis-ci.org/centosadmin/redmine_chat_telegram)
-[![Rate at redmine.org](http://img.shields.io/badge/rate%20at-redmine.org-blue.svg?style=flat)](http://www.redmine.org/plugins/redmine_chat_telegram)
+# THIS PLUGIN IS DEPRECATED! PLEASE, USE [REDMINE_2CHAT](https://github.com/centosadmin/redmine_2chat) INSTEAD
+
 # redmine_chat_telegram
 
 [Русская версия](README.ru.md)
