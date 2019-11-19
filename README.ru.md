@@ -9,28 +9,28 @@
 
 Плагин `redmine_chat_telegram` используется для создания группового чата, связанного с тикетом, и записи его логов в архиве Redmine. Связанные групповые чаты могут легко быть созданы с помощью ссылки "Создать чат Telegram", которая появится на странице тикета. Вы сможете скопировать ссылку и передать её любому, кого Вы захотите подключить к этому чату.
 
-![Create telegram chat](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/create-link.png)
-![Chat links](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/chat-links.png)
+![Create telegram chat](https://github.com/southbridgeio/redmine_chat_telegram/raw/master/assets/images/create-link.png)
+![Chat links](https://github.com/southbridgeio/redmine_chat_telegram/raw/master/assets/images/chat-links.png)
 
-Пожалуйста, помогите нам сделать этот плагин лучше, сообщая во вкладке [Issues](https://github.com/centosadmin/redmine_chat_telegram/issues) обо всех проблемах, с которыми Вы столкнётесь при его использовании. Мы готовы ответить на Все ваши вопросы, касающиеся этого плагина.
+Пожалуйста, помогите нам сделать этот плагин лучше, сообщая во вкладке [Issues](https://github.com/southbridgeio/redmine_chat_telegram/issues) обо всех проблемах, с которыми Вы столкнётесь при его использовании. Мы готовы ответить на Все ваши вопросы, касающиеся этого плагина.
 
 ## Установка
 
 ### Требования
 
 * **Ruby 2.3+**
-* Настроенный [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
+* Настроенный [redmine_telegram_common](https://github.com/southbridgeio/redmine_telegram_common)
 * У Вас должен быть аккаунт для создания ботов в Telegram
 * Установите [Redis](https://redis.io) 2.8 или выше. Запустите Redis и добавьте его запуск в автозагрузку.
 * Установите плагин [redmine_sidekiq](https://github.com/ogom/redmine_sidekiq).
-* Настройте Sidekiq на обработку очереди `default` и `telegram`. [Пример конфига](https://github.com/centosadmin/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
+* Настройте Sidekiq на обработку очереди `default` и `telegram`. [Пример конфига](https://github.com/southbridgeio/redmine_chat_telegram/blob/master/extras/sidekiq.yml) - разместите его в папке `redmine/config`
 (Можно скопировать из plugins/redmine_chat_telegram/extras/sidekiq.yml в config/sidekiq.yml).
 
 * Плагин устанавливается стандартно:
 
 ```
 cd {REDMINE_ROOT}
-git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmine_chat_telegram
+git clone https://github.com/southbridgeio/redmine_chat_telegram.git plugins/redmine_chat_telegram
 bundle install RAILS_ENV=production
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
