@@ -39,11 +39,11 @@ Sidekiq::Cron::Job.create(name:  'Telegram Kick locked users - every day',
 
 Redmine::Plugin.register :redmine_chat_telegram do
   name 'Redmine Chat Telegram plugin'
-  url 'https://github.com/centosadmin/redmine_chat_telegram'
+  url 'https://github.com/southbridgeio/redmine_chat_telegram'
   description 'This is a plugin for Redmine which adds Telegram Group Chat to Redmine Issue'
   version '2.2.3'
   author 'Southbridge'
-  author_url 'https://github.com/centosadmin'
+  author_url 'https://github.com/southbridgeio'
 
   requires_redmine_plugin :redmine_telegram_common, '0.7.0'
 
