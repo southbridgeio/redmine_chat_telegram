@@ -1,4 +1,4 @@
-# THIS PLUGIN IS DEPRECATED! PLEASE, USE [REDMINE_2CHAT](https://github.com/centosadmin/redmine_2chat) INSTEAD
+# THIS PLUGIN IS DEPRECATED! PLEASE, USE [REDMINE_2CHAT](https://github.com/southbridgeio/redmine_2chat) INSTEAD
 
 # redmine_chat_telegram
 
@@ -8,17 +8,17 @@ Redmine plugin is used to create Telegram group chats.
 
 The `redmine_chat_telegram` can be used to create a group chat associated with a ticket and record its logs to the Redmine archive. Associated group chats can be easily created via the `Create Telegram chat` link on the ticket page. You can copy the link and pass it to anyone you want to join this Telegram chat.
 
-![Create telegram chat](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/create-link.png)
-![Chat links](https://github.com/centosadmin/redmine_chat_telegram/raw/master/assets/images/chat-links.png)
+![Create telegram chat](https://github.com/southbridgeio/redmine_chat_telegram/raw/master/assets/images/create-link.png)
+![Chat links](https://github.com/southbridgeio/redmine_chat_telegram/raw/master/assets/images/chat-links.png)
 
-Please help us make this plugin better telling us of any [issues](https://github.com/centosadmin/redmine_chat_telegram/issues) you'll face using it. We are ready to answer all your questions regarding this plugin.
+Please help us make this plugin better telling us of any [issues](https://github.com/southbridgeio/redmine_chat_telegram/issues) you'll face using it. We are ready to answer all your questions regarding this plugin.
 
 ## Installation
 
 ### Requirements
 
 * **Ruby 2.3+**
-* Configured [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
+* Configured [redmine_telegram_common](https://github.com/southbridgeio/redmine_telegram_common)
 version 1.4.1 has problems with archive sync.
 * You should have Telegram bot account
 * Install [Redis](https://redis.io) 2.8 or higher. Run Redis and add it to autorun.
@@ -29,7 +29,7 @@ version 1.4.1 has problems with archive sync.
 
 ```
 cd {REDMINE_ROOT}
-git clone https://github.com/centosadmin/redmine_chat_telegram.git plugins/redmine_chat_telegram
+git clone https://github.com/southbridgeio/redmine_chat_telegram.git plugins/redmine_chat_telegram
 bundle install RAILS_ENV=production
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 ```
@@ -50,7 +50,7 @@ Also you should re-initialize bot on redmine_telegram_common settings page.
 
 ### Upgrade to 2.0.0
 
-Since version 2.0.0 this plugin uses [redmine_telegram_common](https://github.com/centosadmin/redmine_telegram_common)
+Since version 2.0.0 this plugin uses [redmine_telegram_common](https://github.com/southbridgeio/redmine_telegram_common)
 0.1.0 version, where removed Telegram CLI dependency. Please, take a look on new requirements.
 
 ## Usage
